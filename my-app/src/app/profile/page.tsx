@@ -2,7 +2,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Order, Address, UserProfile, OrderCard, AddressCard, ProfileForm, AddressDialog } from "@/components/profile/ProfileComponents";
+import { Order, Address, UserProfile, OrderCard, AddressCard, ProfileForm } from "@/components/profile/ProfileComponents";
 import { Package, User, MapPin, LayoutDashboard, LogOut, ChevronRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useProfileStore } from "@/store/useProfileStore";
@@ -16,10 +16,6 @@ export default function ProfilePage() {
     const { orders, addresses, fetchAddresses, addAddress, updateAddress, removeAddress } = useProfileStore();
     const { user, isAuthenticated, isLoading: authLoading, logout } = useAuthStore();
     const [mounted, setMounted] = useState(false);
-
-    // Dialog state
-    const [isAddressDialogOpen, setIsAddressDialogOpen] = useState(false);
-    const [editingAddress, setEditingAddress] = useState<Partial<Address> | null>(null);
 
     useEffect(() => {
         setMounted(true);
@@ -42,14 +38,6 @@ export default function ProfilePage() {
         lastName: user?.name?.split(' ').slice(1).join(' ') || "",
         email: user?.email || "",
         phone: user?.phone || "",
-    };
-
-    const handleSaveAddress = async (addressData: Partial<Address>) => {
-        if (editingAddress?._id || editingAddress?.id) {
-            await updateAddress((editingAddress._id || editingAddress.id) as string, addressData);
-        } else {
-            await addAddress(addressData);
-        }
     };
 
     const handleDeleteAddress = async (id: string) => {
@@ -129,9 +117,11 @@ export default function ProfilePage() {
                     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <div className="flex items-center justify-between mb-4">
                             <h2 className="text-xl font-semibold">My Addresses</h2>
-                            <Button onClick={() => { setEditingAddress(null); setIsAddressDialogOpen(true); }}>
-                                <PlusIcon className="w-4 h-4 mr-2" /> Add New Address
-                            </Button>
+                            <Link href="/profile/address/new">
+                                <Button>
+                                    <PlusIcon className="w-4 h-4 mr-2" /> Add New Address
+                                </Button>
+                            </Link>
                         </div>
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                             {addresses.length === 0 ? (
@@ -141,19 +131,12 @@ export default function ProfilePage() {
                                     <AddressCard
                                         key={addr._id || addr.id}
                                         address={addr}
-                                        onEdit={() => { setEditingAddress(addr); setIsAddressDialogOpen(true); }}
+                                        onEdit={() => router.push(`/profile/address/${addr._id || addr.id}`)}
                                         onDelete={() => handleDeleteAddress(addr._id || addr.id)}
                                     />
                                 ))
                             )}
                         </div>
-
-                        <AddressDialog
-                            open={isAddressDialogOpen}
-                            onOpenChange={setIsAddressDialogOpen}
-                            initialData={editingAddress}
-                            onSave={handleSaveAddress}
-                        />
                     </div>
                 );
             default:

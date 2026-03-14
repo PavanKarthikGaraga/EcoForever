@@ -39,11 +39,13 @@ const UserSchema = new mongoose.Schema({
             default: 'Home'
         },
         name: String,
-        street: String,
+        email: String,
+        phone: String,
+        flat: String,
+        area: String,
         city: String,
         state: String,
-        zip: String,
-        phone: String,
+        pincode: String,
         isDefault: {
             type: Boolean,
             default: false

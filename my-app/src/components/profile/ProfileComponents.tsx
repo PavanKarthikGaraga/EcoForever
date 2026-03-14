@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Package, MapPin, Loader2, Plus, Edit2, Trash2 } from "lucide-react";
 import { useProfileStore } from "@/store/useProfileStore";
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
+import { useAuthStore } from "@/store/useAuthStore";
 
 // --- Types ---
 export interface Order {
@@ -23,11 +23,13 @@ export interface Address {
     _id?: string;
     type: "Home" | "Work" | "Other";
     name: string;
-    street: string;
+    email: string;
+    phone: string;
+    flat: string;
+    area: string;
     city: string;
     state: string;
-    zip: string;
-    phone: string;
+    pincode: string;
     isDefault?: boolean;
 }
 
@@ -95,9 +97,9 @@ export const AddressCard = ({ address, compact = false, onEdit, onDelete }: { ad
             </CardHeader>
             <CardContent className="text-sm text-muted-foreground">
                 <p className="font-medium text-foreground mb-1">{address.name}</p>
-                <p>{address.street}</p>
-                <p>{address.city}, {address.state} - {address.zip}</p>
-                <p className="mt-2 text-xs">Ph: {address.phone}</p>
+                <p>{address.flat}, {address.area}</p>
+                <p>{address.city}, {address.state} - {address.pincode}</p>
+                <p className="mt-2 text-xs">Ph: {address.phone} {address.email && `| Email: ${address.email}`}</p>
 
                 {!compact && (
                     <div className="mt-4 flex gap-2">
@@ -168,108 +170,5 @@ export const ProfileForm = ({ defaultValues }: { defaultValues: UserProfile }) =
                 </form>
             </CardContent>
         </Card>
-    );
-};
-
-export const AddressDialog = ({
-    open,
-    onOpenChange,
-    initialData,
-    onSave
-}: {
-    open: boolean,
-    onOpenChange: (open: boolean) => void,
-    initialData?: Partial<Address> | null,
-    onSave: (address: Partial<Address>) => Promise<void>
-}) => {
-    const [isLoading, setIsLoading] = useState(false);
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setIsLoading(true);
-        const formData = new FormData(e.currentTarget);
-        try {
-            await onSave({
-                type: formData.get('type') as any,
-                name: formData.get('name') as string,
-                street: formData.get('street') as string,
-                city: formData.get('city') as string,
-                state: formData.get('state') as string,
-                zip: formData.get('zip') as string,
-                phone: formData.get('phone') as string,
-                isDefault: formData.get('isDefault') === 'on'
-            });
-            onOpenChange(false);
-        } catch (error) {
-            alert("Failed to save address");
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                    <DialogTitle>{initialData ? 'Edit Address' : 'Add New Address'}</DialogTitle>
-                </DialogHeader>
-                <form onSubmit={handleSubmit} className="grid gap-4 py-4">
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="type">Address Type</Label>
-                            <select
-                                id="type"
-                                name="type"
-                                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                                defaultValue={initialData?.type || "Home"}
-                            >
-                                <option value="Home">Home</option>
-                                <option value="Work">Work</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="name">Full Name</Label>
-                            <Input id="name" name="name" defaultValue={initialData?.name} required />
-                        </div>
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="street">Street Address</Label>
-                        <Textarea id="street" name="street" defaultValue={initialData?.street} required className="resize-none" rows={2} />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="city">City</Label>
-                            <Input id="city" name="city" defaultValue={initialData?.city} required />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="state">State</Label>
-                            <Input id="state" name="state" defaultValue={initialData?.state} required />
-                        </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="zip">ZIP Code</Label>
-                            <Input id="zip" name="zip" defaultValue={initialData?.zip} required />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="phone">Phone Number</Label>
-                            <Input id="phone" name="phone" type="tel" defaultValue={initialData?.phone} required />
-                        </div>
-                    </div>
-                    <div className="flex items-center space-x-2 mt-2">
-                        <input type="checkbox" id="isDefault" name="isDefault" defaultChecked={initialData?.isDefault} className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" />
-                        <Label htmlFor="isDefault" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                            Set as default address
-                        </Label>
-                    </div>
-                    <DialogFooter>
-                        <Button type="submit" disabled={isLoading}>
-                            {isLoading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...</> : "Save Address"}
-                        </Button>
-                    </DialogFooter>
-                </form>
-            </DialogContent>
-        </Dialog>
     );
 };

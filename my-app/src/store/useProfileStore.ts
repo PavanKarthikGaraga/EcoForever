@@ -14,11 +14,13 @@ export interface Address {
     _id?: string;
     type: "Home" | "Work" | "Other";
     name: string;
-    street: string;
+    email: string;
+    phone: string;
+    flat: string;
+    area: string;
     city: string;
     state: string;
-    zip: string;
-    phone: string;
+    pincode: string;
     isDefault?: boolean;
 }
 
