@@ -2,14 +2,18 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { ShoppingCart, Search, User } from "lucide-react";
+import { ShoppingCart, Search, User, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { CartSheet } from "@/components/cart/CartSheet";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const { isAuthenticated, checkAuth } = useAuthStore();
 
   useEffect(() => {
+    checkAuth(); // Check session on mount
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
@@ -43,24 +47,25 @@ const Navbar = () => {
 
           {/* Icons */}
           <div className="flex items-center space-x-2 shrink-0">
-            {/* Profile Button */}
-            <Button variant="ghost" asChild className="hover:bg-primary">
-              <Link href="/profile">
-                <User className="h-5 w-5" />
-                <span>Profile</span>
-              </Link>
-            </Button>
+            {/* Profile/Login Button */}
+            {isAuthenticated ? (
+              <Button variant="ghost" asChild className="hover:bg-primary">
+                <Link href="/profile">
+                  <User className="h-5 w-5 mr-2" />
+                  <span className="hidden sm:inline">Profile</span>
+                </Link>
+              </Button>
+            ) : (
+              <Button variant="ghost" asChild className="hover:bg-primary">
+                <Link href="/login">
+                  <LogIn className="h-5 w-5 mr-2" />
+                  <span className="hidden sm:inline">Sign In</span>
+                </Link>
+              </Button>
+            )}
 
-            {/* Cart Button */}
-            <Button variant="ghost" className="relative hover:bg-primary" asChild>
-              <Link href="/cart">
-                <ShoppingCart className="h-5 w-5" />
-                <span>Cart</span>
-                <span className="absolute -top-1 -right-1 bg-primary-accent text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  0
-                </span>
-              </Link>
-            </Button>
+            {/* Cart Drawer */}
+            <CartSheet />
           </div>
         </div>
       </div>

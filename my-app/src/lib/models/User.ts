@@ -20,6 +20,35 @@ const UserSchema = new mongoose.Schema({
         enum: ['user', 'admin'],
         default: 'user',
     },
+    isVerified: {
+        type: Boolean,
+        default: false,
+    },
+    phone: {
+        type: String,
+    },
+    otp: {
+        type: String,
+    },
+    otpExpires: {
+        type: Date,
+    },
+    addresses: [{
+        type: {
+            type: String, // 'Home', 'Work', 'Other'
+            default: 'Home'
+        },
+        name: String,
+        street: String,
+        city: String,
+        state: String,
+        zip: String,
+        phone: String,
+        isDefault: {
+            type: Boolean,
+            default: false
+        }
+    }],
     createdAt: {
         type: Date,
         default: Date.now,

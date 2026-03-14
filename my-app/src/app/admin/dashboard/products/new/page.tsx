@@ -28,14 +28,18 @@ interface Variant {
     size: string;
     price: string;
     stock: string;
+    premiumPrice?: string;
+    premiumStock?: string;
 }
 
 export default function CreateProductPage() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [images, setImages] = useState<string[]>([]);
+    const [hasPremium, setHasPremium] = useState(false);
+    const [premiumImages, setPremiumImages] = useState<string[]>([]);
     const [variants, setVariants] = useState<Variant[]>([
-        { size: '', price: '', stock: '' },
+        { size: '', price: '', stock: '', premiumPrice: '', premiumStock: '' },
     ]);
     const [formData, setFormData] = useState({
         title: '',
@@ -56,14 +60,14 @@ export default function CreateProductPage() {
     };
 
     const addVariant = () => {
-        setVariants([...variants, { size: '', price: '', stock: '' }]);
+        setVariants([...variants, { size: '', price: '', stock: '', premiumPrice: '', premiumStock: '' }]);
     };
 
     const removeVariant = (index: number) => {
         setVariants(variants.filter((_, i) => i !== index));
     };
 
-    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, isPremium = false) => {
         const files = e.target.files;
         if (!files || files.length === 0) return;
 
@@ -78,7 +82,11 @@ export default function CreateProductPage() {
             });
             const data = await res.json();
             if (res.ok && data.url) {
-                setImages([...images, data.url]);
+                if (isPremium) {
+                    setPremiumImages([...premiumImages, data.url]);
+                } else {
+                    setImages([...images, data.url]);
+                }
             } else {
                 alert('Upload failed');
             }
@@ -90,8 +98,12 @@ export default function CreateProductPage() {
         }
     };
 
-    const removeImage = (index: number) => {
-        setImages(images.filter((_, i) => i !== index));
+    const removeImage = (index: number, isPremium = false) => {
+        if (isPremium) {
+            setPremiumImages(premiumImages.filter((_, i) => i !== index));
+        } else {
+            setImages(images.filter((_, i) => i !== index));
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -109,10 +121,14 @@ export default function CreateProductPage() {
             const payload = {
                 ...formData,
                 images,
+                hasPremium,
+                premiumImages,
                 variants: variants.map(v => ({
                     size: v.size,
                     price: parseFloat(v.price),
-                    stock: parseInt(v.stock)
+                    stock: parseInt(v.stock),
+                    ...(hasPremium && v.premiumPrice ? { premiumPrice: parseFloat(v.premiumPrice) } : {}),
+                    ...(hasPremium && v.premiumStock ? { premiumStock: parseInt(v.premiumStock) } : {})
                 }))
             };
 
@@ -205,6 +221,19 @@ export default function CreateProductPage() {
                             />
                         </div>
 
+                        <div className="flex items-center space-x-2 border p-4 rounded-md bg-gray-50">
+                            <input
+                                type="checkbox"
+                                id="hasPremium"
+                                checked={hasPremium}
+                                onChange={(e) => setHasPremium(e.target.checked)}
+                                className="h-4 w-4 rounded border-gray-300 text-primary-accent focus:ring-primary-accent"
+                            />
+                            <Label htmlFor="hasPremium" className="font-semibold text-base cursor-pointer">
+                                Enable Premium Variant
+                            </Label>
+                        </div>
+
                         {/* Images */}
                         <div className="space-y-2">
                             <Label>Images</Label>
@@ -239,6 +268,43 @@ export default function CreateProductPage() {
                                 </Label>
                             </div>
                         </div>
+
+                        {/* Premium Images */}
+                        {hasPremium && (
+                            <div className="space-y-2 border-t pt-4 border-dashed">
+                                <Label className="text-primary-accent">Premium Images</Label>
+                                <div className="flex flex-wrap gap-4">
+                                    {premiumImages.map((url, idx) => (
+                                        <div key={idx} className="relative h-24 w-24 border rounded-md overflow-hidden group">
+                                            <Image src={url} alt="Premium Product" fill className="object-cover" />
+                                            <button
+                                                type="button"
+                                                onClick={() => removeImage(idx, true)}
+                                                className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                                            >
+                                                <X className="h-3 w-3" />
+                                            </button>
+                                        </div>
+                                    ))}
+
+                                    <Label
+                                        htmlFor="premium-image-upload"
+                                        className="flex h-24 w-24 cursor-pointer flex-col items-center justify-center rounded-md border border-dashed border-primary-accent/50 hover:bg-primary-accent/5"
+                                    >
+                                        <Upload className="h-5 w-5 text-primary-accent disabled:opacity-50" />
+                                        <span className="text-xs text-primary-accent mt-1">Upload Premium</span>
+                                        <Input
+                                            id="premium-image-upload"
+                                            type="file"
+                                            accept="image/*"
+                                            className="hidden"
+                                            onChange={(e) => handleImageUpload(e, true)}
+                                            disabled={loading}
+                                        />
+                                    </Label>
+                                </div>
+                            </div>
+                        )}
 
                         {/* Variants */}
                         <div className="space-y-4">
@@ -280,6 +346,29 @@ export default function CreateProductPage() {
                                             required
                                         />
                                     </div>
+
+                                    {hasPremium && (
+                                        <>
+                                            <div className="space-y-2">
+                                                <Label className="text-primary-accent">Prem. Price (₹)</Label>
+                                                <Input
+                                                    type="number"
+                                                    placeholder="0.00"
+                                                    value={variant.premiumPrice || ''}
+                                                    onChange={(e) => handleVariantChange(index, 'premiumPrice', e.target.value)}
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <Label className="text-primary-accent">Prem. Stock</Label>
+                                                <Input
+                                                    type="number"
+                                                    placeholder="0"
+                                                    value={variant.premiumStock || ''}
+                                                    onChange={(e) => handleVariantChange(index, 'premiumStock', e.target.value)}
+                                                />
+                                            </div>
+                                        </>
+                                    )}
 
                                     {variants.length > 1 && (
                                         <Button

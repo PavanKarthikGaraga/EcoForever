@@ -4,8 +4,27 @@ import { ShoppingCart, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
+import { useCartStore } from "@/store/useCartStore";
 
 const ComboPacks = () => {
+    const addItem = useCartStore((state) => state.addItem);
+
+    const handleAddToCart = (pack: any) => {
+        const price = pack.isPremium ? 799 : 499; // Mock prices for combo packs
+
+        addItem({
+            id: `combo-${pack.isPremium ? 'premium' : 'normal'}`,
+            productId: `combo-${pack.isPremium ? 'premium' : 'normal'}`,
+            name: pack.name,
+            image: pack.image,
+            price: price,
+            quantity: 1,
+            packSize: "1 Combo Box",
+            size: "Standard",
+            isPremium: pack.isPremium
+        });
+    };
+
     const packs = [
         {
             name: "Normal Combo Pack",
@@ -94,7 +113,10 @@ const ComboPacks = () => {
                                             Includes: {pack.items.join(", ")}
                                         </p>
 
-                                        <Button className="bg-white text-black hover:bg-white/90 font-semibold px-6 py-2 md:px-8 shadow-md transition-transform active:scale-95 text-sm md:text-base w-full md:w-auto">
+                                        <Button
+                                            onClick={() => handleAddToCart(pack)}
+                                            className="bg-white text-black hover:bg-white/90 font-semibold px-6 py-2 md:px-8 shadow-md transition-transform active:scale-95 text-sm md:text-base w-full md:w-auto"
+                                        >
                                             Add to Cart
                                         </Button>
                                     </div>

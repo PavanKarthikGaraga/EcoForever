@@ -4,50 +4,81 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { Star, ShoppingCart, Heart, Truck, Shield, RotateCcw, Check } from "lucide-react";
+import { Star, ShoppingCart, Truck, Shield, RotateCcw, Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { products, Product, ProductVariant } from "@/data/products";
 import { cn } from "@/lib/utils";
+import { useCartStore } from "@/store/useCartStore";
 
 const ProductDetail = () => {
   const params = useParams();
   const id = params?.id as string;
-  const product = products.find(p => p.id === id);
 
-  // State for selections
-  const [selectedQuality, setSelectedQuality] = useState<string>("");
+  const [product, setProduct] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  const [isPremiumSelected, setIsPremiumSelected] = useState(false);
   const [selectedSize, setSelectedSize] = useState<string>("");
-  const [selectedWeight, setSelectedWeight] = useState<string>("");
-  const [currentVariant, setCurrentVariant] = useState<ProductVariant | null>(null);
+  const [currentVariant, setCurrentVariant] = useState<any>(null);
+  const [activeImages, setActiveImages] = useState<string[]>([]);
+  const [quantity, setQuantity] = useState(1);
+  const addItem = useCartStore((state) => state.addItem);
 
-  // Initialize defaults on product load
   useEffect(() => {
-    if (product) {
-      // Default to the first available variant options
-      const defaultVariant = product.variants[0];
-      if (defaultVariant) {
-        setSelectedQuality(defaultVariant.attributes.quality || "Standard");
-        setSelectedSize(defaultVariant.attributes.size || "Standard");
-        setSelectedWeight(defaultVariant.attributes.weight || "Standard");
+    const fetchProduct = async () => {
+      try {
+        const res = await fetch(`/api/admin/products/${id}`);
+        if (!res.ok) throw new Error("Product not found");
+        const data = await res.json();
+        setProduct(data);
+
+        // Set initial defaults
+        if (data.variants && data.variants.length > 0) {
+          setSelectedSize(data.variants[0].size);
+          setCurrentVariant(data.variants[0]);
+        }
+        setActiveImages(data.images || []);
+      } catch (err) {
+        console.error(err);
+        setError(true);
+      } finally {
+        setLoading(false);
       }
-    }
-  }, [product]);
+    };
 
-  // Update current variant when selections change
+    if (id) fetchProduct();
+  }, [id]);
+
+  // Update current variant when size changes
   useEffect(() => {
-    if (product) {
-      const variant = product.variants.find(v =>
-        (v.attributes.quality || "Standard") === selectedQuality &&
-        (v.attributes.size || "Standard") === selectedSize &&
-        (v.attributes.weight || "Standard") === selectedWeight
-      );
+    if (product && product.variants) {
+      const variant = product.variants.find((v: any) => v.size === selectedSize);
       setCurrentVariant(variant || null);
     }
-  }, [product, selectedQuality, selectedSize, selectedWeight]);
+  }, [product, selectedSize]);
 
-  if (!product) {
+  // Update active images based on premium toggle
+  useEffect(() => {
+    if (product) {
+      if (isPremiumSelected && product.hasPremium && product.premiumImages && product.premiumImages.length > 0) {
+        setActiveImages(product.premiumImages);
+      } else {
+        setActiveImages(product.images || []);
+      }
+    }
+  }, [isPremiumSelected, product]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-bg flex items-center justify-center">
+        <Loader2 className="h-12 w-12 animate-spin text-primary-accent" />
+      </div>
+    );
+  }
+
+  if (error || !product) {
     return (
       <div className="min-h-screen bg-bg flex items-center justify-center">
         <div className="text-center">
@@ -60,49 +91,43 @@ const ProductDetail = () => {
     );
   }
 
-  // Derive available options based on current selections
-  // 1. Available Qualities (always all available for the product)
-  const availableQualities = Array.from(new Set(product.variants.map(v => v.attributes.quality || "Standard")));
+  const availableSizes = product.variants ? product.variants.map((v: any) => v.size) : [];
 
-  // 2. Available Sizes (based on selected quality)
-  const availableSizes = Array.from(new Set(
-    product.variants
-      .filter(v => (v.attributes.quality || "Standard") === selectedQuality)
-      .map(v => v.attributes.size || "Standard")
-  ));
+  // Calculate current price based on premium toggle
+  let displayPrice = 0;
+  let displayStock = 0;
 
-  // 3. Available Weights (based on selected quality AND size)
-  const availableWeights = Array.from(new Set(
-    product.variants
-      .filter(v =>
-        (v.attributes.quality || "Standard") === selectedQuality &&
-        (v.attributes.size || "Standard") === selectedSize
-      )
-      .map(v => v.attributes.weight || "Standard")
-  ));
-
-  const handleQualityChange = (quality: string) => {
-    setSelectedQuality(quality);
-    // Reset dependent selections to valid defaults
-    const validVariants = product.variants.filter(v => (v.attributes.quality || "Standard") === quality);
-    if (validVariants.length > 0) {
-      setSelectedSize(validVariants[0].attributes.size || "Standard");
-      setSelectedWeight(validVariants[0].attributes.weight || "Standard");
+  if (currentVariant) {
+    if (isPremiumSelected) {
+      displayPrice = currentVariant.premiumPrice || currentVariant.price;
+      displayStock = currentVariant.premiumStock || 0;
+    } else {
+      displayPrice = currentVariant.price;
+      displayStock = currentVariant.stock;
     }
+  }
+
+  const handleAddToCart = () => {
+    if (!product || !currentVariant) return;
+    const itemId = `${product._id}-${currentVariant.size}-${isPremiumSelected ? 'premium' : 'standard'}`;
+    addItem({
+      id: itemId,
+      productId: product._id,
+      name: product.title,
+      image: activeImages[0] || "/placeholder.png",
+      price: totalPrice,
+      quantity: quantity,
+      packSize: product.packSize || "pack",
+      size: currentVariant.size,
+      isPremium: isPremiumSelected
+    });
+    setQuantity(1);
   };
 
-  const handleSizeChange = (size: string) => {
-    setSelectedSize(size);
-    // Reset weight to a valid default for this size
-    const validVariants = product.variants.filter(v =>
-      (v.attributes.quality || "Standard") === selectedQuality &&
-      (v.attributes.size || "Standard") === size
-    );
-    if (validVariants.length > 0) {
-      setSelectedWeight(validVariants[0].attributes.weight || "Standard");
-    }
-  };
-
+  // Try to extract original pack size number for per-piece price calculation
+  const packCount = product.packSize;
+  const perPiecePrice = displayPrice;
+  const totalPrice = displayPrice * packCount;
   return (
     <div className="min-h-screen bg-white">
       {/* Breadcrumb */}
@@ -112,7 +137,9 @@ const ProductDetail = () => {
           <span>/</span>
           <Link href="/#products" className="hover:text-primary-accent">Products</Link>
           <span>/</span>
-          <span className="text-headings">{product.name}</span>
+          <span className="text-headings">{product.category}</span>
+          <span>/</span>
+          <span className="text-headings">{product.title}</span>
         </nav>
       </div>
 
@@ -120,47 +147,49 @@ const ProductDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Product Images */}
           <div className="space-y-4">
-            <div className="aspect-square relative overflow-hidden rounded-2xl bg-card-accent">
+            <div className="aspect-square relative overflow-hidden rounded-2xl bg-card-accent border shadow-sm">
               <Image
-                src={product.images[0]}
-                alt={product.name}
+                src={activeImages[0] || "/placeholder.png"}
+                alt={product.title}
                 fill
                 className="object-cover"
                 priority
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
             </div>
-            <div className="grid grid-cols-4 gap-4">
-              {product.images.map((image, index) => (
-                <div key={index} className="aspect-square relative overflow-hidden rounded-lg bg-card-accent cursor-pointer">
-                  <Image
-                    src={image}
-                    alt={`${product.name} ${index + 1} `}
-                    fill
-                    className="object-cover hover:opacity-80 transition-opacity"
-                    sizes="(max-width: 1024px) 25vw, 12.5vw"
-                  />
-                </div>
-              ))}
-            </div>
+            {activeImages.length > 1 && (
+              <div className="grid grid-cols-4 gap-4">
+                {activeImages.map((image, index) => (
+                  <div key={index} className="aspect-square relative overflow-hidden rounded-lg bg-card-accent cursor-pointer border shadow-sm">
+                    <Image
+                      src={image}
+                      alt={`${product.title} view ${index + 1}`}
+                      fill
+                      className="object-cover hover:opacity-80 transition-opacity"
+                      sizes="(max-width: 1024px) 25vw, 12.5vw"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
 
-            {/* Shipping & Returns - Moved here */}
+            {/* Shipping & Returns */}
             <div className="grid grid-cols-1 gap-4 pt-6">
-              <div className="flex items-center space-x-3 p-4 bg-alt-bg rounded-xl">
+              <div className="flex items-center space-x-3 p-4 bg-gray-50 border rounded-xl">
                 <Truck className="h-8 w-8 text-primary-accent" />
                 <div>
                   <div className="font-medium text-headings">Free Shipping</div>
                   <div className="text-sm text-muted-foreground">Orders over ₹500</div>
                 </div>
               </div>
-              <div className="flex items-center space-x-3 p-4 bg-alt-bg rounded-xl">
+              <div className="flex items-center space-x-3 p-4 bg-gray-50 border rounded-xl">
                 <Shield className="h-8 w-8 text-primary-accent" />
                 <div>
                   <div className="font-medium text-headings">Secure Payment</div>
                   <div className="text-sm text-muted-foreground">100% Protected</div>
                 </div>
               </div>
-              <div className="flex items-center space-x-3 p-4 bg-alt-bg rounded-xl">
+              <div className="flex items-center space-x-3 p-4 bg-gray-50 border rounded-xl">
                 <RotateCcw className="h-8 w-8 text-primary-accent" />
                 <div>
                   <div className="font-medium text-headings">Easy Returns</div>
@@ -174,99 +203,111 @@ const ProductDetail = () => {
           <div className="space-y-6">
             <div>
               <div className="flex items-center gap-3 mb-4">
-                {product.badge && (
-                  <Badge className="bg-primary-accent text-primary-foreground">
-                    {product.badge}
-                  </Badge>
-                )}
-                {product.ecoFriendly && (
-                  <Badge variant="outline" className="text-green-600 border-green-600">
-                    Eco-Friendly
+                <Badge className="bg-primary-accent text-primary-foreground">
+                  100% Areca Leaf
+                </Badge>
+                {product.hasPremium && (
+                  <Badge variant="outline" className="text-amber-600 border-amber-600">
+                    Premium Available
                   </Badge>
                 )}
               </div>
 
               <h1 className="text-3xl md:text-4xl font-heading font-bold text-headings mb-4">
-                {product.name}
+                {product.title}
               </h1>
 
-              {/* Rating */}
-              <div className="flex items-center space-x-4 mb-6">
+              {/* Default Rating Placeholder */}
+              {/* <div className="flex items-center space-x-4 mb-6">
                 <div className="flex items-center space-x-1">
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`h-5 w-5 ${i < Math.floor(product.rating)
-                        ? "text-yellow-400 fill-current"
-                        : "text-gray-300"
-                        } `}
+                      className={`h-5 w-5 ${i < 5 ? "text-yellow-400 fill-current" : "text-gray-300"}`}
                     />
                   ))}
-                  <span className="ml-2 text-lg font-medium">{product.rating}</span>
+                  <span className="ml-2 text-lg font-medium">5.0</span>
                 </div>
                 <span className="text-muted-foreground">
-                  ({product.reviews} reviews)
+                  (12 reviews)
                 </span>
-              </div>
+              </div> */}
 
               {/* Price */}
-              <div className="flex items-center space-x-3 mb-6">
-                <span className="text-3xl font-heading font-bold text-headings">
-                  {currentVariant ? (
-                    (() => {
-                      const packMatch = currentVariant.attributes.pack?.match(/Pack of (\d+)/i);
-                      const packSize = packMatch ? parseInt(packMatch[1]) : 1;
-                      const uPrice = currentVariant.price / packSize;
-                      return `₹${uPrice.toFixed(2)} / piece`;
-                    })()
-                  ) : "..."}
-                </span>
-                {currentVariant && (
-                  <span className="text-lg text-muted-foreground">
-                    (₹{currentVariant.price} for {currentVariant.attributes.pack || "pack"})
-                  </span>
+              <div className="flex flex-col mb-6 bg-gray-50 p-4 border rounded-xl relative overflow-hidden">
+                {isPremiumSelected && (
+                  <div className="absolute top-0 right-0 bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
+                    PREMIUM
+                  </div>
                 )}
+                <div className="flex items-center space-x-3 ">
+                  <span className="text-3xl font-heading font-bold text-headings">
+                    {currentVariant ? `₹${perPiecePrice.toFixed(2)} / piece` : "..."} 
+                  </span>
+                  <span className="text-sm text-muted-foreground"> (pack of {packCount})</span>
+                </div>
+
               </div>
 
               {/* Variant Selectors */}
 
-              {/* Quality Selector */}
-              {availableQualities.length > 1 && (
-                <div className="mb-4">
-                  <span className="block text-sm font-medium text-headings mb-2">Quality</span>
-                  <div className="flex flex-wrap gap-3">
-                    {availableQualities.map(q => (
-                      <button
-                        key={q}
-                        onClick={() => handleQualityChange(q)}
-                        className={cn(
-                          "px-4 py-2 rounded-lg border transition-all text-sm font-medium",
-                          selectedQuality === q
-                            ? "bg-primary-accent text-white border-primary-accent"
-                            : "bg-white text-body-text border-border hover:border-primary-accent/50"
-                        )}
-                      >
-                        {q}
-                      </button>
-                    ))}
+              {/* Premium Toggle */}
+              {product.hasPremium && (
+                <div className="mb-6 border-b pb-6">
+                  <span className="block text-sm font-medium text-headings mb-2">Select Variant Quality</span>
+                  <div className="flex gap-4">
+                    <button
+                      onClick={() => setIsPremiumSelected(false)}
+                      className={cn(
+                        "flex-1 px-4 py-3 rounded-lg border-2 transition-all flex flex-col items-center justify-center relative",
+                        !isPremiumSelected
+                          ? "bg-primary-accent/5 border-primary-accent"
+                          : "bg-white border-border hover:border-primary-accent/50"
+                      )}
+                    >
+                      <span className={cn("font-bold", !isPremiumSelected ? "text-primary-accent" : "text-headings")}>
+                        Standard
+                      </span>
+                      <span className="text-xs text-muted-foreground mt-1">High-quality eco friendly</span>
+                      {!isPremiumSelected && (
+                        <Check className="absolute top-2 right-2 w-4 h-4 text-primary-accent" />
+                      )}
+                    </button>
+                    <button
+                      onClick={() => setIsPremiumSelected(true)}
+                      className={cn(
+                        "flex-1 px-4 py-3 rounded-lg border-2 transition-all flex flex-col items-center justify-center relative",
+                        isPremiumSelected
+                          ? "bg-amber-50 border-amber-500"
+                          : "bg-white border-border hover:border-amber-500/50"
+                      )}
+                    >
+                      <span className={cn("font-bold", isPremiumSelected ? "text-amber-600" : "text-headings")}>
+                        Premium
+                      </span>
+                      <span className="text-xs text-muted-foreground mt-1">Sturdier, zero defects</span>
+                      {isPremiumSelected && (
+                        <Check className="absolute top-2 right-2 w-4 h-4 text-amber-500" />
+                      )}
+                    </button>
                   </div>
                 </div>
               )}
 
               {/* Size Selector */}
-              {availableSizes.length > 1 && (
-                <div className="mb-4">
-                  <span className="block text-sm font-medium text-headings mb-2">Size</span>
+              {availableSizes.length > 0 && (
+                <div className="mb-6">
+                  <span className="block text-sm font-medium text-headings mb-2">Available Sizes</span>
                   <div className="flex flex-wrap gap-3">
-                    {availableSizes.map(s => (
+                    {availableSizes.map((s: string) => (
                       <button
                         key={s}
-                        onClick={() => handleSizeChange(s)}
+                        onClick={() => setSelectedSize(s)}
                         className={cn(
                           "px-4 py-2 rounded-lg border transition-all text-sm font-medium",
                           selectedSize === s
                             ? "bg-primary-accent text-white border-primary-accent"
-                            : "bg-white text-body-text border-border hover:border-primary-accent/50"
+                            : "bg-white text-body-text border-gray-200 hover:border-primary-accent/50"
                         )}
                       >
                         {s}
@@ -276,144 +317,62 @@ const ProductDetail = () => {
                 </div>
               )}
 
-              {/* Weight/Variant Selector */}
-              {availableWeights.length > 1 && (
-                <div className="mb-6">
-                  <span className="block text-sm font-medium text-headings mb-2">Weight / Thickness</span>
-                  <div className="flex flex-wrap gap-3">
-                    {availableWeights.map(w => (
-                      <button
-                        key={w}
-                        onClick={() => setSelectedWeight(w)}
-                        className={cn(
-                          "px-4 py-2 rounded-lg border transition-all text-sm font-medium relative overflow-hidden",
-                          selectedWeight === w
-                            ? "bg-primary-accent text-white border-primary-accent"
-                            : "bg-white text-body-text border-border hover:border-primary-accent/50"
-                        )}
-                      >
-                        {w}
-                        {selectedWeight === w && (
-                          <div className="absolute top-0 right-0 p-0.5 bg-white/20 rounded-bl">
-                            <Check className="w-3 h-3 text-white" />
-                          </div>
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
 
               {/* Stock Status */}
               <div className="flex items-center space-x-2 mb-6">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span className="text-green-600 font-medium">In Stock</span>
-                <span className="text-muted-foreground">• Ships within 2-3 business days</span>
+                {displayStock > 0 ? (
+                  <>
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span className="text-green-600 font-medium">In Stock</span>
+                  </>
+                ) : (
+                  <>
+                    <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                    <span className="text-red-600 font-medium">Out of Stock</span>
+                  </>
+                )}
               </div>
             </div>
 
             {/* Description */}
-            <div>
+            <div className="border-t pt-6">
               <h3 className="text-lg font-heading font-semibold text-headings mb-3">
                 Description
               </h3>
-              <p className="text-muted-foreground leading-relaxed">
+              <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
                 {product.description}
               </p>
             </div>
 
             {/* Quantity and Add to Cart */}
-            <div className="space-y-4">
+            <div className="space-y-4 pt-4">
               <div className="flex items-center space-x-4">
                 <label className="font-medium text-headings">Quantity:</label>
-                <select className="px-4 py-2 border border-border rounded-xl bg-white min-w-20">
-                  {[1, 2, 3, 4, 5].map(num => (
+                <select
+                  className="px-4 py-2 border border-border rounded-xl bg-white min-w-20"
+                  value={quantity}
+                  onChange={(e) => setQuantity(Number(e.target.value))}
+                >
+                  {[1, 2, 3, 4, 5, 10, 20].map(num => (
                     <option key={num} value={num}>{num}</option>
                   ))}
                 </select>
               </div>
 
               <div className="flex gap-4">
-                <Button className="flex-1" size="lg" disabled={!currentVariant}>
+                <Button
+                  className="flex-1 py-6 text-lg shadow-md"
+                  size="lg"
+                  disabled={!currentVariant || displayStock <= 0}
+                  onClick={handleAddToCart}
+                >
                   <ShoppingCart className="h-5 w-5 mr-2" />
-                  {currentVariant ? "Add to Cart" : "Unavailable"}
+                  {!currentVariant ? "Select Options" : displayStock <= 0 ? "Out of Stock" : "Add to Cart"}
                 </Button>
               </div>
             </div>
-
-            {/* Features */}
-            <Card>
-              <CardContent className="p-6">
-                <h3 className="text-lg font-heading font-semibold text-headings mb-4">
-                  Key Features
-                </h3>
-                <ul className="space-y-3">
-                  {product.features.map((feature, index) => (
-                    <li key={index} className="flex items-start">
-                      <div className="w-2 h-2 bg-primary-accent rounded-full mt-2 mr-3 shrink-0"></div>
-                      <span className="text-muted-foreground">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
           </div>
 
-        </div>
-
-
-        {/* Related Products */}
-        <div className="mt-16">
-          <h2 className="text-2xl font-heading font-bold text-headings mb-8 text-center">
-            You Might Also Like
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {products
-              .filter(p => p.id !== product.id && p.category === product.category)
-              .slice(0, 4)
-              .map((relatedProduct) => (
-                <Card key={relatedProduct.id} className="group overflow-hidden hover:shadow-lg transition-all duration-300">
-                  <div className="aspect-square relative overflow-hidden bg-card-accent">
-                    <Image
-                      src={relatedProduct.images[0]}
-                      alt={relatedProduct.name}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    />
-                    {relatedProduct.badge && (
-                      <Badge className="absolute top-3 left-3 bg-primary-accent text-primary-foreground">
-                        {relatedProduct.badge}
-                      </Badge>
-                    )}
-                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      <Button size="sm" className="bg-white text-primary-accent hover:bg-white/90" asChild>
-                        <Link href={`/product/${relatedProduct.id}`}>Quick View</Link>
-                      </Button>
-                    </div>
-                  </div>
-
-                  <CardContent className="p-4">
-                    <h3 className="text-lg font-heading font-semibold text-headings mb-2 group-hover:text-primary-accent transition-colors line-clamp-2">
-                      {relatedProduct.name}
-                    </h3>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <span className="text-lg font-bold text-headings">
-                          ₹{Math.min(...relatedProduct.variants.map(v => v.price))}
-                        </span>
-                      </div>
-                    </div>
-                    <Button asChild className="w-full mt-3" size="sm">
-                      <Link href={`/product/${relatedProduct.id}`}>
-                        View Details
-                      </Link>
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-          </div>
         </div>
       </div>
     </div>

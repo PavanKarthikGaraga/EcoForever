@@ -4,7 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Package, MapPin, Loader2 } from "lucide-react";
+import { Package, MapPin, Loader2, Plus, Edit2, Trash2 } from "lucide-react";
+import { useProfileStore } from "@/store/useProfileStore";
+import { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
 
 // --- Types ---
 export interface Order {
@@ -16,7 +19,8 @@ export interface Order {
 }
 
 export interface Address {
-    id: string;
+    id?: string;
+    _id?: string;
     type: "Home" | "Work" | "Other";
     name: string;
     street: string;
@@ -73,7 +77,7 @@ export const OrderCard = ({ order, compact = false }: { order: Order; compact?: 
     );
 };
 
-export const AddressCard = ({ address, compact = false }: { address: Address; compact?: boolean }) => {
+export const AddressCard = ({ address, compact = false, onEdit, onDelete }: { address: Address; compact?: boolean, onEdit?: () => void, onDelete?: () => void }) => {
     return (
         <Card className={`min-w-[280px] snap-start relative ${compact ? 'shadow-sm' : ''}`}>
             <CardHeader className="pb-2">
@@ -83,7 +87,7 @@ export const AddressCard = ({ address, compact = false }: { address: Address; co
                         <span className="font-semibold">{address.type}</span>
                     </div>
                     {address.isDefault && (
-                        <Badge variant="outline" className="text-[10px] px-2 py-0 border-primary text-primary">
+                        <Badge variant="outline" className="text-[10px] px-2 py-0 border-primary text-primary bg-primary/5">
                             Default
                         </Badge>
                     )}
@@ -94,48 +98,178 @@ export const AddressCard = ({ address, compact = false }: { address: Address; co
                 <p>{address.street}</p>
                 <p>{address.city}, {address.state} - {address.zip}</p>
                 <p className="mt-2 text-xs">Ph: {address.phone}</p>
-                <div className="mt-3 flex gap-2">
-                    <Button variant="outline" size="sm" className="flex-1 text-xs h-8">
-                        Edit
-                    </Button>
-                    <Button variant="ghost" size="sm" className="text-xs h-8 text-destructive hover:text-destructive">
-                        Delete
-                    </Button>
-                </div>
+
+                {!compact && (
+                    <div className="mt-4 flex gap-2">
+                        <Button variant="outline" size="sm" className="flex-1 text-xs h-8" onClick={onEdit}>
+                            <Edit2 className="w-3 h-3 mr-1" /> Edit
+                        </Button>
+                        <Button variant="ghost" size="sm" className="text-xs h-8 text-destructive hover:text-destructive hover:bg-destructive/10" onClick={onDelete}>
+                            <Trash2 className="w-3 h-3 mr-1" /> Delete
+                        </Button>
+                    </div>
+                )}
             </CardContent>
         </Card>
     );
 };
 
 export const ProfileForm = ({ defaultValues }: { defaultValues: UserProfile }) => {
+    const updateProfile = useProfileStore(state => state.updateProfile);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setIsLoading(true);
+        const formData = new FormData(e.currentTarget);
+
+        try {
+            await updateProfile({
+                firstName: formData.get('firstName') as string,
+                lastName: formData.get('lastName') as string,
+                phone: formData.get('phone') as string,
+            });
+            alert("Profile updated successfully!");
+        } catch (error) {
+            alert("Failed to update profile.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <Card>
             <CardHeader>
                 <CardTitle>Personal Information</CardTitle>
             </CardHeader>
             <CardContent>
-                <form className="grid gap-4 md:grid-cols-2">
+                <form className="grid gap-4 md:grid-cols-2" onSubmit={handleSubmit}>
                     <div className="space-y-2">
                         <Label htmlFor="firstName">First Name</Label>
-                        <Input id="firstName" defaultValue={defaultValues.firstName} />
+                        <Input id="firstName" name="firstName" defaultValue={defaultValues.firstName} required />
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="lastName">Last Name</Label>
-                        <Input id="lastName" defaultValue={defaultValues.lastName} />
+                        <Input id="lastName" name="lastName" defaultValue={defaultValues.lastName} required />
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="email">Email</Label>
-                        <Input id="email" type="email" defaultValue={defaultValues.email} />
+                        <Input id="email" name="email" type="email" defaultValue={defaultValues.email} disabled className="bg-gray-50 text-gray-500" />
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="phone">Mobile Number</Label>
-                        <Input id="phone" type="tel" defaultValue={defaultValues.phone} />
+                        <Input id="phone" name="phone" type="tel" defaultValue={defaultValues.phone} />
                     </div>
                     <div className="md:col-span-2 pt-2">
-                        <Button>Save Changes</Button>
+                        <Button type="submit" disabled={isLoading}>
+                            {isLoading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...</> : "Save Changes"}
+                        </Button>
                     </div>
                 </form>
             </CardContent>
         </Card>
+    );
+};
+
+export const AddressDialog = ({
+    open,
+    onOpenChange,
+    initialData,
+    onSave
+}: {
+    open: boolean,
+    onOpenChange: (open: boolean) => void,
+    initialData?: Partial<Address> | null,
+    onSave: (address: Partial<Address>) => Promise<void>
+}) => {
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setIsLoading(true);
+        const formData = new FormData(e.currentTarget);
+        try {
+            await onSave({
+                type: formData.get('type') as any,
+                name: formData.get('name') as string,
+                street: formData.get('street') as string,
+                city: formData.get('city') as string,
+                state: formData.get('state') as string,
+                zip: formData.get('zip') as string,
+                phone: formData.get('phone') as string,
+                isDefault: formData.get('isDefault') === 'on'
+            });
+            onOpenChange(false);
+        } catch (error) {
+            alert("Failed to save address");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    return (
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                    <DialogTitle>{initialData ? 'Edit Address' : 'Add New Address'}</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleSubmit} className="grid gap-4 py-4">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="type">Address Type</Label>
+                            <select
+                                id="type"
+                                name="type"
+                                className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                                defaultValue={initialData?.type || "Home"}
+                            >
+                                <option value="Home">Home</option>
+                                <option value="Work">Work</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="name">Full Name</Label>
+                            <Input id="name" name="name" defaultValue={initialData?.name} required />
+                        </div>
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="street">Street Address</Label>
+                        <Textarea id="street" name="street" defaultValue={initialData?.street} required className="resize-none" rows={2} />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="city">City</Label>
+                            <Input id="city" name="city" defaultValue={initialData?.city} required />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="state">State</Label>
+                            <Input id="state" name="state" defaultValue={initialData?.state} required />
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="zip">ZIP Code</Label>
+                            <Input id="zip" name="zip" defaultValue={initialData?.zip} required />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="phone">Phone Number</Label>
+                            <Input id="phone" name="phone" type="tel" defaultValue={initialData?.phone} required />
+                        </div>
+                    </div>
+                    <div className="flex items-center space-x-2 mt-2">
+                        <input type="checkbox" id="isDefault" name="isDefault" defaultChecked={initialData?.isDefault} className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary" />
+                        <Label htmlFor="isDefault" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                            Set as default address
+                        </Label>
+                    </div>
+                    <DialogFooter>
+                        <Button type="submit" disabled={isLoading}>
+                            {isLoading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...</> : "Save Address"}
+                        </Button>
+                    </DialogFooter>
+                </form>
+            </DialogContent>
+        </Dialog>
     );
 };

@@ -23,6 +23,14 @@ const ProductSchema = new mongoose.Schema({
         type: [String],
         required: [true, 'Please provide at least one image'],
     },
+    hasPremium: {
+        type: Boolean,
+        default: false,
+    },
+    premiumImages: {
+        type: [String],
+        default: [],
+    },
     variants: [
         {
             size: {
@@ -42,6 +50,14 @@ const ProductSchema = new mongoose.Schema({
             },
             sku: {
                 type: String,
+            },
+            premiumPrice: {
+                type: Number,
+                min: 0,
+            },
+            premiumStock: {
+                type: Number,
+                min: 0,
             },
         },
     ],

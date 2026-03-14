@@ -1,32 +1,27 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Trash2, Plus, Minus, ShoppingBag, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useCartStore } from "@/store/useCartStore";
 
 const Cart = () => {
-  // Mock cart data - in a real app, this would come from state management or API
-  const cartItems = [
-    {
-      id: "wooden-spork-white",
-      name: "4\" Wooden Spork - White",
-      price: 25,
-      quantity: 2,
-      image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=100&h=100&fit=crop&crop=center",
-      ecoFriendly: true,
-    },
-    {
-      id: "square-plate",
-      name: "10\" Square Plate",
-      price: 45,
-      quantity: 1,
-      image: "https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=100&h=100&fit=crop&crop=center",
-      ecoFriendly: true,
-    },
-  ];
+  const { items: cartItems, removeItem, updateQuantity, getSubtotal } = useCartStore();
+  const [mounted, setMounted] = useState(false);
 
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const shipping = subtotal > 500 ? 0 : 50;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return <div className="min-h-screen bg-white" />;
+  }
+
+  const subtotal = getSubtotal();
+  const shipping = subtotal > 500 || subtotal === 0 ? 0 : 50;
   const tax = Math.round(subtotal * 0.18); // 18% GST
   const total = subtotal + shipping + tax;
 
@@ -87,16 +82,19 @@ const Cart = () => {
                           <h3 className="font-heading font-semibold text-headings mb-1">
                             {item.name}
                           </h3>
-                          <div className="flex items-center space-x-2 mb-2">
-                            <span className="text-lg font-bold text-headings">₹{item.price}</span>
-                            {item.ecoFriendly && (
-                              <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">
-                                Eco-Friendly
+                          <div className="flex flex-wrap gap-2 mb-2">
+                            <span className="text-sm text-muted-foreground">Size: {item.size}</span>
+                            {item.isPremium && (
+                              <span className="text-xs bg-amber-100 text-amber-600 px-2 py-0.5 rounded-full font-bold">
+                                PREMIUM
                               </span>
                             )}
                           </div>
+                          <div className="flex items-center space-x-2 mb-2">
+                            <span className="text-lg font-bold text-headings">₹{item.price}</span>
+                          </div>
                           <p className="text-sm text-muted-foreground">
-                            Subtotal: ₹{item.price * item.quantity}
+                            Subtotal: ₹{(item.price * item.quantity).toFixed(2)}
                           </p>
                         </div>
 
@@ -106,6 +104,7 @@ const Cart = () => {
                             variant="outline"
                             size="icon"
                             className="h-8 w-8 rounded-full"
+                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
                           >
                             <Minus className="h-4 w-4" />
                           </Button>
@@ -114,6 +113,7 @@ const Cart = () => {
                             variant="outline"
                             size="icon"
                             className="h-8 w-8 rounded-full"
+                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
                           >
                             <Plus className="h-4 w-4" />
                           </Button>
@@ -124,6 +124,7 @@ const Cart = () => {
                           variant="ghost"
                           size="icon"
                           className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                          onClick={() => removeItem(item.id)}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -155,22 +156,22 @@ const Cart = () => {
                   <div className="space-y-4">
                     <div className="flex justify-between">
                       <span>Subtotal ({cartItems.length} items)</span>
-                      <span>₹{subtotal}</span>
+                      <span>₹{subtotal.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Shipping</span>
                       <span className={shipping === 0 ? "text-green-600" : ""}>
-                        {shipping === 0 ? "Free" : `₹${shipping}`}
+                        {shipping === 0 ? "Free" : `₹${shipping.toFixed(2)}`}
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span>Tax (GST 18%)</span>
-                      <span>₹{tax}</span>
+                      <span>₹{tax.toFixed(2)}</span>
                     </div>
                     <div className="border-t border-border pt-4">
                       <div className="flex justify-between text-lg font-bold">
                         <span>Total</span>
-                        <span>₹{total}</span>
+                        <span>₹{total.toFixed(2)}</span>
                       </div>
                     </div>
                   </div>

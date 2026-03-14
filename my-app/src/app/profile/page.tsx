@@ -1,87 +1,62 @@
 "use client";
-import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Order, Address, UserProfile, OrderCard, AddressCard, ProfileForm } from "@/components/profile/ProfileComponents";
-import { Package, User, MapPin, LayoutDashboard, LogOut, ChevronRight } from "lucide-react";
+import { Order, Address, UserProfile, OrderCard, AddressCard, ProfileForm, AddressDialog } from "@/components/profile/ProfileComponents";
+import { Package, User, MapPin, LayoutDashboard, LogOut, ChevronRight, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useProfileStore } from "@/store/useProfileStore";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
+    const router = useRouter();
     const [activeTab, setActiveTab] = useState("overview");
+    const { orders, addresses, fetchAddresses, addAddress, updateAddress, removeAddress } = useProfileStore();
+    const { user, isAuthenticated, isLoading: authLoading, logout } = useAuthStore();
+    const [mounted, setMounted] = useState(false);
 
-    // --- Dummy Data ---
-    const userProfile: UserProfile = {
-        firstName: "Karthik",
-        lastName: "Garaga",
-        email: "karthik@example.com",
-        phone: "+91 98765 43210",
+    // Dialog state
+    const [isAddressDialogOpen, setIsAddressDialogOpen] = useState(false);
+    const [editingAddress, setEditingAddress] = useState<Partial<Address> | null>(null);
+
+    useEffect(() => {
+        setMounted(true);
+        if (isAuthenticated) {
+            fetchAddresses();
+        }
+    }, [isAuthenticated, fetchAddresses]);
+
+    useEffect(() => {
+        if (!authLoading && !isAuthenticated) {
+            router.push("/login");
+        }
+    }, [isAuthenticated, authLoading, router]);
+
+    if (!mounted || authLoading || !isAuthenticated) return <div className="min-h-screen bg-white flex justify-center items-center"><div className="animate-pulse">Loading profile...</div></div>;
+
+    // Realtime data fetched from Auth Store
+    const userProfile = {
+        firstName: user?.name?.split(' ')[0] || "",
+        lastName: user?.name?.split(' ').slice(1).join(' ') || "",
+        email: user?.email || "",
+        phone: user?.phone || "",
     };
 
-    const orders: Order[] = [
-        {
-            id: "ORD-7782",
-            date: "Oct 24, 2023",
-            status: "Delivered",
-            total: 1250,
-            items: ["Bamboo Toothbrush (x2)", "Wooden Comb"],
-        },
-        {
-            id: "ORD-7783",
-            date: "Nov 02, 2023",
-            status: "Processing",
-            total: 450,
-            items: ["Neem Wood Comb"],
-        },
-        {
-            id: "ORD-7784",
-            date: "Nov 15, 2023",
-            status: "Shipped",
-            total: 890,
-            items: ["Coconut Shell Bowl", "Bamboo Straws"],
-        },
-        {
-            id: "ORD-7781",
-            date: "Sep 10, 2023",
-            status: "Delivered",
-            total: 2100,
-            items: ["Eco Gift Set", "Jute Bag"],
-        },
-    ];
+    const handleSaveAddress = async (addressData: Partial<Address>) => {
+        if (editingAddress?._id || editingAddress?.id) {
+            await updateAddress((editingAddress._id || editingAddress.id) as string, addressData);
+        } else {
+            await addAddress(addressData);
+        }
+    };
 
-    const addresses: Address[] = [
-        {
-            id: "addr_1",
-            type: "Home",
-            name: "Karthik Garaga",
-            street: "123 Green Street, Eco City",
-            city: "Hyderabad",
-            state: "Telangana",
-            zip: "500001",
-            phone: "+91 98765 43210",
-            isDefault: true,
-        },
-        {
-            id: "addr_2",
-            type: "Work",
-            name: "Karthik Garaga",
-            street: "456 Tech Park, Cyber Towers",
-            city: "Hyderabad",
-            state: "Telangana",
-            zip: "500081",
-            phone: "+91 98765 43210",
-        },
-        {
-            id: "addr_3",
-            type: "Other",
-            name: "Parents",
-            street: "789 Quiet Lane, Suburbia",
-            city: "Vijayawada",
-            state: "Andhra Pradesh",
-            zip: "520001",
-            phone: "+91 98765 43210",
-        },
-    ];
+    const handleDeleteAddress = async (id: string) => {
+        if (confirm("Are you sure you want to delete this address?")) {
+            await removeAddress(id);
+        }
+    };
 
     const renderContent = () => {
         switch (activeTab) {
@@ -97,9 +72,13 @@ export default function ProfilePage() {
                                 </Button>
                             </div>
                             <div className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-hide">
-                                {orders.slice(0, 3).map((order) => (
-                                    <OrderCard key={order.id} order={order} compact />
-                                ))}
+                                {orders.length === 0 ? (
+                                    <p className="text-muted-foreground text-sm italic">No recent orders found.</p>
+                                ) : (
+                                    orders.slice(0, 3).map((order: any) => (
+                                        <OrderCard key={order.id} order={order} compact />
+                                    ))
+                                )}
                             </div>
                         </section>
 
@@ -112,9 +91,13 @@ export default function ProfilePage() {
                                 </Button>
                             </div>
                             <div className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-hide">
-                                {addresses.map((addr) => (
-                                    <AddressCard key={addr.id} address={addr} compact />
-                                ))}
+                                {addresses.length === 0 ? (
+                                    <p className="text-muted-foreground text-sm italic">No addresses saved yet.</p>
+                                ) : (
+                                    addresses.map((addr: any) => (
+                                        <AddressCard key={addr.id} address={addr} compact />
+                                    ))
+                                )}
                             </div>
                         </section>
                     </div>
@@ -131,9 +114,13 @@ export default function ProfilePage() {
                     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <h2 className="text-xl font-semibold mb-4">My Orders</h2>
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2">
-                            {orders.map((order) => (
-                                <OrderCard key={order.id} order={order} />
-                            ))}
+                            {orders.length === 0 ? (
+                                <p className="text-muted-foreground text-sm italic col-span-full">You haven't placed any orders yet.</p>
+                            ) : (
+                                orders.map((order: any) => (
+                                    <OrderCard key={order.id} order={order} />
+                                ))
+                            )}
                         </div>
                     </div>
                 );
@@ -142,15 +129,31 @@ export default function ProfilePage() {
                     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <div className="flex items-center justify-between mb-4">
                             <h2 className="text-xl font-semibold">My Addresses</h2>
-                            <Button>
+                            <Button onClick={() => { setEditingAddress(null); setIsAddressDialogOpen(true); }}>
                                 <PlusIcon className="w-4 h-4 mr-2" /> Add New Address
                             </Button>
                         </div>
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                            {addresses.map((addr) => (
-                                <AddressCard key={addr.id} address={addr} />
-                            ))}
+                            {addresses.length === 0 ? (
+                                <p className="text-muted-foreground text-sm italic col-span-full">You don't have any addresses saved.</p>
+                            ) : (
+                                addresses.map((addr: any) => (
+                                    <AddressCard
+                                        key={addr._id || addr.id}
+                                        address={addr}
+                                        onEdit={() => { setEditingAddress(addr); setIsAddressDialogOpen(true); }}
+                                        onDelete={() => handleDeleteAddress(addr._id || addr.id)}
+                                    />
+                                ))
+                            )}
                         </div>
+
+                        <AddressDialog
+                            open={isAddressDialogOpen}
+                            onOpenChange={setIsAddressDialogOpen}
+                            initialData={editingAddress}
+                            onSave={handleSaveAddress}
+                        />
                     </div>
                 );
             default:
@@ -195,7 +198,11 @@ export default function ProfilePage() {
                                 />
 
                                 <div className="pt-4 mt-4">
-                                    <Button variant="ghost" className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50 px-4 py-4 border-b border-gray-100 rounded-none h-auto">
+                                    <Button
+                                        onClick={() => logout()}
+                                        variant="ghost"
+                                        className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50 px-4 py-4 border-b border-gray-100 rounded-none h-auto"
+                                    >
                                         <LogOut className="w-4 h-4 mr-3" />
                                         Log Out
                                     </Button>
