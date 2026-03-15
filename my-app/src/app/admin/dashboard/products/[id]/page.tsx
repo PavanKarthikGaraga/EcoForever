@@ -2,6 +2,7 @@
 
 import { useEffect, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -83,7 +84,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
             })));
         } catch (error) {
             console.error(error);
-            alert('Error loading product');
+            toast.error('Error loading product');
         } finally {
             setLoading(false);
         }
@@ -129,11 +130,11 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                     setImages([...images, data.url]);
                 }
             } else {
-                alert('Upload failed');
+                toast.error('Upload failed');
             }
         } catch (error) {
             console.error('Upload error', error);
-            alert('Upload failed');
+            toast.error('Upload failed');
         } finally {
             setSaving(false);
         }
@@ -152,7 +153,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
         setSaving(true);
 
         if (images.length === 0) {
-            alert('Please upload at least one image');
+            toast.error('Please upload at least one image');
             setSaving(false);
             return;
         }
@@ -184,11 +185,11 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                 router.push('/admin/dashboard/products');
             } else {
                 const data = await res.json();
-                alert(data.error || 'Failed to update product');
+                toast.error(data.error || 'Failed to update product');
             }
         } catch (error) {
             console.error('Error updating product:', error);
-            alert('Error updating product');
+            toast.error('Error updating product');
         } finally {
             setSaving(false);
         }
@@ -206,11 +207,11 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
             if (res.ok) {
                 router.push('/admin/dashboard/products');
             } else {
-                alert("Failed to delete product");
+                toast.error("Failed to delete product");
             }
         } catch (err) {
             console.error(err);
-            alert("Error deleting product");
+            toast.error("Error deleting product");
         } finally {
             setSaving(false);
         }

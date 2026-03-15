@@ -3,19 +3,48 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Package, MapPin, Loader2, Plus, Edit2, Trash2 } from "lucide-react";
 import { useProfileStore } from "@/store/useProfileStore";
 import { useState } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
+import { toast } from "sonner";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+} from '@/components/ui/dialog';
 
 // --- Types ---
+
+export interface OrderItemType {
+    product?: {
+        title?: string;
+        images?: string[];
+    };
+    quantity: number;
+    size: string;
+    price: number;
+}
+
+export interface ShippingAddressType {
+    street?: string;
+    city: string;
+    state?: string;
+    zipCode?: string;
+    country: string;
+}
+
 export interface Order {
     id: string;
+    orderId?: string;
     date: string;
-    status: "Delivered" | "Processing" | "Shipped" | "Cancelled";
+    status: "Pending" | "Delivered" | "Processing" | "Shipped" | "Cancelled";
     total: number;
     items: string[];
+    fullItems?: OrderItemType[];
+    shippingAddress?: ShippingAddressType;
 }
 
 export interface Address {
@@ -43,6 +72,8 @@ export interface UserProfile {
 // --- Components ---
 
 export const OrderCard = ({ order, compact = false }: { order: Order; compact?: boolean }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const getStatusColor = (status: Order["status"]) => {
         switch (status) {
             case "Delivered": return "bg-green-100 text-green-700 hover:bg-green-100/80";
@@ -53,29 +84,97 @@ export const OrderCard = ({ order, compact = false }: { order: Order; compact?: 
         }
     };
 
+    const displayId = order.orderId || order.id.slice(-8).toUpperCase();
+
     return (
-        <Card className={`min-w-[300px] snap-start ${compact ? 'shadow-sm' : ''}`}>
-            <CardHeader className="pb-2">
-                <div className="flex justify-between items-start">
-                    <div>
-                        <CardTitle className="text-base font-semibold">Order #{order.id}</CardTitle>
-                        <p className="text-xs text-muted-foreground">{order.date}</p>
+        <>
+            <Card className={`min-w-[300px] snap-start ${compact ? 'shadow-sm' : ''}`}>
+                <CardHeader className="pb-2">
+                    <div className="flex justify-between items-start gap-2">
+                        <div className="min-w-0 flex-1">
+                            <CardTitle className="text-base font-semibold truncate" title={`Order #${displayId}`}>
+                                Order #{displayId}
+                            </CardTitle>
+                            <p className="text-xs text-muted-foreground">{order.date}</p>
+                        </div>
+                        <Badge className={`${getStatusColor(order.status)} shrink-0`} variant="secondary">
+                            {order.status}
+                        </Badge>
                     </div>
-                    <Badge className={getStatusColor(order.status)} variant="secondary">
-                        {order.status}
-                    </Badge>
-                </div>
-            </CardHeader>
-            <CardContent className="text-sm">
-                <div className="space-y-1 mb-3">
-                    <p className="font-medium text-foreground/80">{order.items.join(", ")}</p>
-                    <p className="text-muted-foreground">Total: ₹{order.total}</p>
-                </div>
-                <Button variant="outline" size="sm" className="w-full text-xs h-8">
-                    View Details
-                </Button>
-            </CardContent>
-        </Card>
+                </CardHeader>
+                <CardContent className="text-sm">
+                    <div className="space-y-1 mb-3">
+                        <p className="font-medium text-foreground/80">{order.items.join(", ")}</p>
+                        <p className="text-muted-foreground">Total: ₹{order.total}</p>
+                    </div>
+                    <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="w-full text-xs h-8"
+                        onClick={() => setIsModalOpen(true)}
+                    >
+                        View Details
+                    </Button>
+                </CardContent>
+            </Card>
+
+            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+                    <DialogHeader>
+                        <DialogTitle>Order Summary</DialogTitle>
+                        <DialogDescription>
+                            Review the details of your order.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-6 mt-4">
+                        <div className="flex justify-between items-center border-b pb-4">
+                            <div>
+                                <p className="text-sm text-muted-foreground">Order ID</p>
+                                <p className="font-mono font-medium text-emerald-700">#{displayId}</p>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-sm text-muted-foreground">Status</p>
+                                <Badge className={`${getStatusColor(order.status)}`} variant="secondary">
+                                    {order.status}
+                                </Badge>
+                            </div>
+                        </div>
+
+                        {order.shippingAddress && (
+                            <div className="border-b pb-4">
+                                <h3 className="font-semibold mb-2 text-sm">Shipping Address</h3>
+                                <p className="text-sm text-muted-foreground">{order.shippingAddress.street}</p>
+                                <p className="text-sm text-muted-foreground">{order.shippingAddress.city}, {order.shippingAddress.state} {order.shippingAddress.zipCode}</p>
+                            </div>
+                        )}
+
+                        <div>
+                            <h3 className="font-semibold mb-3 text-sm">Items</h3>
+                            <div className="space-y-3">
+                                {order.fullItems && order.fullItems.length > 0 ? (
+                                    order.fullItems.map((item, idx) => (
+                                        <div key={idx} className="flex justify-between items-center bg-gray-50 p-3 rounded-md border text-sm">
+                                            <div>
+                                                <p className="font-medium">{item.product?.title || 'Unknown Product'}</p>
+                                                <p className="text-xs text-muted-foreground">Size: {item.size} | Qty: {item.quantity}</p>
+                                            </div>
+                                            <p className="font-medium">₹{item.price * item.quantity}</p>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p className="text-sm text-muted-foreground">{order.items.join(", ")}</p>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="border-t pt-4 flex justify-between items-center">
+                            <h3 className="font-bold">Total Amount</h3>
+                            <p className="font-bold text-emerald-700">₹{order.total}</p>
+                        </div>
+                    </div>
+                </DialogContent>
+            </Dialog>
+        </>
     );
 };
 
@@ -131,9 +230,9 @@ export const ProfileForm = ({ defaultValues }: { defaultValues: UserProfile }) =
                 lastName: formData.get('lastName') as string,
                 phone: formData.get('phone') as string,
             });
-            alert("Profile updated successfully!");
+            toast.success("Profile updated successfully!");
         } catch (error) {
-            alert("Failed to update profile.");
+            toast.error("Failed to update profile.");
         } finally {
             setIsLoading(false);
         }

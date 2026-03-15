@@ -96,7 +96,7 @@ export default function SignupPage() {
                 {step === 1 && (
                     <p className="mt-2 text-center text-sm text-gray-600">
                         Already have an account?{" "}
-                        <Link href="/login" className="font-medium text-emerald-600 hover:text-emerald-500">
+                        <Link href="/auth/login" className="font-medium text-emerald-600 hover:text-emerald-500">
                             Sign in here
                         </Link>
                     </p>

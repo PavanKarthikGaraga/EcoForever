@@ -19,6 +19,8 @@ interface CartState {
     removeItem: (id: string) => void;
     updateQuantity: (id: string, quantity: number) => void;
     clearCart: () => void;
+    setItems: (items: CartItem[]) => void;
+    syncCartWithServer: () => Promise<void>;
     getTotalItems: () => number;
     getSubtotal: () => number;
 }
@@ -28,37 +30,70 @@ export const useCartStore = create<CartState>()(
         (set, get) => ({
             items: [],
 
-            addItem: (newItem) => set((state) => {
-                const existingItem = state.items.find(item => item.id === newItem.id);
-                if (existingItem) {
+            setItems: (items) => set({ items }),
+
+            syncCartWithServer: async () => {
+                try {
+                    const res = await fetch('/api/user/cart', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ items: get().items }),
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        // Only update if server gives us a merged cart
+                        if (data.cart) {
+                            set({ items: data.cart });
+                        }
+                    }
+                } catch (err) {
+                    console.error('Cart sync error:', err);
+                }
+            },
+
+            addItem: (newItem) => {
+                set((state) => {
+                    const existingItem = state.items.find(item => item.id === newItem.id);
+                    if (existingItem) {
+                        return {
+                            items: state.items.map(item =>
+                                item.id === newItem.id
+                                    ? { ...item, quantity: item.quantity + newItem.quantity }
+                                    : item
+                            )
+                        };
+                    } else {
+                        return { items: [...state.items, newItem] };
+                    }
+                });
+                get().syncCartWithServer();
+            },
+
+            removeItem: (id) => {
+                set((state) => ({
+                    items: state.items.filter(item => item.id !== id)
+                }));
+                get().syncCartWithServer();
+            },
+
+            updateQuantity: (id, quantity) => {
+                set((state) => {
+                    if (quantity <= 0) {
+                        return { items: state.items.filter(item => item.id !== id) };
+                    }
                     return {
                         items: state.items.map(item =>
-                            item.id === newItem.id
-                                ? { ...item, quantity: item.quantity + newItem.quantity }
-                                : item
+                            item.id === id ? { ...item, quantity } : item
                         )
                     };
-                } else {
-                    return { items: [...state.items, newItem] };
-                }
-            }),
+                });
+                get().syncCartWithServer();
+            },
 
-            removeItem: (id) => set((state) => ({
-                items: state.items.filter(item => item.id !== id)
-            })),
-
-            updateQuantity: (id, quantity) => set((state) => {
-                if (quantity <= 0) {
-                    return { items: state.items.filter(item => item.id !== id) };
-                }
-                return {
-                    items: state.items.map(item =>
-                        item.id === id ? { ...item, quantity } : item
-                    )
-                };
-            }),
-
-            clearCart: () => set({ items: [] }),
+            clearCart: () => {
+                set({ items: [] });
+                get().syncCartWithServer();
+            },
 
             getTotalItems: () => {
                 return get().items.reduce((total, item) => total + item.quantity, 0);

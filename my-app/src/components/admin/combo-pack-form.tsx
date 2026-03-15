@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -57,11 +58,11 @@ export function ComboPackForm({ initialData }: ComboPackFormProps) {
             if (res.ok && data.url) {
                 setFormData(prev => ({ ...prev, image: data.url }));
             } else {
-                alert('Upload failed');
+                toast.error('Upload failed');
             }
         } catch (error) {
             console.error('Upload error', error);
-            alert('Upload failed');
+            toast.error('Upload failed');
         } finally {
             setSaving(false);
         }
@@ -87,7 +88,7 @@ export function ComboPackForm({ initialData }: ComboPackFormProps) {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!formData.image) {
-            alert('Please upload an image');
+            toast.error('Please upload an image');
             return;
         }
 
@@ -103,11 +104,11 @@ export function ComboPackForm({ initialData }: ComboPackFormProps) {
                 router.push('/admin/dashboard/combo-packs');
                 router.refresh();
             } else {
-                alert('Failed to save combo pack');
+                toast.error('Failed to save combo pack');
             }
         } catch (error) {
             console.error(error);
-            alert('Error saving combo pack');
+            toast.error('Error saving combo pack');
         } finally {
             setSaving(false);
         }

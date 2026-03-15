@@ -47,7 +47,7 @@ const Navbar = () => {
 
           {/* Icons */}
           <div className="flex items-center space-x-2 shrink-0">
-            {/* Profile/Login Button */}
+            {/* Profile/auth/login Button */}
             {isAuthenticated ? (
               <Button variant="ghost" asChild className="hover:bg-primary">
                 <Link href="/profile">
@@ -57,7 +57,7 @@ const Navbar = () => {
               </Button>
             ) : (
               <Button variant="ghost" asChild className="hover:bg-primary">
-                <Link href="/login">
+                <Link href="/auth/login">
                   <LogIn className="h-5 w-5 mr-2" />
                   <span className="hidden sm:inline">Sign In</span>
                 </Link>

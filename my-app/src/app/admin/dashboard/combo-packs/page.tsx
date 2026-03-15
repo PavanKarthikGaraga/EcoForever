@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, Plus, Trash2, Pencil } from 'lucide-react';
@@ -56,11 +57,11 @@ export default function ComboPackListPage() {
             if (res.ok) {
                 setPacks(prev => prev.filter(p => p._id !== id));
             } else {
-                alert('Failed to delete');
+                toast.error('Failed to delete');
             }
         } catch (error) {
             console.error(error);
-            alert('Error deleting');
+            toast.error('Error deleting');
         }
     };
 

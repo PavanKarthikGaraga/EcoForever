@@ -8,13 +8,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, ArrowLeft } from "lucide-react";
 import { Address } from "@/components/profile/ProfileComponents";
+import { toast } from "sonner";
 
 export default function EditAddressPage() {
     const router = useRouter();
     const params = useParams();
     const id = params.id as string;
 
-    const { user, isAuthenticated, isLoading: authLoading } = useAuthStore();
+    const { isAuthenticated, isLoading: authLoading } = useAuthStore();
     const { addresses, updateAddress, fetchAddresses } = useProfileStore();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -23,13 +24,14 @@ export default function EditAddressPage() {
     const [city, setCity] = useState("");
     const [stateName, setStateName] = useState("");
     const [isFetchingPincode, setIsFetchingPincode] = useState(false);
+    const [pincodeError, setPincodeError] = useState("");
 
     // Initial load state
     const [initialData, setInitialData] = useState<Address | null>(null);
 
     useEffect(() => {
         if (!authLoading && !isAuthenticated) {
-            router.push("/login");
+            router.push("/auth/login");
         }
     }, [isAuthenticated, authLoading, router]);
 
@@ -53,27 +55,56 @@ export default function EditAddressPage() {
                 router.push("/profile"); // Not found
             }
         }
-    }, [addresses, id]);
+    }, [addresses, id, router]);
+
+    type PostOffice = {
+        Name: string;
+        Description: string;
+        Block: string;
+        BranchType: string;
+        DeliveryStatus: string;
+        Circle: string;
+        District: string;
+        Division: string;
+        Region: string;
+        State: string;
+        Country: string;
+    };
 
     const handlePincodeChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value;
         setPincode(val);
+        setPincodeError("");
 
         if (val.length === 6) {
             setIsFetchingPincode(true);
             try {
                 const res = await fetch(`https://api.postalpincode.in/pincode/${val}`);
                 const data = await res.json();
-                if (data && data[0] && data[0].Status === "Success" && data[0].PostOffice && data[0].PostOffice.length > 0) {
-                    const postOffice = data[0].PostOffice[0];
-                    setCity(postOffice.District || postOffice.Block);
-                    setStateName(postOffice.State);
+                if (data?.[0]?.Status === "Success" && data?.[0]?.PostOffice?.length > 0) {
+                    const offices: PostOffice[] = data[0].PostOffice;
+                    const office = 
+                        offices.find((o) => o.BranchType === "Head Post Office" || o.BranchType === "Head Office") ||
+                        offices.find((o) => o.BranchType === "Sub Post Office" || o.BranchType === "Sub Office") ||
+                        offices[0];
+                    setCity(office.Block  || "");
+                    setStateName(office.State || "");
+                } else {
+                    setPincodeError("Failed to fetch pincode details, enter a correct pincode");
+                    setCity("");
+                    setStateName("");
                 }
             } catch (error) {
                 console.error("Failed to fetch pincode details", error);
+                setPincodeError("Failed to fetch pincode details, enter a correct pincode");
+                setCity("");
+                setStateName("");
             } finally {
                 setIsFetchingPincode(false);
             }
+        } else {
+            setCity("");
+            setStateName("");
         }
     };
 
@@ -83,7 +114,7 @@ export default function EditAddressPage() {
         const formData = new FormData(e.currentTarget);
         try {
             await updateAddress(id, {
-                type: formData.get('type') as any,
+                type: formData.get('type') as "Home" | "Work" | "Other",
                 name: formData.get('name') as string,
                 email: formData.get('email') as string,
                 phone: formData.get('phone') as string,
@@ -95,8 +126,10 @@ export default function EditAddressPage() {
                 isDefault: formData.get('isDefault') === 'on'
             });
             router.push("/profile");
+            toast.success("Address updated successfully!");
         } catch (error) {
-            alert("Failed to update address");
+            console.error("Failed to update address:", error);
+            toast.error("Failed to update address");
             setIsLoading(false);
         }
     };
@@ -128,7 +161,7 @@ export default function EditAddressPage() {
 
                         <div className="space-y-2">
                             <Label htmlFor="email">Email</Label>
-                            <Input id="email" name="email" type="email" defaultValue={initialData?.email} required />
+                            <Input id="email" name="email" type="email" defaultValue={initialData?.email} required readOnly className="bg-gray-50 text-gray-500 cursor-not-allowed focus-visible:ring-0" />
                         </div>
 
                         <div className="space-y-2">
@@ -145,17 +178,18 @@ export default function EditAddressPage() {
                             <div className="space-y-2">
                                 <Label htmlFor="pincode">Pincode</Label>
                                 <div className="relative">
-                                    <Input id="pincode" name="pincode" value={pincode} onChange={handlePincodeChange} required maxLength={6} />
+                                    <Input id="pincode" name="pincode" value={pincode} onChange={handlePincodeChange} required maxLength={6} className={pincodeError ? "border-red-500" : ""} />
                                     {isFetchingPincode && <Loader2 className="w-4 h-4 animate-spin absolute right-2 top-2.5 text-muted-foreground" />}
                                 </div>
+                                {pincodeError && <p className="text-xs text-red-500 mt-1">{pincodeError}</p>}
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="city">City</Label>
-                                <Input id="city" name="city" value={city} onChange={(e) => setCity(e.target.value)} required />
+                                <Input id="city" name="city" value={city} readOnly required className="bg-gray-50 text-gray-500 cursor-not-allowed focus-visible:ring-0" />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="state">State</Label>
-                                <Input id="state" name="state" value={stateName} onChange={(e) => setStateName(e.target.value)} required />
+                                <Input id="state" name="state" value={stateName} readOnly required className="bg-gray-50 text-gray-500 cursor-not-allowed focus-visible:ring-0" />
                             </div>
                         </div>
 

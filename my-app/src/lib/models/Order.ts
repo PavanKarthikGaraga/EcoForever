@@ -1,6 +1,10 @@
 import mongoose from 'mongoose';
 
 const OrderSchema = new mongoose.Schema({
+    orderId: {
+        type: String,
+        unique: true,
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User', // If users are registered

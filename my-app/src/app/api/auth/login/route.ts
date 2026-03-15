@@ -19,8 +19,8 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // 2. Prevent unverified users from logging in with password
-        if (!user.isVerified) {
+        // 2. Prevent unverified non-admin users from logging in with password
+        if (user.role !== 'admin' && !user.isVerified) {
             return NextResponse.json(
                 { error: 'Please verify your email address first.' },
                 { status: 403 }
@@ -55,11 +55,13 @@ export async function POST(req: NextRequest) {
         );
 
         // 5. Store JWT in HTTP-Only Auth Cookie
+        const maxAge = user.role === 'admin' ? 60 * 60 * 2 : 60 * 60 * 24 * 7;
+        
         response.cookies.set('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
-            maxAge: 60 * 60 * 24 * 7, // 7 Days
+            maxAge: maxAge,
             path: '/',
         });
 

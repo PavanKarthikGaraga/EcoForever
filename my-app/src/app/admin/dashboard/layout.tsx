@@ -4,6 +4,12 @@ import { DashboardHeader } from '@/components/admin/dashboard-header';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { verifyToken } from '@/lib/jwt';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Ecodosth - Admin Dashboard',
+    description: 'Manage your application settings and data.',
+};
 
 export default async function AdminDashboardLayout({
     children,
@@ -22,6 +28,7 @@ export default async function AdminDashboardLayout({
         redirect('/admin');
     }
 
+    
     return (
         <SidebarProvider>
             <AppSidebar />

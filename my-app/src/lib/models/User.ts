@@ -51,6 +51,17 @@ const UserSchema = new mongoose.Schema({
             default: false
         }
     }],
+    cart: [{
+        id: String,
+        productId: String,
+        name: String,
+        image: String,
+        price: Number,
+        quantity: Number,
+        packSize: String,
+        size: String,
+        isPremium: Boolean
+    }],
     createdAt: {
         type: Date,
         default: Date.now,

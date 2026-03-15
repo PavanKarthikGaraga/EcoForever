@@ -36,6 +36,7 @@ interface ProfileState {
     orders: Order[];
     isLoading: boolean;
     fetchAddresses: () => Promise<void>;
+    fetchOrders: () => Promise<void>;
     updateProfile: (updates: Partial<UserProfile>) => Promise<void>;
     addAddress: (address: Partial<Address>) => Promise<void>;
     removeAddress: (id: string) => Promise<void>;
@@ -46,6 +47,21 @@ export const useProfileStore = create<ProfileState>((set, get) => ({
     addresses: [],
     orders: [], // Will be hydrated when orders API is built
     isLoading: false,
+
+    fetchOrders: async () => {
+        set({ isLoading: true });
+        try {
+            const res = await fetch('/api/user/orders');
+            if (res.ok) {
+                const data = await res.json();
+                set({ orders: data.orders });
+            }
+        } catch (error) {
+            console.error('Failed to fetch orders', error);
+        } finally {
+            set({ isLoading: false });
+        }
+    },
 
     fetchAddresses: async () => {
         set({ isLoading: true });

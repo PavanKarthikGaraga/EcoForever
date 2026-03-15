@@ -186,9 +186,11 @@ const Cart = () => {
                   )}
 
                   {/* Checkout Button */}
-                  <Button className="w-full mt-6" size="lg">
-                    Proceed to Checkout
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                  <Button className="w-full mt-6" size="lg" asChild>
+                    <Link href="/checkout">
+                      Proceed to Checkout
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Link>
                   </Button>
 
                   {/* Payment Methods */}

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -88,11 +89,11 @@ export default function CreateProductPage() {
                     setImages([...images, data.url]);
                 }
             } else {
-                alert('Upload failed');
+                toast.error('Upload failed');
             }
         } catch (error) {
             console.error('Upload error', error);
-            alert('Upload failed');
+            toast.error('Upload failed');
         } finally {
             setLoading(false);
         }
@@ -112,7 +113,7 @@ export default function CreateProductPage() {
 
         // Validate
         if (images.length === 0) {
-            alert('Please upload at least one image');
+            toast.error('Please upload at least one image');
             setLoading(false);
             return;
         }
@@ -144,11 +145,11 @@ export default function CreateProductPage() {
                 router.push('/admin/dashboard/products');
             } else {
                 const data = await res.json();
-                alert(data.error || 'Failed to create product');
+                toast.error(data.error || 'Failed to create product');
             }
         } catch (error) {
             console.error('Error creating product:', error);
-            alert('Error creating product');
+            toast.error('Error creating product');
         } finally {
             setLoading(false);
         }

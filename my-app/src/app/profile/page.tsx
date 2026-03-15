@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 export default function ProfilePage() {
     const router = useRouter();
     const [activeTab, setActiveTab] = useState("overview");
-    const { orders, addresses, fetchAddresses, addAddress, updateAddress, removeAddress } = useProfileStore();
+    const { orders, addresses, fetchAddresses, fetchOrders, addAddress, updateAddress, removeAddress } = useProfileStore();
     const { user, isAuthenticated, isLoading: authLoading, logout } = useAuthStore();
     const [mounted, setMounted] = useState(false);
 
@@ -21,16 +21,18 @@ export default function ProfilePage() {
         setMounted(true);
         if (isAuthenticated) {
             fetchAddresses();
+            fetchOrders();
         }
-    }, [isAuthenticated, fetchAddresses]);
+    }, [isAuthenticated, fetchAddresses, fetchOrders]);
 
     useEffect(() => {
         if (!authLoading && !isAuthenticated) {
-            router.push("/login");
+            router.push("/auth/login");
         }
     }, [isAuthenticated, authLoading, router]);
 
-    if (!mounted || authLoading || !isAuthenticated) return <div className="min-h-screen bg-white flex justify-center items-center"><div className="animate-pulse">Loading profile...</div></div>;
+    if (!mounted || authLoading) return <div className="min-h-screen bg-white flex justify-center items-center"><div className="animate-pulse">Loading profile...</div></div>;
+    if (!isAuthenticated) return null; // Prevent rendering anything while redirecting
 
     // Realtime data fetched from Auth Store
     const userProfile = {
@@ -63,7 +65,7 @@ export default function ProfilePage() {
                                 {orders.length === 0 ? (
                                     <p className="text-muted-foreground text-sm italic">No recent orders found.</p>
                                 ) : (
-                                    orders.slice(0, 3).map((order: any) => (
+                                    orders.slice(0, 3).map((order: Order) => (
                                         <OrderCard key={order.id} order={order} compact />
                                     ))
                                 )}
@@ -82,7 +84,7 @@ export default function ProfilePage() {
                                 {addresses.length === 0 ? (
                                     <p className="text-muted-foreground text-sm italic">No addresses saved yet.</p>
                                 ) : (
-                                    addresses.map((addr: any) => (
+                                    addresses.map((addr: Address) => (
                                         <AddressCard key={addr.id} address={addr} compact />
                                     ))
                                 )}
@@ -105,7 +107,7 @@ export default function ProfilePage() {
                             {orders.length === 0 ? (
                                 <p className="text-muted-foreground text-sm italic col-span-full">You haven't placed any orders yet.</p>
                             ) : (
-                                orders.map((order: any) => (
+                                orders.map((order: Order) => (
                                     <OrderCard key={order.id} order={order} />
                                 ))
                             )}
@@ -127,7 +129,7 @@ export default function ProfilePage() {
                             {addresses.length === 0 ? (
                                 <p className="text-muted-foreground text-sm italic col-span-full">You don't have any addresses saved.</p>
                             ) : (
-                                addresses.map((addr: any) => (
+                                addresses.map((addr: Address) => (
                                     <AddressCard
                                         key={addr._id || addr.id}
                                         address={addr}

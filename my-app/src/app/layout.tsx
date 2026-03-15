@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Cormorant, Poppins } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "@/components/layout/ClientLayout";
+import { Toaster } from "@/components/ui/sonner";
 
 const cormorant = Cormorant({
   variable: "--font-heading",
@@ -40,6 +41,7 @@ export default function RootLayout({
         <ClientLayout>
           {children}
         </ClientLayout>
+        <Toaster />
       </body>
     </html>
   );

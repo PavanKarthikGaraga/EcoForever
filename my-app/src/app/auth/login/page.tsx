@@ -41,7 +41,17 @@ export default function LoginPage() {
 
             // Sync Zustand store with new cookie
             await checkAuth();
-            router.push("/profile");
+            
+            const searchParams = new URLSearchParams(window.location.search);
+            const callbackUrl = searchParams.get('callbackUrl');
+
+            if (data.user?.role === 'admin') {
+                router.push("/admin/dashboard");
+            } else if (callbackUrl) {
+                router.push(callbackUrl);
+            } else {
+                router.push("/profile");
+            }
         } catch (err: any) {
             setError("An unexpected error occurred. Please try again.");
             setIsLoading(false);
@@ -56,7 +66,7 @@ export default function LoginPage() {
                 </h2>
                 <p className="mt-2 text-center text-sm text-gray-600">
                     Or{" "}
-                    <Link href="/signup" className="font-medium text-emerald-600 hover:text-emerald-500">
+                    <Link href="/auth/signup" className="font-medium text-emerald-600 hover:text-emerald-500">
                         create a new account
                     </Link>
                 </p>

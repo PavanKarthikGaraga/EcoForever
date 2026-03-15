@@ -26,9 +26,22 @@ export async function POST(req: NextRequest) {
 
         const body = await req.json();
 
+        const today = new Date();
+        const year = today.getFullYear().toString().slice(-2);
+        const startOfYear = new Date(today.getFullYear(), 0, 1);
+        const endOfYear = new Date(today.getFullYear(), 11, 31, 23, 59, 59);
+
+        const count = await Order.countDocuments({
+            createdAt: { $gte: startOfYear, $lte: endOfYear }
+        });
+
+        const orderNumber = (count + 1).toString().padStart(5, '0');
+        const customOrderId = `EC-${year}-${orderNumber}`;
+
         // This is a simplified Create Order implementation.
         // It saves the order to DB and immediately sends the confirmation email.
         const newOrder = await Order.create({
+            orderId: customOrderId,
             user: (user as any).id,
             items: body.items,
             shippingAddress: body.shippingAddress,
