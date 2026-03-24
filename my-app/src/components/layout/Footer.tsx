@@ -60,11 +60,6 @@ const Footer = () => {
                   Bulk Orders
                 </Link>
               </li>
-              <li>
-                <Link href="/sustainability" className="text-white/80 hover:text-primary-accent transition-colors text-base">
-                  Sustainability
-                </Link>
-              </li>
             </ul>
           </div>
 
