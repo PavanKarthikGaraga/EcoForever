@@ -102,14 +102,17 @@ const ProductDetail = () => {
 
   // Calculate current price based on premium toggle
   let displayPrice = 0;
+  let displayMrp = 0;
   let displayStock = 0;
 
   if (currentVariant) {
     if (isPremiumSelected) {
       displayPrice = currentVariant.premiumPrice || currentVariant.price;
+      displayMrp = currentVariant.premiumMrp || currentVariant.mrp || 0;
       displayStock = currentVariant.premiumStock || 0;
     } else {
       displayPrice = currentVariant.price;
+      displayMrp = currentVariant.mrp || 0;
       displayStock = currentVariant.stock;
     }
   }
@@ -248,10 +251,20 @@ const ProductDetail = () => {
                   </div>
                 )}
                 <div className="flex items-center space-x-3 ">
+                  {displayMrp > displayPrice && (
+                    <span className="text-xl line-through text-muted-foreground">
+                      ₹{displayMrp.toFixed(2)}
+                    </span>
+                  )}
                   <span className="text-3xl font-heading font-bold text-headings">
                     {currentVariant ? `₹${perPiecePrice.toFixed(2)} / piece` : "..."} 
                   </span>
                   <span className="text-sm text-muted-foreground"> (pack of {packCount})</span>
+                  {displayMrp > displayPrice && (
+                    <Badge className="ml-2 bg-green-100 text-green-800 hover:bg-green-100 border-green-200">
+                      Save {Math.round(((displayMrp - displayPrice) / displayMrp) * 100)}%
+                    </Badge>
+                  )}
                 </div>
 
               </div>

@@ -28,8 +28,10 @@ import Image from 'next/image';
 interface Variant {
     size: string;
     price: string;
+    mrp?: string;
     stock: string;
     premiumPrice?: string;
+    premiumMrp?: string;
     premiumStock?: string;
 }
 
@@ -47,7 +49,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
     const [hasPremium, setHasPremium] = useState(false);
     const [premiumImages, setPremiumImages] = useState<string[]>([]);
     const [variants, setVariants] = useState<Variant[]>([
-        { size: '', price: '', stock: '', premiumPrice: '', premiumStock: '' },
+        { size: '', price: '', mrp: '', stock: '', premiumPrice: '', premiumMrp: '', premiumStock: '' },
     ]);
     const [formData, setFormData] = useState({
         title: '',
@@ -80,8 +82,10 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
             setVariants(data.variants.map((v: any) => ({
                 size: v.size,
                 price: v.price.toString(),
+                ...(v.mrp !== undefined ? { mrp: v.mrp.toString() } : {}),
                 stock: v.stock.toString(),
                 ...(v.premiumPrice !== undefined ? { premiumPrice: v.premiumPrice.toString() } : {}),
+                ...(v.premiumMrp !== undefined ? { premiumMrp: v.premiumMrp.toString() } : {}),
                 ...(v.premiumStock !== undefined ? { premiumStock: v.premiumStock.toString() } : {})
             })));
         } catch (error) {
@@ -104,7 +108,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
     };
 
     const addVariant = () => {
-        setVariants([...variants, { size: '', price: '', stock: '', premiumPrice: '', premiumStock: '' }]);
+        setVariants([...variants, { size: '', price: '', mrp: '', stock: '', premiumPrice: '', premiumMrp: '', premiumStock: '' }]);
     };
 
     const removeVariant = (index: number) => {
@@ -169,8 +173,10 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                 variants: variants.map(v => ({
                     size: v.size,
                     price: parseFloat(v.price),
+                    ...(v.mrp ? { mrp: parseFloat(v.mrp) } : {}),
                     stock: parseInt(v.stock),
                     ...(hasPremium && v.premiumPrice ? { premiumPrice: parseFloat(v.premiumPrice) } : {}),
+                    ...(hasPremium && v.premiumMrp ? { premiumMrp: parseFloat(v.premiumMrp) } : {}),
                     ...(hasPremium && v.premiumStock ? { premiumStock: parseInt(v.premiumStock) } : {})
                 }))
             };
@@ -389,7 +395,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                             </div>
 
                             {variants.map((variant, index) => (
-                                <div key={index} className="grid gap-4 md:grid-cols-4 items-end border p-4 rounded-md relative bg-gray-50/50">
+                                <div key={index} className={`grid gap-4 ${hasPremium ? 'md:grid-cols-7' : 'md:grid-cols-4'} items-end border p-4 rounded-md relative bg-gray-50/50`}>
                                     <div className="space-y-2">
                                         <Label>Size</Label>
                                         <Input
@@ -407,6 +413,15 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                                             value={variant.price}
                                             onChange={(e) => handleVariantChange(index, 'price', e.target.value)}
                                             required
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label>MRP (₹)</Label>
+                                        <Input
+                                            type="number"
+                                            placeholder="0.00"
+                                            value={variant.mrp || ''}
+                                            onChange={(e) => handleVariantChange(index, 'mrp', e.target.value)}
                                         />
                                     </div>
                                     <div className="space-y-2">
@@ -429,6 +444,15 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                                                     placeholder="0.00"
                                                     value={variant.premiumPrice || ''}
                                                     onChange={(e) => handleVariantChange(index, 'premiumPrice', e.target.value)}
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <Label className="text-primary-accent">Prem. MRP (₹)</Label>
+                                                <Input
+                                                    type="number"
+                                                    placeholder="0.00"
+                                                    value={variant.premiumMrp || ''}
+                                                    onChange={(e) => handleVariantChange(index, 'premiumMrp', e.target.value)}
                                                 />
                                             </div>
                                             <div className="space-y-2">

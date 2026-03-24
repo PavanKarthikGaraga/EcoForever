@@ -19,6 +19,7 @@ interface ComboPack {
     title: string;
     image: string;
     price: string;
+    mrp?: string;
     items: ComboItem[];
 }
 
@@ -108,6 +109,7 @@ export default function ComboPackListPage() {
                             <CardHeader>
                                 <CardTitle>{pack.title}</CardTitle>
                                 <CardDescription>
+                                    {pack.mrp ? <span className="line-through text-muted-foreground mr-2">₹{pack.mrp}</span> : null}
                                     ₹{pack.price}
                                 </CardDescription>
                             </CardHeader>

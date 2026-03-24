@@ -118,7 +118,10 @@ const ComboPacks = () => {
                                         </p>
 
                                         <div className={`flex flex-row items-center gap-4 mt-6 pt-6 border-t border-white/20 w-full ${pack.textPosition === 'left' ? 'justify-start' : 'justify-end'}`}>
-                                            <div className="text-2xl md:text-3xl font-bold text-white">₹{pack.price}</div>
+                                            <div className="text-2xl md:text-3xl font-bold text-white">
+                                                {pack.mrp && <span className="line-through text-white/70 text-lg mr-2">₹{pack.mrp}</span>}
+                                                ₹{pack.price}
+                                            </div>
                                             <Button
                                                 onClick={() => handleAddToCart(pack)}
                                                 className="bg-primary-accent text-white hover:bg-primary-accent/90 font-semibold px-6 py-2 md:px-8 shadow-md transition-transform active:scale-95 text-sm md:text-base ml-auto"

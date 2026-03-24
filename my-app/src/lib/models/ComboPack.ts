@@ -24,6 +24,9 @@ const ComboPackSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    mrp: {
+        type: Number,
+    },
     items: {
         type: [ComboItemSchema],
         default: [],

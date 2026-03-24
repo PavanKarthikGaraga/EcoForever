@@ -21,6 +21,7 @@ export interface ComboPackData {
     title: string;
     image: string;
     price: string;
+    mrp?: string;
     items: ComboItem[];
     textPosition: 'left' | 'right';
 }
@@ -36,6 +37,7 @@ export function ComboPackForm({ initialData }: ComboPackFormProps) {
         title: '',
         image: '',
         price: '',
+        mrp: '',
         items: [],
         textPosition: 'left'
     });
@@ -130,14 +132,24 @@ export function ComboPackForm({ initialData }: ComboPackFormProps) {
                             required
                         />
                     </div>
-                    <div className="space-y-2">
-                        <Label>Price (₹)</Label>
-                        <Input
-                            type="number"
-                            value={formData.price}
-                            onChange={e => setFormData({ ...formData, price: e.target.value })}
-                            required
-                        />
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label>Price (₹)</Label>
+                            <Input
+                                type="number"
+                                value={formData.price}
+                                onChange={e => setFormData({ ...formData, price: e.target.value })}
+                                required
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label>MRP (₹)</Label>
+                            <Input
+                                type="number"
+                                value={formData.mrp || ''}
+                                onChange={e => setFormData({ ...formData, mrp: e.target.value })}
+                            />
+                        </div>
                     </div>
                     <div className="space-y-2">
                         <Label>Items Included</Label>

@@ -42,6 +42,10 @@ const ProductSchema = new mongoose.Schema({
                 required: true,
                 min: 0,
             },
+            mrp: {
+                type: Number,
+                min: 0,
+            },
             stock: {
                 type: Number,
                 required: true,
@@ -52,6 +56,10 @@ const ProductSchema = new mongoose.Schema({
                 type: String,
             },
             premiumPrice: {
+                type: Number,
+                min: 0,
+            },
+            premiumMrp: {
                 type: Number,
                 min: 0,
             },

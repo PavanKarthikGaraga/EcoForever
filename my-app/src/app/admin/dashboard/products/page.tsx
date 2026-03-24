@@ -16,6 +16,7 @@ interface Product {
     variants: {
         size: string;
         price: number;
+        mrp?: number;
         stock: number;
     }[];
 }
@@ -95,7 +96,7 @@ export default function ProductsPage() {
                                             <div className="flex flex-wrap gap-1 mt-1">
                                                 {product.variants.map((v, i) => (
                                                     <span key={i} className="inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium text-foreground">
-                                                        {v.size} (₹{v.price})
+                                                        {v.size} ({v.mrp ? <span className="line-through text-muted-foreground mr-1">₹{v.mrp}</span> : null}₹{v.price})
                                                     </span>
                                                 ))}
                                             </div>

@@ -67,6 +67,12 @@ const BestSellers = () => {
                 ? Math.min(...product.variants.map((v: any) => v.price))
                 : 0;
 
+              const minMrp = product.variants && product.variants.length > 0
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                ? Math.min(...product.variants.map((v: any) => v.mrp || Infinity))
+                : Infinity;
+              const displayMrp = minMrp !== Infinity && minMrp > minPrice ? minMrp : null;
+
               return (
                 <ScrollAnimation
                   key={product._id}
@@ -110,6 +116,11 @@ const BestSellers = () => {
 
                       {/* Price */}
                       <div className="flex items-center space-x-2 md:space-x-3 flex-wrap mt-auto">
+                        {displayMrp && (
+                          <span className="text-xs md:text-sm text-muted-foreground line-through">
+                            ₹{displayMrp.toFixed(2)}
+                          </span>
+                        )}
                         <span className="text-sm md:text-lg font-bold text-primary-accent">
                           From ₹{minPrice.toFixed(2)}
                         </span>
