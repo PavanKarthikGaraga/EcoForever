@@ -18,6 +18,7 @@ import { useCartStore } from "@/store/useCartStore";
 export function CartSheet() {
     const { items, removeItem, updateQuantity, getTotalItems, getSubtotal } = useCartStore();
     const [mounted, setMounted] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
     // Prevent hydration mismatch for persistent store
     useEffect(() => {
@@ -37,7 +38,7 @@ export function CartSheet() {
     const subtotal = getSubtotal();
 
     return (
-        <Sheet>
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
                 <button className="relative p-2 focus:outline-none focus:ring-2 focus:ring-primary-accent rounded-full transition-colors">
                     <ShoppingCart className="h-6 w-6 text-headings hover:text-primary-accent transition-colors" />
@@ -68,7 +69,7 @@ export function CartSheet() {
                             Looks like you haven&apos;t added any eco-friendly products to your cart yet.
                         </p>
                         <Button asChild className="mt-4">
-                            <Link href="/#products">Start Shopping</Link>
+                            <Link href="/#products" onClick={() => setIsOpen(false)}>Start Shopping</Link>
                         </Button>
                     </div>
                 ) : (
@@ -154,7 +155,7 @@ export function CartSheet() {
                                 Shipping and taxes calculated at checkout.
                             </p>
                             <Button className="w-full py-6 text-lg hover:shadow-md transition-shadow" asChild>
-                                <Link href="/cart">
+                                <Link href="/cart" onClick={() => setIsOpen(false)}>
                                     Proceed to Checkout
                                 </Link>
                             </Button>
