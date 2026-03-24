@@ -12,8 +12,8 @@ const Contact = () => {
       icon: Mail,
       title: "Email Us",
       description: "Send us an email and we'll respond within 24 hours",
-      contact: "hello@ecodosth.com",
-      action: "mailto:hello@ecodosth.com"
+      contact: "hello@ecoforever.com",
+      action: "mailto:hello@ecoforever.com"
     },
     {
       icon: Phone,

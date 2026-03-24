@@ -16,7 +16,7 @@ const Footer = () => {
             <Link href="/" className="flex items-center space-x-2 text-3xl">
               <Leaf className="h-10 w-10 text-white" />
               <span className="text-3xl font-heading font-semibold text-white ">
-                EcoDosth
+                EcoForever
               </span>
             </Link>
             <p className="text-white/80 text-base leading-relaxed max-w-xs">
@@ -78,7 +78,7 @@ const Footer = () => {
               </li>
               <li className="flex items-start space-x-3">
                 <Mail className="h-5 w-5 text-white/80 shrink-0 mt-0.5" />
-                <span className="text-white/80 text-base">hello@ecodosth.com</span>
+                <span className="text-white/80 text-base">hello@ecoforever.com</span>
               </li>
               <li className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-white/80 shrink-0 mt-0.5" />
@@ -95,7 +95,7 @@ const Footer = () => {
         {/* Bottom Section */}
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center bg-[var(--color-heading)]">
           <p className="text-xs text-white/60">
-            © {currentYear} EcoDosth. All rights reserved.
+            © {currentYear} EcoForever. All rights reserved.
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link href="/privacy" className="text-xs text-white/60 hover:text-white transition-colors">

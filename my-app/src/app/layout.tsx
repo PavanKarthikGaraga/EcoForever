@@ -17,7 +17,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "EcoDosth - Sustainable Tableware from Nature",
+  title: "EcoForever - Sustainable Tableware from Nature",
   description: "Premium wooden, bamboo, and areca tableware. Eco-friendly cutlery, plates, and bowls crafted for conscious living.",
   keywords: "sustainable tableware, wooden cutlery, bamboo products, eco-friendly dining, biodegradable plates",
 };

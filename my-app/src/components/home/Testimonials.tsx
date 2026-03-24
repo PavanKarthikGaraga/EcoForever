@@ -10,14 +10,14 @@ const Testimonials = () => {
       name: "Sarah Johnson",
       location: "New York, USA",
       rating: 5,
-      text: "The quality of EcoDosth products is exceptional. My wooden spoons are still perfect after months of daily use, and knowing they're biodegradable makes every meal feel more meaningful.",
+      text: "The quality of EcoForever products is exceptional. My wooden spoons are still perfect after months of daily use, and knowing they're biodegradable makes every meal feel more meaningful.",
       avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=60&h=60&fit=crop&crop=face",
     },
     {
       name: "Rajesh Kumar",
       location: "Mumbai, India",
       rating: 5,
-      text: "As someone who cares deeply about the environment, finding EcoDosth was a game-changer. Their bamboo plates are beautiful and the fact that they're supporting local artisans is a bonus.",
+      text: "As someone who cares deeply about the environment, finding EcoForever was a game-changer. Their bamboo plates are beautiful and the fact that they're supporting local artisans is a bonus.",
       avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face",
     },
     {

@@ -1,6 +1,6 @@
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 
-const S3_BUCKET = process.env.S3_BUCKET_NAME || 'ecodosth'; // Defaulting or waiting for input
+const S3_BUCKET = process.env.S3_BUCKET_NAME || 'ecoforever'; // Defaulting or waiting for input
 const R2_ACCOUNT_ID = process.env.R2_ID;
 const ACCESS_KEY_ID = process.env.ACCESS_KEY;
 const SECRET_ACCESS_KEY = process.env.SECRET_ACCESS_KEY;

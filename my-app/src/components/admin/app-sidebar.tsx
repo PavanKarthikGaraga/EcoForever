@@ -64,7 +64,7 @@ export function AppSidebar() {
                         <Package className="size-5" />
                     </div>
                     <div className="grid flex-1 text-left text-sm leading-tight">
-                        <span className="truncate font-bold text-base tracking-wide">EcoDosth</span>
+                        <span className="truncate font-bold text-base tracking-wide">EcoForever</span>
 
                     </div>
                 </div>

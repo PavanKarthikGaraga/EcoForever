@@ -27,7 +27,7 @@ const About = () => {
   ];
 
   const milestones = [
-    { year: "2018", title: "Founded EcoDosth", description: "Started with a vision to replace plastic tableware" },
+    { year: "2018", title: "Founded EcoForever", description: "Started with a vision to replace plastic tableware" },
     { year: "2019", title: "First Product Launch", description: "Introduced bamboo cutlery line to market" },
     { year: "2020", title: "Sustainable Certification", description: "Achieved FSC certification for all products" },
     { year: "2021", title: "100,000 Products Sold", description: "Reached major milestone in eco-conscious consumers" },

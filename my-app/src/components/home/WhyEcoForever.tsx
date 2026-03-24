@@ -1,6 +1,6 @@
 import { Leaf, Recycle, Heart, Shield, Truck, Award } from "lucide-react";
 
-const WhyEcoDosth = () => {
+const WhyEcoForever = () => {
   const reasons = [
     {
       icon: Leaf,
@@ -40,7 +40,7 @@ const WhyEcoDosth = () => {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-heading font-bold text-headings mb-4">
-            Why Choose EcoDosth?
+            Why Choose EcoForever?
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             We&apos;re committed to sustainable dining that doesn&apos;t compromise on quality,
@@ -83,4 +83,4 @@ const WhyEcoDosth = () => {
     </section>
   );
 };
-export default WhyEcoDosth;
+export default WhyEcoForever;

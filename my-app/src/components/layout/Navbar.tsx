@@ -32,7 +32,7 @@ const Navbar = () => {
             href="/"
             className="text-2xl font-heading font-semibold text-primary-accent hover:text-primary-accent transition-colors shrink-0"
           >
-            EcoDosth
+            EcoForever
           </Link>
 
           {/* Search Bar - Desktop */}

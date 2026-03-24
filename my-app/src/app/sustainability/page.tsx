@@ -184,7 +184,7 @@ const Sustainability = () => {
                         Plastic
                       </th>
                       <th className="px-6 py-4 text-left font-heading font-semibold text-headings">
-                        EcoDosth
+                        EcoForever
                       </th>
                     </tr>
                   </thead>

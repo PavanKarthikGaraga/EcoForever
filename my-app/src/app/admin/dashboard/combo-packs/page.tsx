@@ -88,7 +88,7 @@ export default function ComboPackListPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {packs.map((pack) => (
                         <Card key={pack._id} className="overflow-hidden group py-0">
-                            <div className="aspect-square relative bg-muted">
+                            <div className="h-80 relative bg-muted">
                                 {pack.image && (
                                     <Image src={pack.image} alt={pack.title} fill className="object-cover" />
                                 )}

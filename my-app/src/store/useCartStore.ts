@@ -104,7 +104,7 @@ export const useCartStore = create<CartState>()(
             }
         }),
         {
-            name: 'ecodosth-cart-storage', // The key used in localStorage
+            name: 'ecoforever-cart-storage', // The key used in localStorage
         }
     )
 );

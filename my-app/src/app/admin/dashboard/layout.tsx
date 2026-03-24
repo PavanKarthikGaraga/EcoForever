@@ -7,7 +7,7 @@ import { verifyToken } from '@/lib/jwt';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Ecodosth - Admin Dashboard',
+    title: 'Ecoforever - Admin Dashboard',
     description: 'Manage your application settings and data.',
 };
 

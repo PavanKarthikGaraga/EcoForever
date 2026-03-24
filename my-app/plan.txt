@@ -1,4 +1,4 @@
-# EcoDosth — Website Structure & Component Plan (Cursor / shadcn / MagicUI)
+# EcoForever — Website Structure & Component Plan (Cursor / shadcn / MagicUI)
 
 > **Backend not required now** — only frontend scaffolding. Cart & quote forms can be placeholder logic.
 > **Images:** Only use real relevant product photos (areca/wooden/bamboo). No unrelated props.
@@ -32,7 +32,7 @@ src/
      └─ home/
          ├─ Hero.tsx
          ├─ ProductCategories.tsx
-         ├─ WhyEcoDosth.tsx
+         ├─ WhyEcoForever.tsx
          ├─ BestSellers.tsx
          ├─ SustainabilityImpact.tsx
          ├─ ManufacturingPreview.tsx
@@ -58,7 +58,7 @@ Sections (in order):
 
 1. **Hero** — modern hero, large typography, subtle natural texture
 2. **ProductCategories** — grid of 4
-3. **WhyEcoDosth** — icons + copy
+3. **WhyEcoForever** — icons + copy
 4. **BestSellers** — slider/cards
 5. **SustainabilityImpact** — metrics + eco meter
 6. **ManufacturingPreview** — 3 image strip + captions

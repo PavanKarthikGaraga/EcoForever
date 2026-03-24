@@ -19,31 +19,31 @@ export const sendOTPEmail = async (to: string, otp: string, userName: string) =>
     const htmlContent = `
     <div style="font-family: Arial, sans-serif; max-w-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
         <div style="background-color: #059669; padding: 20px; text-align: center;">
-            <h1 style="color: white; margin: 0; font-size: 24px;">EcoDosth</h1>
+            <h1 style="color: white; margin: 0; font-size: 24px;">EcoForever</h1>
         </div>
         <div style="padding: 30px; background-color: #ffffff;">
             <h2 style="color: #333333; margin-top: 0;">Verify Your Email Address</h2>
             <p style="color: #555555; line-height: 1.6;">Hello ${userName},</p>
-            <p style="color: #555555; line-height: 1.6;">Thank you for registering with EcoDosth! To complete your registration and secure your account, please use the following One-Time Password (OTP):</p>
+            <p style="color: #555555; line-height: 1.6;">Thank you for registering with EcoForever! To complete your registration and secure your account, please use the following One-Time Password (OTP):</p>
             
             <div style="background-color: #f3f4f6; padding: 15px; text-align: center; border-radius: 6px; margin: 25px 0;">
                 <span style="font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #1f2937;">${otp}</span>
             </div>
             
-            <p style="color: #555555; line-height: 1.6;">This code is valid for <strong>15 minutes</strong>. If you did not sign up for an EcoDosth account, you can safely ignore this email.</p>
-            <p style="color: #555555; line-height: 1.6; margin-top: 30px;">Best regards,<br>The EcoDosth Team</p>
+            <p style="color: #555555; line-height: 1.6;">This code is valid for <strong>15 minutes</strong>. If you did not sign up for an EcoForever account, you can safely ignore this email.</p>
+            <p style="color: #555555; line-height: 1.6; margin-top: 30px;">Best regards,<br>The EcoForever Team</p>
         </div>
         <div style="background-color: #f9fafb; padding: 15px; text-align: center; border-top: 1px solid #e0e0e0;">
-            <p style="color: #9ca3af; font-size: 12px; margin: 0;">© ${new Date().getFullYear()} EcoDosth. All rights reserved.</p>
+            <p style="color: #9ca3af; font-size: 12px; margin: 0;">© ${new Date().getFullYear()} EcoForever. All rights reserved.</p>
         </div>
     </div>
     `;
 
     try {
         const info = await transporter.sendMail({
-            from: `"EcoDosth" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
+            from: `"EcoForever" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
             to,
-            subject: 'Your EcoDosth Verification Code',
+            subject: 'Your EcoForever Verification Code',
             html: htmlContent,
         });
         console.log('OTP Email sent: %s', info.messageId);
@@ -74,7 +74,7 @@ export const sendOrderConfirmationEmail = async (to: string, orderDetails: any) 
     const htmlContent = `
     <div style="font-family: Arial, sans-serif; max-w-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
         <div style="background-color: #059669; padding: 20px; text-align: center;">
-            <h1 style="color: white; margin: 0; font-size: 24px;">EcoDosth</h1>
+            <h1 style="color: white; margin: 0; font-size: 24px;">EcoForever</h1>
         </div>
         <div style="padding: 30px; background-color: #ffffff;">
             <h2 style="color: #333333; margin-top: 0;">Order Confirmation</h2>
@@ -121,14 +121,14 @@ export const sendOrderConfirmationEmail = async (to: string, orderDetails: any) 
             <p style="color: #555555; line-height: 1.6; margin-top: 30px;">We'll send you another email when your order ships.</p>
         </div>
         <div style="background-color: #f9fafb; padding: 15px; text-align: center; border-top: 1px solid #e0e0e0;">
-            <p style="color: #9ca3af; font-size: 12px; margin: 0;">© ${new Date().getFullYear()} EcoDosth. All rights reserved.</p>
+            <p style="color: #9ca3af; font-size: 12px; margin: 0;">© ${new Date().getFullYear()} EcoForever. All rights reserved.</p>
         </div>
     </div>
     `;
 
     try {
         const info = await transporter.sendMail({
-            from: `"EcoDosth Orders" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
+            from: `"EcoForever Orders" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
             to,
             subject: `Order Confirmation - #${orderDetails.orderId}`,
             html: htmlContent,

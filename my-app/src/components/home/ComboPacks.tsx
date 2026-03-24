@@ -5,58 +5,58 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import { useCartStore } from "@/store/useCartStore";
+import { useEffect, useState } from "react";
 
 const ComboPacks = () => {
     const addItem = useCartStore((state) => state.addItem);
+    const [packs, setPacks] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchPacks = async () => {
+            try {
+                const response = await fetch('/api/admin/combo-packs');
+                if (response.ok) {
+                    const data = await response.json();
+                    setPacks(data);
+                }
+            } catch (error) {
+                console.error("Failed to fetch combo packs:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchPacks();
+    }, []);
 
     const handleAddToCart = (pack: any) => {
-        const price = pack.isPremium ? 799 : 499; // Mock prices for combo packs
+        const isPremium = pack.title?.toLowerCase().includes('premium');
 
         addItem({
-            id: `combo-${pack.isPremium ? 'premium' : 'normal'}`,
-            productId: `combo-${pack.isPremium ? 'premium' : 'normal'}`,
-            name: pack.name,
+            id: pack._id,
+            productId: pack._id,
+            name: pack.title,
             image: pack.image,
-            price: price,
+            price: pack.price,
             quantity: 1,
             packSize: "1 Combo Box",
             size: "Standard",
-            isPremium: pack.isPremium
+            isPremium: isPremium
         });
     };
 
-    const packs = [
-        {
-            name: "Normal Combo Pack",
-            items: [
-                "14'' inch Buffet Plate",
-                "15'' inch Sitting Plate",
-                "10'' Inch Breakfast Plate",
-                "14'' inch Meal Trays",
-                "4'' Inch Bowls",
-                "Spoons & Forks",
-            ],
-            // Using a reliable table setting image
-            image: "https://images.unsplash.com/photo-1603006905003-be475563bc59?q=80&w=1974&auto=format&fit=crop",
-            isPremium: false,
-            textPosition: "left",
-        },
-        {
-            name: "Premium Combo Pack",
-            items: [
-                "14'' inch Buffet Plate Premium",
-                "15'' inch Sitting Plate",
-                "10'' Inch Breakfast Plate",
-                "14'' Meal Trays (Slotted)",
-                "4'' Inch Bowls",
-                "Spoons & Forks",
-            ],
-            // Using a different high quality image
-            image: "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=2069&auto=format&fit=crop",
-            isPremium: true,
-            textPosition: "right",
-        },
-    ];
+    if (loading) {
+        return (
+            <section className="py-16 bg-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-center items-center h-[500px]">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-accent"></div>
+                </div>
+            </section>
+        );
+    }
+
+    if (packs.length === 0) return null;
 
     return (
         <section className="py-16 bg-white">
@@ -69,7 +69,7 @@ const ComboPacks = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 overflow-hidden p-2">
                     {packs.map((pack, index) => (
                         <ScrollAnimation
-                            key={pack.name}
+                            key={pack._id}
                             direction={index % 2 === 0 ? "left" : "right"}
                             delay={0.2}
                             className="h-full"
@@ -79,7 +79,7 @@ const ComboPacks = () => {
                             >
                                 <Image
                                     src={pack.image}
-                                    alt={pack.name}
+                                    alt={pack.title}
                                     fill
                                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                                     sizes="(max-width: 768px) 100vw, 50vw"
@@ -92,33 +92,36 @@ const ComboPacks = () => {
                                         }`}
                                 />
 
-                                <div className={`absolute inset-0 p-6 md:p-8 flex flex-col justify-end md:justify-center text-white ${pack.textPosition === 'left' ? 'md:items-start' : 'md:items-end'} ${pack.textPosition === 'left' ? 'md:text-left' : 'md:text-right'}`}>
-                                    <div className="max-w-full md:max-w-[75%]">
-                                        <div className="text-2xl md:text-3xl text-white font-bold mb-2">{pack.name}</div>
-                                        {pack.isPremium && (
+                                <div className={`absolute inset-0 p-6 md:p-8 flex flex-col justify-end text-white ${pack.textPosition === 'left' ? 'md:items-start' : 'md:items-end'} ${pack.textPosition === 'left' ? 'md:text-left' : 'md:text-right'}`}>
+                                    <div className="max-w-full md:max-w-[85%] w-full">
+                                        <div className="text-2xl md:text-3xl text-white font-bold mb-2">{pack.title}</div>
+                                        {pack.title?.toLowerCase().includes('premium') && (
                                             <span className="bg-primary-accent text-white text-xs font-bold px-3 py-1 rounded-full mb-4 inline-block">
                                                 PREMIUM
                                             </span>
                                         )}
 
                                         <ul className={`space-y-1 md:space-y-1.5 mb-6 text-white/90 hidden md:block`}>
-                                            {pack.items.map((item, idx) => (
+                                            {pack.items?.map((item: any, idx: number) => (
                                                 <li key={idx} className="text-sm md:text-base flex items-center gap-2">
-                                                    <Check className="w-4 h-4 text-primary-accent" /> {item}
+                                                    <Check className="w-4 h-4 text-primary-accent" /> {item.quantity}x {item.name}
                                                 </li>
                                             ))}
                                         </ul>
                                         {/* Mobile list summary */}
                                         <p className="text-white/90 text-sm mb-4 md:hidden line-clamp-2">
-                                            Includes: {pack.items.join(", ")}
+                                            Includes: {pack.items?.map((i: any) => `${i.quantity}x ${i.name}`).join(", ")}
                                         </p>
 
-                                        <Button
-                                            onClick={() => handleAddToCart(pack)}
-                                            className="bg-white text-black hover:bg-white/90 font-semibold px-6 py-2 md:px-8 shadow-md transition-transform active:scale-95 text-sm md:text-base w-full md:w-auto"
-                                        >
-                                            Add to Cart
-                                        </Button>
+                                        <div className={`flex flex-row items-center gap-4 mt-6 pt-6 border-t border-white/20 w-full ${pack.textPosition === 'left' ? 'justify-start' : 'justify-end'}`}>
+                                            <div className="text-2xl md:text-3xl font-bold text-white">₹{pack.price}</div>
+                                            <Button
+                                                onClick={() => handleAddToCart(pack)}
+                                                className="bg-primary-accent text-white hover:bg-primary-accent/90 font-semibold px-6 py-2 md:px-8 shadow-md transition-transform active:scale-95 text-sm md:text-base ml-auto"
+                                            >
+                                                <ShoppingCart className="w-4 h-4 mr-2" /> Add to Cart
+                                            </Button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
