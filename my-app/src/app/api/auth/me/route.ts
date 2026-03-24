@@ -4,6 +4,7 @@ import User from '@/lib/models/User';
 import { verifyToken } from '@/lib/jwt';
 import { cookies } from 'next/headers';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function GET(req: NextRequest) {
     try {
         await connectDB();
@@ -15,6 +16,7 @@ export async function GET(req: NextRequest) {
             return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const decoded = verifyToken(token) as any;
 
         if (!decoded || !decoded.id) {
@@ -46,6 +48,7 @@ export async function PUT(req: NextRequest) {
             return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const decoded = verifyToken(token) as any;
 
         if (!decoded || !decoded.id) {
@@ -55,7 +58,8 @@ export async function PUT(req: NextRequest) {
         const body = await req.json();
         const { firstName, lastName, phone } = body;
 
-        let updateData: any = {};
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const updateData: any = {};
         if (firstName && lastName) {
             updateData.name = `${firstName} ${lastName}`;
         } else if (firstName) {

@@ -4,9 +4,15 @@ import { Button } from '@/components/ui/button';
 import { LogOut } from 'lucide-react';
 
 export function DashboardHeader() {
-    const handleLogout = () => {
-        document.cookie = 'token=; Max-Age=0; path=/;';
-        window.location.href = '/admin';
+    const handleLogout = async () => {
+        try {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            window.location.href = '/admin';
+        } catch (error) {
+            console.error('Logout failed:', error);
+            // Fallback redirect just in case
+            window.location.href = '/admin';
+        }
     };
 
     return (

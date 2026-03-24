@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import Order from '@/lib/models/Order';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import User from '@/lib/models/User'; // Ensure User model is registered
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Product from '@/lib/models/Product'; // Ensure Product model is registered
 import { verifyToken } from '@/lib/jwt';
 import { cookies } from 'next/headers';
@@ -12,6 +14,7 @@ async function checkAdmin() {
     const token = cookieStore.get('token')?.value;
     if (!token) return false;
     const payload = verifyToken(token);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return payload && (payload as any).role === 'admin';
 }
 

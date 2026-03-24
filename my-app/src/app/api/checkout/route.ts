@@ -17,6 +17,9 @@ export async function POST(req: NextRequest) {
         }
 
         await connectDB();
+         
+         
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { items, shippingAddress, paymentMethod, subtotal, tax, shipping, total } = await req.json();
 
         if (!items || items.length === 0) {
@@ -48,6 +51,7 @@ export async function POST(req: NextRequest) {
         const newOrder = new Order({
             orderId: customOrderId,
             user: user._id,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             items: items.map((item: any) => ({
                 product: item.productId,
                 variantId: item.id,

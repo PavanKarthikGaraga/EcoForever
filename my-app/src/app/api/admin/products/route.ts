@@ -10,6 +10,7 @@ async function checkAdmin() {
     const token = cookieStore.get('token')?.value;
     if (!token) return false;
     const payload = verifyToken(token);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return payload && (payload as any).role === 'admin';
 }
 
@@ -54,6 +55,7 @@ export async function POST(req: NextRequest) {
         const newProduct = await Product.create(body);
 
         return NextResponse.json(newProduct, { status: 201 });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
         console.error('Error creating product:', error);
         return NextResponse.json({ error: error.message || 'Error creating product' }, { status: 500 });

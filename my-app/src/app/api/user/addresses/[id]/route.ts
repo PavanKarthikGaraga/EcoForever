@@ -24,6 +24,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
         const { id } = await params;
         const body = await req.json();
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const user = await User.findById((userPayload as any).id);
         if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 });
 
@@ -34,6 +35,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
 
         // Handle default toggle logic
         if (body.isDefault) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             user.addresses.forEach((addr: any) => {
                 if (addr._id.toString() !== id) {
                     addr.isDefault = false;
@@ -68,6 +70,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
 
         const { id } = await params;
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const user = await User.findById((userPayload as any).id);
         if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 });
 

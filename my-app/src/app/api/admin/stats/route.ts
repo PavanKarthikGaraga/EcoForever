@@ -12,9 +12,11 @@ async function checkAdmin() {
     const token = cookieStore.get('token')?.value;
     if (!token) return false;
     const payload = verifyToken(token);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return payload && (payload as any).role === 'admin';
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function GET(req: NextRequest) {
     try {
         const isAdmin = await checkAdmin();

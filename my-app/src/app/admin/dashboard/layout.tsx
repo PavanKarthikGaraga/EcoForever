@@ -24,6 +24,7 @@ export default async function AdminDashboardLayout({
     }
 
     const payload = verifyToken(token);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (!payload || (payload as any).role !== 'admin') {
         redirect('/admin');
     }

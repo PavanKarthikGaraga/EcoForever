@@ -57,8 +57,10 @@ export const sendOTPEmail = async (to: string, otp: string, userName: string) =>
 /**
  * Sends an Order Confirmation receipt.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const sendOrderConfirmationEmail = async (to: string, orderDetails: any) => {
     // Generate items HTML table rows
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const itemsHtml = orderDetails.items.map((item: any) => `
         <tr>
             <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;">

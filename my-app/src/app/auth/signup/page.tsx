@@ -48,7 +48,8 @@ export default function SignupPage() {
 
             setSuccessMessage(resData.message);
             setStep(2); // Move to OTP step
-        } catch (err: any) {
+         
+        } catch {
             setError("An unexpected error occurred. Please try again.");
         } finally {
             setIsLoading(false);
@@ -81,7 +82,8 @@ export default function SignupPage() {
             // Sync Zustand store with new cookie
             await checkAuth();
             router.push("/profile");
-        } catch (err: any) {
+         
+        } catch {
             setError("An unexpected error occurred. Please try again.");
             setIsLoading(false);
         }
@@ -157,7 +159,7 @@ export default function SignupPage() {
                     ) : (
                         <form className="space-y-6" onSubmit={handleVerifyOTP}>
                             <div className="text-center text-sm text-gray-600 mb-6">
-                                We've sent a 6-digit code to <strong className="text-gray-900">{email}</strong>. Please enter it below.
+                                We&apos;ve sent a 6-digit code to <strong className="text-gray-900">{email}</strong>. Please enter it below.
                             </div>
 
                             <div>

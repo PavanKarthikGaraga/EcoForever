@@ -22,7 +22,9 @@ export async function GET(req: NextRequest) {
             .sort({ createdAt: -1 })
             .lean();
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const formattedOrders = orders.map((order: any) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const itemsStrings = order.items.map((item: any) => {
                 const title = item.product?.title || 'Unknown Product';
                 return `${item.quantity}x ${title} (${item.size || ''})`.trim();

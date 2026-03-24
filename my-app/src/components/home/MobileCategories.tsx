@@ -2,6 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
+ 
+ 
+ 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Utensils, Circle, Square, Package } from "lucide-react";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 

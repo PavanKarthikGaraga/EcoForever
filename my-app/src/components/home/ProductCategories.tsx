@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ArrowRight, Utensils, Circle, Square, Package } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -62,6 +63,7 @@ const ProductCategories = () => {
         {/* Categories Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {categories.slice(0, 4).map((category, index) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const Icon = category.icon;
             return (
               <ScrollAnimation key={category.name} direction="up" delay={index * 0.1}>

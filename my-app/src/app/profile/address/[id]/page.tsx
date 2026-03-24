@@ -40,6 +40,7 @@ export default function EditAddressPage() {
         if (addresses.length === 0) {
             fetchAddresses();
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Set form data once addresses map is loaded

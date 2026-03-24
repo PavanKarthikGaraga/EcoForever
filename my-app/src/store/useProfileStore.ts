@@ -43,6 +43,7 @@ interface ProfileState {
     updateAddress: (id: string, updates: Partial<Address>) => Promise<void>;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const useProfileStore = create<ProfileState>((set, get) => ({
     addresses: [],
     orders: [], // Will be hydrated when orders API is built

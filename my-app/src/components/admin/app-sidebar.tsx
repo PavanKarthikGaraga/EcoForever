@@ -1,10 +1,14 @@
 'use client';
 
 import {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Calendar,
     Home,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Inbox,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Search,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Settings,
     Package,
     ShoppingCart,

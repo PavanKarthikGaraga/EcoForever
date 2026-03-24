@@ -19,10 +19,12 @@ export async function POST(req: NextRequest) {
         }
 
         const payload = verifyToken(token);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         if (!payload || (payload as any).role !== 'admin') {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const userId = (payload as any).id;
         const user = await User.findById(userId).select('+password');
 

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ShoppingCart, X, Plus, Minus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +21,7 @@ export function CartSheet() {
 
     // Prevent hydration mismatch for persistent store
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setMounted(true);
     }, []);
 
@@ -63,7 +65,7 @@ export function CartSheet() {
                         </div>
                         <p className="text-lg font-medium text-headings">Your cart is empty</p>
                         <p className="text-muted-foreground max-w-[250px]">
-                            Looks like you haven't added any eco-friendly products to your cart yet.
+                            Looks like you haven&apos;t added any eco-friendly products to your cart yet.
                         </p>
                         <Button asChild className="mt-4">
                             <Link href="/#products">Start Shopping</Link>

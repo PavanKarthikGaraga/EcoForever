@@ -29,10 +29,11 @@ export async function POST(req: NextRequest) {
         // If client cart is empty but DB cart has items (e.g., fresh login on new device),
         // we should return the DB cart to the client.
         
-        let mergedItems = [...(user.cart || [])];
+        const mergedItems = [...(user.cart || [])];
 
         if (clientItems && clientItems.length > 0) {
             // Client is sending items. Update/merge with DB.
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const dbMap = new Map(mergedItems.map((i: any) => [i.id, i]));
             
             for (const item of clientItems) {

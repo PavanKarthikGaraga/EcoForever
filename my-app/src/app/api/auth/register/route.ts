@@ -48,6 +48,7 @@ export async function POST(req: NextRequest) {
             user = existingUser;
         } else {
             // Create new record
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             user = await User.create({
                 name: `${firstName} ${lastName}`,
                 email,

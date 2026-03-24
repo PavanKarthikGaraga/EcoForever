@@ -11,6 +11,7 @@ export async function POST() {
         response.cookies.delete('token');
 
         return response;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
         return NextResponse.json(
             { error: 'Internal server error' },

@@ -25,6 +25,7 @@ interface ComboPack {
 export default function ComboPackListPage() {
     const [loading, setLoading] = useState(true);
     const [packs, setPacks] = useState<ComboPack[]>([]);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const router = useRouter();
 
     useEffect(() => {

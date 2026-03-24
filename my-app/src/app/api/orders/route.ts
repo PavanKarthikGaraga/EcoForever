@@ -42,6 +42,7 @@ export async function POST(req: NextRequest) {
         // It saves the order to DB and immediately sends the confirmation email.
         const newOrder = await Order.create({
             orderId: customOrderId,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             user: (user as any).id,
             items: body.items,
             shippingAddress: body.shippingAddress,

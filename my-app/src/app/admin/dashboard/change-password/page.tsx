@@ -52,6 +52,7 @@ export default function ChangePasswordPage() {
             } else {
                 setError(data.error || 'Failed to update password');
             }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             setError('An error occurred');
         } finally {

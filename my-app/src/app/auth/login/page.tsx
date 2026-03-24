@@ -52,7 +52,8 @@ export default function LoginPage() {
             } else {
                 router.push("/profile");
             }
-        } catch (err: any) {
+         
+        } catch {
             setError("An unexpected error occurred. Please try again.");
             setIsLoading(false);
         }

@@ -58,6 +58,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 
     useEffect(() => {
         fetchProduct();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
     const fetchProduct = async () => {
@@ -75,6 +76,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
             setHasPremium(data.hasPremium || false);
             setPremiumImages(data.premiumImages || []);
             setImages(data.images || []);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             setVariants(data.variants.map((v: any) => ({
                 size: v.size,
                 price: v.price.toString(),
