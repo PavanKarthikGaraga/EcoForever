@@ -7,6 +7,41 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import { useCartStore } from "@/store/useCartStore";
 import { useEffect, useState } from "react";
 
+const defaultComboPacks = [
+    {
+        _id: "default-combo-1",
+        title: "Normal Combo Pack",
+        items: [
+            { quantity: "1", name: "14'' inch Buffet Plate" },
+            { quantity: "1", name: "15'' inch Sitting Plate" },
+            { quantity: "1", name: "10'' Inch Breakfast Plate" },
+            { quantity: "1", name: "14'' inch Meal Trays" },
+            { quantity: "1", name: "4'' Inch Bowls" },
+            { quantity: "1", name: "Spoons & Forks" }
+        ],
+        image: "https://images.unsplash.com/photo-1603006905003-be475563bc59?q=80&w=1974&auto=format&fit=crop",
+        price: 499,
+        mrp: 599,
+        textPosition: "left",
+    },
+    {
+        _id: "default-combo-2",
+        title: "Premium Combo Pack",
+        items: [
+            { quantity: "1", name: "14'' inch Buffet Plate Premium" },
+            { quantity: "1", name: "15'' inch Sitting Plate" },
+            { quantity: "1", name: "10'' Inch Breakfast Plate" },
+            { quantity: "1", name: "14'' Meal Trays (Slotted)" },
+            { quantity: "1", name: "4'' Inch Bowls" },
+            { quantity: "1", name: "Spoons & Forks" }
+        ],
+        image: "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=2069&auto=format&fit=crop",
+        price: 799,
+        mrp: 999,
+        textPosition: "right",
+    },
+];
+
 const ComboPacks = () => {
     const addItem = useCartStore((state) => state.addItem);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -19,10 +54,17 @@ const ComboPacks = () => {
                 const response = await fetch('/api/admin/combo-packs');
                 if (response.ok) {
                     const data = await response.json();
-                    setPacks(data);
+                    if (data && data.length > 0) {
+                        setPacks(data);
+                    } else {
+                        setPacks(defaultComboPacks);
+                    }
+                } else {
+                    setPacks(defaultComboPacks);
                 }
             } catch (error) {
                 console.error("Failed to fetch combo packs:", error);
+                setPacks(defaultComboPacks);
             } finally {
                 setLoading(false);
             }

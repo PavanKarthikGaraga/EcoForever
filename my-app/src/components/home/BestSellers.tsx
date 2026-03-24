@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import { Loader2 } from "lucide-react";
+import { products as defaultProductsData } from "@/data/products";
 
 const BestSellers = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -21,10 +22,41 @@ const BestSellers = () => {
         const res = await fetch("/api/admin/products?limit=8");
         if (res.ok) {
           const data = await res.json();
-          setProducts(data.products || []);
+          if (data.products && data.products.length > 0) {
+            setProducts(data.products);
+          } else {
+            // Fallback to local data
+            const fallback = defaultProductsData.map(p => ({
+              _id: p.id,
+              title: p.name,
+              images: p.images,
+              hasPremium: false,
+              isFeatured: p.badge === "Best Seller",
+              variants: p.variants.map(v => ({
+                size: v.attributes.size || v.attributes.type || v.attributes.pack || "Standard",
+                price: v.price,
+                mrp: v.originalPrice,
+              }))
+            }));
+            setProducts(fallback);
+          }
         }
       } catch (err) {
         console.error("Failed to fetch products", err);
+        // Fallback to local data on error
+        const fallback = defaultProductsData.map(p => ({
+            _id: p.id,
+            title: p.name,
+            images: p.images,
+            hasPremium: false,
+            isFeatured: p.badge === "Best Seller",
+            variants: p.variants.map(v => ({
+            size: v.attributes.size || v.attributes.type || v.attributes.pack || "Standard",
+            price: v.price,
+            mrp: v.originalPrice,
+            }))
+        }));
+        setProducts(fallback);
       } finally {
         setLoading(false);
       }
