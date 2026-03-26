@@ -120,29 +120,44 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
         if (!files || files.length === 0) return;
 
         setSaving(true);
-        const formData = new FormData();
-        formData.append('file', files[0]);
+        const newUrls: string[] = [];
 
         try {
-            const res = await fetch('/api/admin/upload', {
-                method: 'POST',
-                body: formData,
+            const uploadPromises = Array.from(files).map(async (file) => {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                const res = await fetch('/api/admin/upload', {
+                    method: 'POST',
+                    body: formData,
+                });
+                
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.url) return data.url;
+                }
+                throw new Error('Upload failed for ' + file.name);
             });
-            const data = await res.json();
-            if (res.ok && data.url) {
+
+            const uploadedUrls = await Promise.all(uploadPromises);
+            newUrls.push(...uploadedUrls.filter(url => url !== undefined));
+
+            if (newUrls.length > 0) {
                 if (isPremium) {
-                    setPremiumImages([...premiumImages, data.url]);
+                    setPremiumImages(prev => [...prev, ...newUrls]);
                 } else {
-                    setImages([...images, data.url]);
+                    setImages(prev => [...prev, ...newUrls]);
                 }
             } else {
-                toast.error('Upload failed');
+                toast.error('Upload failed for all images');
             }
         } catch (error) {
             console.error('Upload error', error);
-            toast.error('Upload failed');
+            toast.error('Some or all uploads failed');
         } finally {
             setSaving(false);
+            // reset file input
+            e.target.value = '';
         }
     };
 
@@ -340,6 +355,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                                         id="image-upload"
                                         type="file"
                                         accept="image/*"
+                                        multiple
                                         className="hidden"
                                         onChange={handleImageUpload}
                                         disabled={saving}
