@@ -242,6 +242,9 @@ const ProductDetail = () => {
                 ))}
               </div>
             )}
+
+            {/* Shipping & Returns */}
+            
           </div>
 
           {/* Product Info */}
@@ -434,6 +437,29 @@ const ProductDetail = () => {
           </div>
 
         </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6">
+              <div className="flex flex-col items-center text-center p-4 bg-gray-50 border rounded-xl">
+                <Truck className="h-8 w-8 text-primary-accent mb-2" />
+                <div>
+                  <div className="font-medium text-headings text-sm">Free Shipping</div>
+                  <div className="text-xs text-muted-foreground mt-1">Orders over ₹500</div>
+                </div>
+              </div>
+              <div className="flex flex-col items-center text-center p-4 bg-gray-50 border rounded-xl">
+                <Shield className="h-8 w-8 text-primary-accent mb-2" />
+                <div>
+                  <div className="font-medium text-headings text-sm">Secure Payment</div>
+                  <div className="text-xs text-muted-foreground mt-1">100% Protected</div>
+                </div>
+              </div>
+              <div className="flex flex-col items-center text-center p-4 bg-gray-50 border rounded-xl">
+                <RotateCcw className="h-8 w-8 text-primary-accent mb-2" />
+                <div>
+                  <div className="font-medium text-headings text-sm">Easy Returns</div>
+                  <div className="text-xs text-muted-foreground mt-1">30-day policy</div>
+                </div>
+              </div>
+            </div>
       </div>
     </div>
   );
