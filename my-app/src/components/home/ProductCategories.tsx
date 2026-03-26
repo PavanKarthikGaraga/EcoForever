@@ -14,7 +14,7 @@ const ProductCategories = () => {
       description: "Premium areca and leaf plates",
       icon: Circle,
       href: "/#products",
-      image: "https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=400&h=300&fit=crop&crop=center",
+      image: "https://pub-90128cc82748409abc1429b2f1594649.r2.dev/ecodosth/products/1774508586786-break_fast_plate_9_inches.jpeg",
       color: "bg-green-50",
     },
     {
@@ -22,25 +22,25 @@ const ProductCategories = () => {
       description: "Sustainable bowls for every meal",
       icon: Circle,
       href: "/#products",
-      image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop&crop=center",
+      image: "https://pub-90128cc82748409abc1429b2f1594649.r2.dev/ecodosth/products/1774510866149-snack_bowl_6_inch.jpeg",
       color: "bg-amber-50",
     },
     {
-      name: "Cutlery",
-      description: "Eco-friendly wooden spoons and forks",
+      name: "Trays",
+      description: "Eco-friendly wooden Trays",
       icon: Utensils,
       href: "/#products",
-      image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop&crop=center",
+      image: "https://pub-90128cc82748409abc1429b2f1594649.r2.dev/ecodosth/products/1774510989370-idly_plate_1_.jpeg",
       color: "bg-orange-50",
     },
-    {
-      name: "Combo Packs",
-      description: "Value packs for events and parties",
-      icon: Package,
-      href: "/#products",
-      image: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=400&h=300&fit=crop&crop=center",
-      color: "bg-stone-50",
-    },
+    // {
+    //   name: "Combo Packs",
+    //   description: "Value packs for events and parties",
+    //   icon: Package,
+    //   href: "/#products",
+    //   image: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=400&h=300&fit=crop&crop=center",
+    //   color: "bg-stone-50",
+    // },
   ];
 
   return (
@@ -61,8 +61,8 @@ const ProductCategories = () => {
         </div>
 
         {/* Categories Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {categories.slice(0, 4).map((category, index) => {
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {categories.slice(0, 3).map((category, index) => {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const Icon = category.icon;
             return (
@@ -72,7 +72,7 @@ const ProductCategories = () => {
                   className="group block"
                 >
                   {/* Image */}
-                  <div className="mx-auto w-48 h-48 relative overflow-hidden rounded-full bg-gray-100 mb-4 shadow-sm border-4 border-white group-hover:border-primary-accent/20 transition-all duration-300">
+                  <div className="mx-auto w-55 h-55 relative overflow-hidden rounded-full bg-gray-100 mb-4 shadow-sm border-4 border-white group-hover:border-primary-accent/20 transition-all duration-300">
                     <Image
                       src={category.image}
                       alt={category.name}

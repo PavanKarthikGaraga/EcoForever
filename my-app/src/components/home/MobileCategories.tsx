@@ -22,15 +22,15 @@ const MobileCategories = () => {
             image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=200&h=200&fit=crop&crop=center",
         },
         {
-            name: "Cutlery",
+            name: "Trays",
             href: "/#products",
             image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=200&h=200&fit=crop&crop=center",
         },
-        {
-            name: "Combo Packs",
-            href: "/#products",
-            image: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=200&h=200&fit=crop&crop=center",
-        },
+        // {
+        //     name: "Combo Packs",
+        //     href: "/#products",
+        //     image: "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=200&h=200&fit=crop&crop=center",
+        // },
     ];
 
     return (

@@ -147,7 +147,6 @@ const ProductDetail = () => {
 
   // Try to extract original pack size number for per-piece price calculation
   const packCount = product.packSize;
-  const perPiecePrice = displayPrice;
   const totalPrice = displayPrice * packCount;
 
   const handleNextImage = () => {
@@ -314,11 +313,11 @@ const ProductDetail = () => {
                 <div className="flex items-center space-x-3 ">
                   {displayMrp > displayPrice && (
                     <span className="text-xl line-through text-muted-foreground">
-                      ₹{displayMrp.toFixed(2)}
+                      ₹{(displayMrp * packCount).toFixed(2)}
                     </span>
                   )}
                   <span className="text-3xl font-heading font-bold text-headings">
-                    {currentVariant ? `₹${perPiecePrice.toFixed(2)} / piece` : "..."} 
+                    {currentVariant ? `₹${totalPrice.toFixed(2)}` : "..."} 
                   </span>
                   <span className="text-sm text-muted-foreground"> (pack of {packCount})</span>
                   {displayMrp > displayPrice && (
@@ -331,73 +330,73 @@ const ProductDetail = () => {
               </div>
 
               {/* Variant Selectors */}
-
-              {/* Premium Toggle */}
-              {product.hasPremium && (
-                <div className="mb-6 border-b pb-6">
-                  <span className="block text-sm font-medium text-headings mb-2">Select Variant Quality</span>
-                  <div className="flex gap-4">
-                    <button
-                      onClick={() => setIsPremiumSelected(false)}
-                      className={cn(
-                        "flex-1 px-4 py-3 rounded-lg border-2 transition-all flex flex-col items-center justify-center relative",
-                        !isPremiumSelected
-                          ? "bg-primary-accent/5 border-primary-accent"
-                          : "bg-white border-border hover:border-primary-accent/50"
-                      )}
-                    >
-                      <span className={cn("font-bold", !isPremiumSelected ? "text-primary-accent" : "text-headings")}>
-                        Standard
-                      </span>
-                      <span className="text-xs text-muted-foreground mt-1">High-quality eco friendly</span>
-                      {!isPremiumSelected && (
-                        <Check className="absolute top-2 right-2 w-4 h-4 text-primary-accent" />
-                      )}
-                    </button>
-                    <button
-                      onClick={() => setIsPremiumSelected(true)}
-                      className={cn(
-                        "flex-1 px-4 py-3 rounded-lg border-2 transition-all flex flex-col items-center justify-center relative",
-                        isPremiumSelected
-                          ? "bg-amber-50 border-amber-500"
-                          : "bg-white border-border hover:border-amber-500/50"
-                      )}
-                    >
-                      <span className={cn("font-bold", isPremiumSelected ? "text-amber-600" : "text-headings")}>
-                        Premium
-                      </span>
-                      <span className="text-xs text-muted-foreground mt-1">Sturdier, Strong base</span>
-                      {isPremiumSelected && (
-                        <Check className="absolute top-2 right-2 w-4 h-4 text-amber-500" />
-                      )}
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Size Selector */}
-              {availableSizes.length > 0 && (
-                <div className="mb-6">
-                  <span className="block text-sm font-medium text-headings mb-2">Available Sizes</span>
-                  <div className="flex flex-wrap gap-3">
-                    {availableSizes.map((s: string) => (
+              <div className="flex flex-col md:flex-row gap-6 mb-6 border-b pb-6">
+                {/* Premium Toggle */}
+                {product.hasPremium && (
+                  <div className="flex-1">
+                    <span className="block text-sm font-medium text-headings mb-2">Select Variant Quality</span>
+                    <div className="flex gap-4">
                       <button
-                        key={s}
-                        onClick={() => setSelectedSize(s)}
+                        onClick={() => setIsPremiumSelected(false)}
                         className={cn(
-                          "px-4 py-2 rounded-lg border transition-all text-sm font-medium",
-                          selectedSize === s
-                            ? "bg-primary-accent text-white border-primary-accent"
-                            : "bg-white text-body-text border-gray-200 hover:border-primary-accent/50"
+                          "flex-1 px-4 py-3 rounded-lg border-2 transition-all flex flex-col items-center justify-center relative",
+                          !isPremiumSelected
+                            ? "bg-primary-accent/5 border-primary-accent"
+                            : "bg-white border-border hover:border-primary-accent/50"
                         )}
                       >
-                        {s}
+                        <span className={cn("font-bold", !isPremiumSelected ? "text-primary-accent" : "text-headings")}>
+                          Standard
+                        </span>
+                        <span className="text-xs text-muted-foreground mt-1 text-center">High-quality eco friendly</span>
+                        {!isPremiumSelected && (
+                          <Check className="absolute top-2 right-2 w-4 h-4 text-primary-accent" />
+                        )}
                       </button>
-                    ))}
+                      <button
+                        onClick={() => setIsPremiumSelected(true)}
+                        className={cn(
+                          "flex-1 px-4 py-3 rounded-lg border-2 transition-all flex flex-col items-center justify-center relative",
+                          isPremiumSelected
+                            ? "bg-amber-50 border-amber-500"
+                            : "bg-white border-border hover:border-amber-500/50"
+                        )}
+                      >
+                        <span className={cn("font-bold", isPremiumSelected ? "text-amber-600" : "text-headings")}>
+                          Premium
+                        </span>
+                        <span className="text-xs text-muted-foreground mt-1 text-center">Sturdier, Strong base</span>
+                        {isPremiumSelected && (
+                          <Check className="absolute top-2 right-2 w-4 h-4 text-amber-500" />
+                        )}
+                      </button>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
+                {/* Size Selector */}
+                {availableSizes.length > 0 && (
+                  <div className="flex-1">
+                    <span className="block text-sm font-medium text-headings mb-2">Available Sizes</span>
+                    <div className="flex flex-wrap gap-3">
+                      {availableSizes.map((s: string) => (
+                        <button
+                          key={s}
+                          onClick={() => setSelectedSize(s)}
+                          className={cn(
+                            "flex-1 min-w-[80px] px-4 py-3 rounded-lg border-2 transition-all text-sm font-bold flex items-center justify-center",
+                            selectedSize === s
+                              ? "bg-primary-accent text-white border-primary-accent"
+                              : "bg-white text-body-text border-border hover:border-primary-accent/50"
+                          )}
+                        >
+                          {s}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
 
               {/* Stock Status */}
               <div className="flex items-center space-x-2 mb-6">
@@ -426,31 +425,37 @@ const ProductDetail = () => {
             </div>
 
             {/* Quantity and Add to Cart */}
-            <div className="space-y-4 pt-4">
-              <div className="flex items-center space-x-4">
-                <label className="font-medium text-headings">Quantity:</label>
-                <select
-                  className="px-4 py-2 border border-border rounded-xl bg-white min-w-20"
-                  value={quantity}
-                  onChange={(e) => setQuantity(Number(e.target.value))}
+            <div className="flex flex-col sm:flex-row gap-4 pt-4 mt-2 items-stretch">
+              <div className="flex items-center border-2 border-border rounded-xl bg-white overflow-hidden h-[56px] shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                  disabled={quantity <= 1}
+                  className="px-4 h-full flex items-center justify-center text-headings hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
-                  {[1, 2, 3, 4, 5, 10, 20].map(num => (
-                    <option key={num} value={num}>{num}</option>
-                  ))}
-                </select>
+                  <span className="text-2xl leading-none mt-[-2px]">-</span>
+                </button>
+                <span className="px-4 h-full flex items-center justify-center font-bold border-x-2 border-border min-w-[3.5rem] text-center text-lg">
+                  {quantity}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setQuantity(q => q + 1)}
+                  className="px-4 h-full flex items-center justify-center text-headings hover:bg-gray-100 transition-colors"
+                >
+                  <span className="text-2xl leading-none mt-[-2px]">+</span>
+                </button>
               </div>
 
-              <div className="flex gap-4">
-                <Button
-                  className="flex-1 py-6 text-lg shadow-md"
-                  size="lg"
-                  disabled={!currentVariant || displayStock <= 0}
-                  onClick={handleAddToCart}
-                >
-                  <ShoppingCart className="h-5 w-5 mr-2" />
-                  {!currentVariant ? "Select Options" : displayStock <= 0 ? "Out of Stock" : "Add to Cart"}
-                </Button>
-              </div>
+              <Button
+                className="flex-1 h-[56px] text-lg shadow-md"
+                size="lg"
+                disabled={!currentVariant || displayStock <= 0}
+                onClick={handleAddToCart}
+              >
+                <ShoppingCart className="h-5 w-5 mr-2" />
+                {!currentVariant ? "Select Options" : displayStock <= 0 ? "Out of Stock" : "Add to Cart"}
+              </Button>
             </div>
           </div>
 

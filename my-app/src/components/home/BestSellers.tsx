@@ -105,6 +105,10 @@ const BestSellers = () => {
                 : Infinity;
               const displayMrp = minMrp !== Infinity && minMrp > minPrice ? minMrp : null;
 
+              const packCount = product.packSize || 1;
+              const totalMinPrice = minPrice * packCount;
+              const totalDisplayMrp = displayMrp ? displayMrp * packCount : null;
+
               return (
                 <ScrollAnimation
                   key={product._id}
@@ -127,6 +131,7 @@ const BestSellers = () => {
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                         sizes="(max-width: 640px) 50vw, 25vw"
                       />
+
                       {/* Badges */}
                       {product.hasPremium && (
                         <div className="absolute top-2 right-2 md:top-4 md:right-4 bg-primary-accent text-white text-[10px] md:text-xs font-bold px-2 py-1 md:px-3 md:py-1.5 rounded-full z-10 shadow-sm">
@@ -148,13 +153,13 @@ const BestSellers = () => {
 
                       {/* Price */}
                       <div className="flex items-center space-x-2 md:space-x-3 flex-wrap mt-auto">
-                        {displayMrp && (
+                        {totalDisplayMrp && (
                           <span className="text-xs md:text-sm text-muted-foreground line-through">
-                            ₹{displayMrp.toFixed(2)}
+                            ₹{totalDisplayMrp.toFixed(2)}
                           </span>
                         )}
                         <span className="text-sm md:text-lg font-bold text-primary-accent">
-                          From ₹{minPrice.toFixed(2)}
+                          ₹{totalMinPrice.toFixed(2)}
                         </span>
                       </div>
                     </div>
