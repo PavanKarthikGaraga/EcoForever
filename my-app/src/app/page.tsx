@@ -6,7 +6,7 @@ import MobileCategories from "@/components/home/MobileCategories";
 import GlobalShipping from "@/components/home/GlobalShipping";
 import DualCTA from "@/components/home/DualCTA";
 import Hero from "@/components/home/Hero";
-import ComboPacks from "@/components/home/ComboPacks";
+// import ComboPacks from "@/components/home/ComboPacks";
 
 export default function Home() {
   return (
@@ -15,7 +15,7 @@ export default function Home() {
       <Hero />
       <ProductCategories />
       <BestSellers />
-      <ComboPacks />
+      {/* <ComboPacks /> */}
       <GlobalShipping />
       <Testimonials />
       <DualCTA />

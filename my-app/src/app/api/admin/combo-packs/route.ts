@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
             return NextResponse.json(comboPack);
         }
 
-        const comboPacks = await ComboPack.find({}).sort({ createdAt: -1 });
+        const comboPacks = await ComboPack.find({}).sort({ createdAt: 1 });
         return NextResponse.json(comboPacks);
     } catch (error) {
         console.error('Error fetching combo packs:', error);

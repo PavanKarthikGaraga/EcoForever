@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
         const skip = (page - 1) * limit;
 
         const products = await Product.find({})
-            .sort({ createdAt: -1 })
+            .sort({ createdAt: 1 })
             .skip(skip)
             .limit(limit);
 
