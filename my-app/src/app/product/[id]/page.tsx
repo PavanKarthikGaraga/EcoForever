@@ -244,26 +244,26 @@ const ProductDetail = () => {
             )}
 
             {/* Shipping & Returns */}
-            <div className="grid grid-cols-1 gap-4 pt-6">
-              <div className="flex items-center space-x-3 p-4 bg-gray-50 border rounded-xl">
-                <Truck className="h-8 w-8 text-primary-accent" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6">
+              <div className="flex flex-col items-center text-center p-4 bg-gray-50 border rounded-xl">
+                <Truck className="h-8 w-8 text-primary-accent mb-2" />
                 <div>
-                  <div className="font-medium text-headings">Free Shipping</div>
-                  <div className="text-sm text-muted-foreground">Orders over ₹500</div>
+                  <div className="font-medium text-headings text-sm">Free Shipping</div>
+                  <div className="text-xs text-muted-foreground mt-1">Orders over ₹500</div>
                 </div>
               </div>
-              <div className="flex items-center space-x-3 p-4 bg-gray-50 border rounded-xl">
-                <Shield className="h-8 w-8 text-primary-accent" />
+              <div className="flex flex-col items-center text-center p-4 bg-gray-50 border rounded-xl">
+                <Shield className="h-8 w-8 text-primary-accent mb-2" />
                 <div>
-                  <div className="font-medium text-headings">Secure Payment</div>
-                  <div className="text-sm text-muted-foreground">100% Protected</div>
+                  <div className="font-medium text-headings text-sm">Secure Payment</div>
+                  <div className="text-xs text-muted-foreground mt-1">100% Protected</div>
                 </div>
               </div>
-              <div className="flex items-center space-x-3 p-4 bg-gray-50 border rounded-xl">
-                <RotateCcw className="h-8 w-8 text-primary-accent" />
+              <div className="flex flex-col items-center text-center p-4 bg-gray-50 border rounded-xl">
+                <RotateCcw className="h-8 w-8 text-primary-accent mb-2" />
                 <div>
-                  <div className="font-medium text-headings">Easy Returns</div>
-                  <div className="text-sm text-muted-foreground">30-day policy</div>
+                  <div className="font-medium text-headings text-sm">Easy Returns</div>
+                  <div className="text-xs text-muted-foreground mt-1">30-day policy</div>
                 </div>
               </div>
             </div>
@@ -330,73 +330,72 @@ const ProductDetail = () => {
               </div>
 
               {/* Variant Selectors */}
-              <div className="flex flex-col md:flex-row gap-6 mb-6 border-b pb-6">
-                {/* Premium Toggle */}
-                {product.hasPremium && (
-                  <div className="flex-1">
-                    <span className="block text-sm font-medium text-headings mb-2">Select Variant Quality</span>
-                    <div className="flex gap-4">
-                      <button
-                        onClick={() => setIsPremiumSelected(false)}
-                        className={cn(
-                          "flex-1 px-4 py-3 rounded-lg border-2 transition-all flex flex-col items-center justify-center relative",
-                          !isPremiumSelected
-                            ? "bg-primary-accent/5 border-primary-accent"
-                            : "bg-white border-border hover:border-primary-accent/50"
-                        )}
-                      >
-                        <span className={cn("font-bold", !isPremiumSelected ? "text-primary-accent" : "text-headings")}>
-                          Standard
-                        </span>
-                        <span className="text-xs text-muted-foreground mt-1 text-center">High-quality eco friendly</span>
-                        {!isPremiumSelected && (
-                          <Check className="absolute top-2 right-2 w-4 h-4 text-primary-accent" />
-                        )}
-                      </button>
-                      <button
-                        onClick={() => setIsPremiumSelected(true)}
-                        className={cn(
-                          "flex-1 px-4 py-3 rounded-lg border-2 transition-all flex flex-col items-center justify-center relative",
-                          isPremiumSelected
-                            ? "bg-amber-50 border-amber-500"
-                            : "bg-white border-border hover:border-amber-500/50"
-                        )}
-                      >
-                        <span className={cn("font-bold", isPremiumSelected ? "text-amber-600" : "text-headings")}>
-                          Premium
-                        </span>
-                        <span className="text-xs text-muted-foreground mt-1 text-center">Sturdier, Strong base</span>
-                        {isPremiumSelected && (
-                          <Check className="absolute top-2 right-2 w-4 h-4 text-amber-500" />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                )}
 
-                {/* Size Selector */}
-                {availableSizes.length > 0 && (
-                  <div className="flex-1">
-                    <span className="block text-sm font-medium text-headings mb-2">Available Sizes</span>
-                    <div className="flex flex-wrap gap-3">
-                      {availableSizes.map((s: string) => (
-                        <button
-                          key={s}
-                          onClick={() => setSelectedSize(s)}
-                          className={cn(
-                            "flex-1 min-w-[80px] px-4 py-3 rounded-lg border-2 transition-all text-sm font-bold flex items-center justify-center",
-                            selectedSize === s
-                              ? "bg-primary-accent text-white border-primary-accent"
-                              : "bg-white text-body-text border-border hover:border-primary-accent/50"
-                          )}
-                        >
-                          {s}
-                        </button>
-                      ))}
-                    </div>
+              {/* Premium Toggle */}
+              {product.hasPremium && (
+                <div className="mb-6 border-b pb-6">
+                  <span className="block text-sm font-medium text-headings mb-2">Select Variant Quality</span>
+                  <div className="flex gap-4">
+                    <button
+                      onClick={() => setIsPremiumSelected(false)}
+                      className={cn(
+                        "flex-1 px-4 py-3 rounded-lg border-2 transition-all flex flex-col items-center justify-center relative",
+                        !isPremiumSelected
+                          ? "bg-primary-accent/5 border-primary-accent"
+                          : "bg-white border-border hover:border-primary-accent/50"
+                      )}
+                    >
+                      <span className={cn("font-bold", !isPremiumSelected ? "text-primary-accent" : "text-headings")}>
+                        Standard
+                      </span>
+                      <span className="text-xs text-muted-foreground mt-1">High-quality eco friendly</span>
+                      {!isPremiumSelected && (
+                        <Check className="absolute top-2 right-2 w-4 h-4 text-primary-accent" />
+                      )}
+                    </button>
+                    <button
+                      onClick={() => setIsPremiumSelected(true)}
+                      className={cn(
+                        "flex-1 px-4 py-3 rounded-lg border-2 transition-all flex flex-col items-center justify-center relative",
+                        isPremiumSelected
+                          ? "bg-amber-50 border-amber-500"
+                          : "bg-white border-border hover:border-amber-500/50"
+                      )}
+                    >
+                      <span className={cn("font-bold", isPremiumSelected ? "text-amber-600" : "text-headings")}>
+                        Premium
+                      </span>
+                      <span className="text-xs text-muted-foreground mt-1">Sturdier, Strong base</span>
+                      {isPremiumSelected && (
+                        <Check className="absolute top-2 right-2 w-4 h-4 text-amber-500" />
+                      )}
+                    </button>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
+
+              {/* Size Selector */}
+              {availableSizes.length > 0 && (
+                <div className="mb-6">
+                  <span className="block text-sm font-medium text-headings mb-2">Available Sizes</span>
+                  <div className="flex flex-wrap gap-3">
+                    {availableSizes.map((s: string) => (
+                      <button
+                        key={s}
+                        onClick={() => setSelectedSize(s)}
+                        className={cn(
+                          "px-4 py-2 rounded-lg border transition-all text-sm font-medium",
+                          selectedSize === s
+                            ? "bg-primary-accent text-white border-primary-accent"
+                            : "bg-white text-body-text border-gray-200 hover:border-primary-accent/50"
+                        )}
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Stock Status */}
               <div className="flex items-center space-x-2 mb-6">
