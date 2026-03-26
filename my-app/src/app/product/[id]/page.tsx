@@ -68,10 +68,19 @@ const ProductDetail = () => {
   // Update active images based on premium toggle
   useEffect(() => {
     if (product) {
-      if (isPremiumSelected && product.hasPremium && product.premiumImages && product.premiumImages.length > 0) {
+      // Check if there are valid premium images (not just an empty array)
+      const hasValidPremiumImages = product.premiumImages && 
+                                    product.premiumImages.length > 0 && 
+                                    product.premiumImages.some((img: string) => img && img.trim() !== "");
+
+      if (isPremiumSelected && product.hasPremium && hasValidPremiumImages) {
         setActiveImages(product.premiumImages);
       } else {
-        setActiveImages(product.images || []);
+        // Fallback to normal images, or a placeholder if those are missing too
+        const fallbackImages = product.images && product.images.length > 0 
+                               ? product.images 
+                               : ["/placeholder.png"];
+        setActiveImages(fallbackImages);
       }
     }
   }, [isPremiumSelected, product]);
