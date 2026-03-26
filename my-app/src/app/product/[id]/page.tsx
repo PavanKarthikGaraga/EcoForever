@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Star, ShoppingCart, Truck, Shield, RotateCcw, Check, Loader2 } from "lucide-react";
+import { Star, ShoppingCart, Truck, Shield, RotateCcw, Check, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
  
@@ -28,6 +28,7 @@ const ProductDetail = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [currentVariant, setCurrentVariant] = useState<any>(null);
   const [activeImages, setActiveImages] = useState<string[]>([]);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const addItem = useCartStore((state) => state.addItem);
 
@@ -82,6 +83,7 @@ const ProductDetail = () => {
                                : ["/placeholder.png"];
         setActiveImages(fallbackImages);
       }
+      setCurrentImageIndex(0);
     }
   }, [isPremiumSelected, product]);
 
@@ -147,6 +149,15 @@ const ProductDetail = () => {
   const packCount = product.packSize;
   const perPiecePrice = displayPrice;
   const totalPrice = displayPrice * packCount;
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prev) => (prev === activeImages.length - 1 ? 0 : prev + 1));
+  };
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prev) => (prev === 0 ? activeImages.length - 1 : prev - 1));
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Breadcrumb */}
@@ -166,25 +177,66 @@ const ProductDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Product Images */}
           <div className="space-y-4">
-            <div className="aspect-square relative overflow-hidden rounded-2xl bg-card-accent border shadow-sm">
+            <div className="aspect-square relative overflow-hidden rounded-2xl bg-card-accent border shadow-sm group">
               <Image
-                src={activeImages[0] || "/placeholder.png"}
+                src={activeImages[currentImageIndex] || "/placeholder.png"}
                 alt={product.title}
                 fill
-                className="object-cover"
+                className="object-cover transition-transform duration-300"
                 priority
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
+              {activeImages.length > 1 && (
+                <>
+                  <button
+                    onClick={handlePrevImage}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-headings p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+                    aria-label="Previous image"
+                  >
+                    <ChevronLeft className="h-6 w-6" />
+                  </button>
+                  <button
+                    onClick={handleNextImage}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-headings p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+                    aria-label="Next image"
+                  >
+                    <ChevronRight className="h-6 w-6" />
+                  </button>
+                  
+                  {/* Pagination Dots */}
+                  <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
+                    {activeImages.map((_, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => setCurrentImageIndex(idx)}
+                        className={cn(
+                          "w-2 h-2 rounded-full transition-all",
+                          currentImageIndex === idx ? "bg-primary-accent w-4" : "bg-gray-300 hover:bg-gray-400"
+                        )}
+                        aria-label={`Go to image ${idx + 1}`}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
+            
             {activeImages.length > 1 && (
               <div className="grid grid-cols-4 gap-4">
                 {activeImages.map((image, index) => (
-                  <div key={index} className="aspect-square relative overflow-hidden rounded-lg bg-card-accent cursor-pointer border shadow-sm">
+                  <div 
+                    key={index} 
+                    className={cn(
+                      "aspect-square relative overflow-hidden rounded-lg bg-card-accent cursor-pointer border shadow-sm transition-all",
+                      currentImageIndex === index ? "ring-2 ring-primary-accent border-transparent opacity-100" : "opacity-70 hover:opacity-100"
+                    )}
+                    onClick={() => setCurrentImageIndex(index)}
+                  >
                     <Image
                       src={image}
                       alt={`${product.title} view ${index + 1}`}
                       fill
-                      className="object-cover hover:opacity-80 transition-opacity"
+                      className="object-cover"
                       sizes="(max-width: 1024px) 25vw, 12.5vw"
                     />
                   </div>
@@ -314,7 +366,7 @@ const ProductDetail = () => {
                       <span className={cn("font-bold", isPremiumSelected ? "text-amber-600" : "text-headings")}>
                         Premium
                       </span>
-                      <span className="text-xs text-muted-foreground mt-1">Sturdier, zero defects</span>
+                      <span className="text-xs text-muted-foreground mt-1">Sturdier, Strong base</span>
                       {isPremiumSelected && (
                         <Check className="absolute top-2 right-2 w-4 h-4 text-amber-500" />
                       )}
