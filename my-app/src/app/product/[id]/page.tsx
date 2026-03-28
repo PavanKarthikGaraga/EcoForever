@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Star, ShoppingCart, Truck, Shield, RotateCcw, Check, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -31,6 +31,30 @@ const ProductDetail = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const addItem = useCartStore((state) => state.addItem);
+
+  // Ref for the thumbnail container to handle auto-scrolling
+  const thumbnailContainerRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll thumbnails when currentImageIndex changes
+  useEffect(() => {
+    if (thumbnailContainerRef.current) {
+      const container = thumbnailContainerRef.current;
+      const activeElement = container.children[currentImageIndex] as HTMLElement;
+      
+      if (activeElement) {
+        // Calculate position to scroll to (center the item if possible, or just bring into view)
+        // For vertical scroll (desktop)
+        if (window.innerWidth >= 768) {
+           const scrollPos = activeElement.offsetTop - container.offsetTop - (container.clientHeight / 2) + (activeElement.clientHeight / 2);
+           container.scrollTo({ top: scrollPos, behavior: 'smooth' });
+        } else {
+           // For horizontal scroll (mobile)
+           const scrollPos = activeElement.offsetLeft - container.offsetLeft - (container.clientWidth / 2) + (activeElement.clientWidth / 2);
+           container.scrollTo({ left: scrollPos, behavior: 'smooth' });
+        }
+      }
+    }
+  }, [currentImageIndex]);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -209,12 +233,15 @@ const ProductDetail = () => {
 
             {/* Thumbnails (Row on Mobile, Column on Desktop) */}
             {activeImages.length > 1 && (
-              <div className="flex flex-row md:flex-col gap-3 overflow-x-auto md:overflow-y-auto scrollbar-hide shrink-0 md:w-20 w-full max-h-[500px]">
+              <div 
+                ref={thumbnailContainerRef}
+                className="flex flex-row md:flex-col gap-3 overflow-x-auto md:overflow-y-auto shrink-0 md:w-24 w-full max-h-[500px] p-1 scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
+              >
                 {activeImages.map((image, index) => (
                   <div 
                     key={index} 
                     className={cn(
-                      "w-16 h-16 md:w-20 md:h-20 shrink-0 relative overflow-hidden rounded-lg bg-card-accent cursor-pointer border shadow-sm transition-all",
+                      "w-16 h-16 shrink-0 relative overflow-hidden rounded-lg bg-card-accent cursor-pointer border shadow-sm transition-all",
                       currentImageIndex === index ? "ring-2 ring-primary-accent border-transparent opacity-100" : "opacity-70 hover:opacity-100"
                     )}
                     onClick={() => setCurrentImageIndex(index)}
@@ -224,7 +251,7 @@ const ProductDetail = () => {
                       alt={`${product.title} view ${index + 1}`}
                       fill
                       className="object-cover"
-                      sizes="(max-width: 768px) 64px, 80px"
+                      sizes="(max-width: 768px) 64px, 64px"
                     />
                   </div>
                 ))}
