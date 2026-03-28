@@ -91,7 +91,7 @@ const BestSellers = () => {
             No products available yet.
           </div>
         ) : (
-          <div className="flex flex-wrap justify-center gap-4 md:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {products.map((product, index) => {
               // Calculate min unit price from new schema
               const minPrice = product.variants && product.variants.length > 0
@@ -113,55 +113,61 @@ const BestSellers = () => {
                 <ScrollAnimation
                   key={product._id}
                   direction="up"
-                  delay={index * 0.15}
-                  duration={0.8}
-                  distance={100}
-                  className="w-[calc(50%-0.5rem)] md:w-[calc(25%-1.5rem)]"
+                  delay={index * 0.1}
+                  duration={0.6}
+                  distance={60}
+                  className="h-full"
                 >
                   <Link
                     href={`/product/${product._id}`}
-                    className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 group hover:-translate-y-1 block h-full flex flex-col"
+                    className="bg-white border border-border rounded-2xl p-4 md:p-5 shadow-sm hover:shadow-lg hover:border-primary-accent/30 transition-all duration-300 group hover:-translate-y-1 flex flex-col h-full"
                   >
-                    {/* Image */}
-                    <div className="aspect-square relative overflow-hidden bg-gray-100 flex-shrink-0">
-                      <Image
-                        src={product.images && product.images[0] ? product.images[0] : "/placeholder.png"}
-                        alt={product.title || 'Product'}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        sizes="(max-width: 640px) 50vw, 25vw"
-                      />
+                    {/* Title on Top */}
+                    <h3 className="text-base md:text-lg font-heading font-bold text-headings mb-4 group-hover:text-primary-accent transition-colors line-clamp-2">
+                      {product.title}
+                    </h3>
 
-                      {/* Badges */}
-                      {product.hasPremium && (
-                        <div className="absolute top-2 right-2 md:top-4 md:right-4 bg-primary-accent text-white text-[10px] md:text-xs font-bold px-2 py-1 md:px-3 md:py-1.5 rounded-full z-10 shadow-sm">
-                          Premium Available
-                        </div>
-                      )}
-                      {product.isFeatured && (
-                        <div className="absolute top-2 left-2 md:top-4 md:left-4 bg-white/90 backdrop-blur text-primary-accent text-[10px] md:text-xs font-bold px-2 py-1 md:px-3 md:py-1.5 rounded-full z-10 shadow-sm">
-                          Featured
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Content */}
-                    <div className="p-3 md:p-6 flex flex-col flex-grow">
-                      <h3 className="text-sm md:text-xl font-heading font-bold text-headings mb-1 md:mb-2 hover:text-primary-accent transition-colors line-clamp-1 md:line-clamp-2">
-                        {product.title}
-                      </h3>
-
-                      {/* Price */}
-                      <div className="flex items-center space-x-2 md:space-x-3 flex-wrap mt-auto">
-                        {totalDisplayMrp && (
-                          <span className="text-xs md:text-sm text-muted-foreground line-through">
-                            ₹{totalDisplayMrp.toFixed(2)}
-                          </span>
+                    {/* Content Row: Image Left, Details Right */}
+                    <div className="flex flex-row gap-4 mt-auto">
+                      
+                      {/* Square Image on Left */}
+                      <div className="w-28 h-28 md:w-32 md:h-32 aspect-square relative overflow-hidden rounded-xl bg-card-accent flex-shrink-0">
+                        <Image
+                          src={product.images && product.images[0] ? product.images[0] : "/placeholder.png"}
+                          alt={product.title || 'Product'}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          sizes="(max-width: 640px) 112px, 128px"
+                        />
+                        
+                        {/* Badges */}
+                        {product.hasPremium && (
+                          <div className="absolute top-1 left-1 bg-primary-accent text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md z-10 shadow-sm">
+                            PREMIUM
+                          </div>
                         )}
-                        <span className="text-sm md:text-lg font-bold text-primary-accent">
-                          ₹{totalMinPrice.toFixed(2)}
-                        </span>
                       </div>
+
+                      {/* Price & Action on Right */}
+                      <div className="flex flex-col justify-between flex-grow">
+                        <div>
+                          {totalDisplayMrp && (
+                            <span className="text-xs text-muted-foreground line-through block mb-0.5">
+                              ₹{totalDisplayMrp.toFixed(2)}
+                            </span>
+                          )}
+                          <span className="text-xl md:text-2xl font-bold text-primary-accent block leading-none">
+                            ₹{totalMinPrice.toFixed(2)}
+                          </span>
+                        </div>
+                        
+                        <div className="mt-auto pt-3">
+                          <Button size="sm" className="w-full bg-primary-accent hover:bg-primary-accent/90 text-white rounded-lg font-medium shadow-sm transition-all group-hover:shadow-md h-9">
+                             Shop Now
+                          </Button>
+                        </div>
+                      </div>
+
                     </div>
                   </Link>
                 </ScrollAnimation>
