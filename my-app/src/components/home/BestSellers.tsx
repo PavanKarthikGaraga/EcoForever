@@ -65,17 +65,8 @@ const BestSellers = () => {
     fetchProducts();
   }, []);
   return (
-    <section className="relative py-24 overflow-hidden" id="products">
-      {/* Background Image with Parallax-like effect */}
-      <div 
-        className="absolute inset-0 z-0 bg-[url('/grss-bg.png')] bg-cover bg-center bg-no-repeat bg-fixed opacity-20"
-        aria-hidden="true"
-      />
-
-      {/* Subtle Gradient Overlay for depth */}
-      <div className="absolute inset-0 z-0 bg-gradient-to-b from-white via-transparent to-white" aria-hidden="true" />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-16 bg-[url('/grss-bg.png')] bg-cover bg-center bg-no-repeat" id="products">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}        <div className="text-center mb-12">
           <ScrollAnimation direction="up" duration={0.8} distance={80}>
             <h2 className="text-4xl md:text-5xl font-heading font-bold text-headings mb-4">
