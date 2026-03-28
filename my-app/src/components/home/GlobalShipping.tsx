@@ -60,7 +60,7 @@ const GlobalShipping = () => {
             </h3>
             <p className="text-muted-foreground text-lg mb-6 max-w-2xl mx-auto">
               All shipments use recycled packaging materials and carbon-offset delivery partners.
-              Free shipping on orders over ₹2,000.
+              Free shipping on orders over ₹500.
             </p>
             <div className="flex flex-wrap justify-center gap-6 text-sm">
               <div className="flex items-center">
@@ -73,7 +73,7 @@ const GlobalShipping = () => {
               </div>
               <div className="flex items-center">
                 <div className="w-3 h-3 bg-primary-accent rounded-full mr-2"></div>
-                <span>Free Shipping ₹2,000+</span>
+                <span>Free Shipping ₹500+</span>
               </div>
             </div>
           </div>

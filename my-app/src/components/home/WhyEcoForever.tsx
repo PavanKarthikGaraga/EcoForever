@@ -5,7 +5,7 @@ const WhyEcoForever = () => {
     {
       icon: Leaf,
       title: "100% Natural Materials",
-      description: "Crafted from sustainable wood, bamboo, and areca palm - all renewable resources harvested responsibly.",
+      description: "Crafted from sustainable wood, bamboo, and Palash and Sal leaves - all renewable resources harvested responsibly.",
     },
     {
       icon: Recycle,

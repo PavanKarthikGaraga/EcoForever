@@ -19,8 +19,8 @@ const DualCTA = () => {
               <h2 className="text-2xl md:text-3xl lg:text-4xl font-heading font-bold text-headings mb-4">
                 Start Your Sustainable Journey
               </h2>
-              <p className="text-base md:text-lg text-muted-foreground mb-8 max-w-md mx-auto md:mx-0">
-                Browse our collection of premium wooden, bamboo, and areca tableware.
+              <p className="text-base md:text-lg text-white/80 mb-8 max-w-md mx-auto md:mx-0">
+                Browse our collection of premium wooden, bamboo, and Palash and Sal tableware.
                 Quality craftsmanship meets environmental responsibility.
               </p>
               <div className="mt-auto w-full md:w-auto">

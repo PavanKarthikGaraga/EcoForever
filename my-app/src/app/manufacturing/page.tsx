@@ -10,7 +10,7 @@ const Manufacturing = () => {
     {
       step: 1,
       title: "Sustainable Sourcing",
-      description: "We source bamboo and areca palm from certified sustainable farms and plantations, ensuring no deforestation and fair trade practices.",
+      description: "We source bamboo and Palash and Sal leaves from certified sustainable farms and plantations, ensuring no deforestation and fair trade practices.",
       image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=400&fit=crop&crop=center",
       icon: Factory,
       duration: "2-3 days"

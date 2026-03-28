@@ -11,7 +11,7 @@ const ProductCategories = () => {
   const categories = [
     {
       name: "Plates",
-      description: "Premium areca and leaf plates",
+      description: "Premium Palash and Sal leaf plates",
       icon: Circle,
       href: "/#products",
       image: "https://pub-90128cc82748409abc1429b2f1594649.r2.dev/ecodosth/products/1774508586786-break_fast_plate_9_inches.jpeg",

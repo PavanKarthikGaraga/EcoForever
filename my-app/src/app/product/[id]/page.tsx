@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Star, ShoppingCart, Truck, Shield, RotateCcw, Check, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Ban , ShoppingCart, Truck, Shield, Check, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
  
@@ -265,7 +265,7 @@ const ProductDetail = () => {
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <Badge className="bg-primary-accent text-primary-foreground">
-                  100% Areca Leaf
+                  100% Palash & Sal Leaf
                 </Badge>
                 {product.hasPremium && (
                   <Badge variant="outline" className="text-primary-accent border-primary-accent">
@@ -454,8 +454,8 @@ const ProductDetail = () => {
               <div className="flex flex-col items-center text-center p-4 bg-gray-50 border rounded-xl">
                 <Truck className="h-8 w-8 text-primary-accent mb-2" />
                 <div>
-                  <div className="font-medium text-headings text-sm">Free Shipping</div>
-                  <div className="text-xs text-muted-foreground mt-1">Orders over ₹500</div>
+                  <div className="font-medium text-headings text-sm">Free Shipping Above ₹500</div>
+                  <div className="text-xs text-muted-foreground mt-1">Delivery throughout India</div>
                 </div>
               </div>
               <div className="flex flex-col items-center text-center p-4 bg-gray-50 border rounded-xl">
@@ -466,10 +466,10 @@ const ProductDetail = () => {
                 </div>
               </div>
               <div className="flex flex-col items-center text-center p-4 bg-gray-50 border rounded-xl">
-                <RotateCcw className="h-8 w-8 text-primary-accent mb-2" />
+                <Ban className="h-8 w-8 text-primary-accent mb-2" />
                 <div>
-                  <div className="font-medium text-headings text-sm">Easy Returns</div>
-                  <div className="text-xs text-muted-foreground mt-1">30-day policy</div>
+                  <div className="font-medium text-headings text-sm">No Returns</div>
+                  <div className="text-xs text-muted-foreground mt-1">No Return Policy</div>
                 </div>
               </div>
             </div>

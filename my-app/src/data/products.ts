@@ -48,7 +48,7 @@ export const products: Product[] = [
             "Sturdy"
         ],
         specifications: {
-            "Material": "Areca Palm Leaf",
+            "Material": "Palash and Sal leaves",
             "Shape": "Round",
             "Origin": "India"
         },
@@ -100,7 +100,7 @@ export const products: Product[] = [
             "Premium finish"
         ],
         specifications: {
-            "Material": "Areca Palm Leaf",
+            "Material": "Palash and Sal leaves",
             "Shape": "Round",
             "Origin": "India"
         },
@@ -150,7 +150,7 @@ export const products: Product[] = [
             "Hot & cold safe"
         ],
         specifications: {
-            "Material": "Areca Palm Leaf",
+            "Material": "Palash and Sal leaves",
             "Shape": "Round",
             "Origin": "India"
         },
@@ -310,7 +310,7 @@ export const products: Product[] = [
             "Healthy cooking"
         ],
         specifications: {
-            "Material": "Areca Palm Leaf",
+            "Material": "Palash and Sal leaves",
             "Usage": "Steaming",
             "Origin": "India"
         },

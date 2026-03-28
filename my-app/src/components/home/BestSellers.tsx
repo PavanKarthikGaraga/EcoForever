@@ -65,7 +65,7 @@ const BestSellers = () => {
     fetchProducts();
   }, []);
   return (
-    <section className="py-16 bg-[url('/grss-bg.png')] bg-[length:100%_100%] bg-center bg-no-repeat" id="products">
+    <section className="py-16 bg-[url('/grss-bg1.png')] bg-[length:100%_100%] bg-center bg-no-repeat" id="products">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}        <div className="text-center mb-12">
           <ScrollAnimation direction="up" duration={0.8} distance={80}>
