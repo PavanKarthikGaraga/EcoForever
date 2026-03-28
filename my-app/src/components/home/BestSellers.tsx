@@ -65,10 +65,18 @@ const BestSellers = () => {
     fetchProducts();
   }, []);
   return (
-    <section className="py-16 bg-bg" id="products">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-12">
+    <section className="relative py-24 overflow-hidden" id="products">
+      {/* Background Image with Parallax-like effect */}
+      <div 
+        className="absolute inset-0 z-0 bg-[url('/grss-bg.png')] bg-cover bg-center bg-no-repeat bg-fixed opacity-20"
+        aria-hidden="true"
+      />
+
+      {/* Subtle Gradient Overlay for depth */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-white via-transparent to-white" aria-hidden="true" />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}        <div className="text-center mb-12">
           <ScrollAnimation direction="up" duration={0.8} distance={80}>
             <h2 className="text-4xl md:text-5xl font-heading font-bold text-headings mb-4">
               Our Products
@@ -86,7 +94,7 @@ const BestSellers = () => {
           <div className="flex justify-center py-12">
             <Loader2 className="h-8 w-8 animate-spin text-primary-accent" />
           </div>
-        ) : !products.length ? (
+        ) : products.length === 0 ? (
           <div className="text-center py-12 text-muted-foreground">
             No products available yet.
           </div>
@@ -94,12 +102,13 @@ const BestSellers = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {products.map((product, index) => {
               // Calculate min unit price from new schema
-              const minPrice = product.variants && product.variants.length > 0
+              const hasVariants = product.variants?.length ?? 0 > 0;
+              const minPrice = hasVariants
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 ? Math.min(...product.variants.map((v: any) => v.price))
                 : 0;
 
-              const minMrp = product.variants && product.variants.length > 0
+              const minMrp = hasVariants
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 ? Math.min(...product.variants.map((v: any) => v.mrp || Infinity))
                 : Infinity;
