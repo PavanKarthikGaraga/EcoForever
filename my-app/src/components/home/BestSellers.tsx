@@ -120,29 +120,29 @@ const BestSellers = () => {
                 >
                   <Link
                     href={`/product/${product._id}`}
-                    className="bg-white border border-border rounded-2xl p-4 md:p-5 shadow-sm hover:shadow-lg hover:border-primary-accent/30 transition-all duration-300 group hover:-translate-y-1 flex flex-col h-full"
+                    className="bg-white border border-border rounded-2xl p-4 md:p-6 shadow-sm hover:shadow-lg hover:border-primary-accent/30 transition-all duration-300 group hover:-translate-y-1 flex flex-col h-full"
                   >
                     {/* Title on Top */}
-                    <h3 className="text-base md:text-lg font-heading font-bold text-headings mb-4 group-hover:text-primary-accent transition-colors line-clamp-2">
+                    <h3 className="text-lg md:text-2xl font-heading font-bold text-headings mb-5 group-hover:text-primary-accent transition-colors line-clamp-2 leading-tight">
                       {product.title}
                     </h3>
 
                     {/* Content Row: Image Left, Details Right */}
-                    <div className="flex flex-row gap-4 mt-auto">
+                    <div className="flex flex-row gap-5 mt-auto">
                       
                       {/* Square Image on Left */}
-                      <div className="w-28 h-28 md:w-32 md:h-32 aspect-square relative overflow-hidden rounded-xl bg-card-accent flex-shrink-0">
+                      <div className="w-36 h-36 md:w-44 md:h-44 aspect-square relative overflow-hidden rounded-xl bg-card-accent flex-shrink-0">
                         <Image
                           src={product.images && product.images[0] ? product.images[0] : "/placeholder.png"}
                           alt={product.title || 'Product'}
                           fill
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
-                          sizes="(max-width: 640px) 112px, 128px"
+                          sizes="(max-width: 640px) 144px, 176px"
                         />
                         
                         {/* Badges */}
                         {product.hasPremium && (
-                          <div className="absolute top-1 left-1 bg-primary-accent text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md z-10 shadow-sm">
+                          <div className="absolute top-1.5 left-1.5 bg-primary-accent text-white text-[10px] font-bold px-2 py-0.5 rounded-md z-10 shadow-sm">
                             PREMIUM
                           </div>
                         )}
@@ -150,7 +150,7 @@ const BestSellers = () => {
 
                       {/* Price & Action on Right */}
                       <div className="flex flex-col justify-between flex-grow">
-                        <div>
+                        <div className="mb-2">
                           {totalDisplayMrp && (
                             <span className="text-xs text-muted-foreground line-through block mb-0.5">
                               ₹{totalDisplayMrp.toFixed(2)}
@@ -160,8 +160,13 @@ const BestSellers = () => {
                             ₹{totalMinPrice.toFixed(2)}
                           </span>
                         </div>
+
+                        {/* Short Description */}
+                        <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed mb-3">
+                          {product.description || "100% natural, compostable and eco-friendly tableware for a sustainable lifestyle."}
+                        </p>
                         
-                        <div className="mt-auto pt-3">
+                        <div className="mt-auto">
                           <Button size="sm" className="w-full bg-primary-accent hover:bg-primary-accent/90 text-white rounded-lg font-medium shadow-sm transition-all group-hover:shadow-md h-9">
                              Shop Now
                           </Button>
