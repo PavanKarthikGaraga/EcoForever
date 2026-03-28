@@ -162,7 +162,7 @@ const BestSellers = () => {
                         </div>
 
                         {/* Short Description */}
-                        <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed mb-3">
+                        <p className="text-xs text-muted-foreground line-clamp-4 leading-relaxed mb-3">
                           {product.description || "100% natural, compostable and eco-friendly tableware for a sustainable lifestyle."}
                         </p>
                         
