@@ -175,10 +175,10 @@ const ProductDetail = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Product Images */}
-          <div className="flex flex-col md:flex-row gap-4 h-fit lg:sticky lg:top-24">
+          <div className="flex flex-col md:flex-row gap-4 items-start h-fit lg:sticky lg:top-24">
             
             {/* Main Image */}
-            <div className="flex-1 w-full aspect-square relative overflow-hidden rounded-2xl bg-card-accent border shadow-sm group">
+            <div className="flex-1 w-full aspect-square relative overflow-hidden rounded-2xl bg-card-accent border shadow-sm group shrink-0">
               <Image
                 src={activeImages[currentImageIndex] || "/placeholder.png"}
                 alt={product.title}
@@ -209,7 +209,7 @@ const ProductDetail = () => {
 
             {/* Thumbnails (Row on Mobile, Column on Desktop) */}
             {activeImages.length > 1 && (
-              <div className="flex flex-row md:flex-col gap-3 overflow-x-auto md:overflow-y-auto scrollbar-hide shrink-0 md:w-20">
+              <div className="flex flex-row md:flex-col gap-3 overflow-x-auto md:overflow-y-auto scrollbar-hide shrink-0 md:w-20 w-full max-h-[500px]">
                 {activeImages.map((image, index) => (
                   <div 
                     key={index} 
