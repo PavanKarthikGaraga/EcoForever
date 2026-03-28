@@ -86,7 +86,7 @@ const BestSellers = () => {
           <div className="flex justify-center py-12">
             <Loader2 className="h-8 w-8 animate-spin text-primary-accent" />
           </div>
-        ) : products.length === 0 ? (
+        ) : !products.length ? (
           <div className="text-center py-12 text-muted-foreground">
             No products available yet.
           </div>
@@ -120,10 +120,10 @@ const BestSellers = () => {
                 >
                   <Link
                     href={`/product/${product._id}`}
-                    className="bg-white border border-border rounded-2xl p-4 md:p-6 shadow-sm hover:shadow-lg hover:border-primary-accent/30 transition-all duration-300 group hover:-translate-y-1 flex flex-col h-full"
+                    className="bg-white border border-border rounded-2xl p-4 shadow-sm hover:shadow-lg hover:border-primary-accent/30 transition-all duration-300 group hover:-translate-y-1 flex flex-col h-full"
                   >
                     {/* Title on Top */}
-                    <h3 className="text-lg md:text-2xl font-heading font-bold text-headings mb-5 group-hover:text-primary-accent transition-colors line-clamp-2 leading-tight">
+                    <h3 className="text-lg md:text-3xl font-heading font-bold text-headings mb-5 group-hover:text-primary-accent transition-colors line-clamp-2 leading-tight">
                       {product.title}
                     </h3>
 

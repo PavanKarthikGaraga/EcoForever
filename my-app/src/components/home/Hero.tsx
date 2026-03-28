@@ -11,7 +11,7 @@ import { AnimatePresence, motion } from "framer-motion";
 const slides = [
   {
     id: 1,
-    image: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=2070&auto=format&fit=crop",
+    image: "/hero/Plate1.png",
     title: "Eco-Friendly Dining",
     subtitle: "Sustainable tableware for a better tomorrow",
     cta: "Shop Now",
@@ -19,7 +19,7 @@ const slides = [
   },
   {
     id: 2,
-    image: "https://images.unsplash.com/photo-1584346133934-a3afd2a33c4c?q=80&w=2070&auto=format&fit=crop",
+    image: "/hero/Bowls1.png",
     title: "Natural & Biodegradable",
     subtitle: "100% plastic-free, made from fallen leaves",
     cta: "Learn More",
@@ -27,7 +27,7 @@ const slides = [
   },
   {
     id: 3,
-    image: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=2070&auto=format&fit=crop",
+    image: "/hero/all.png",
     title: "Premium Quality",
     subtitle: "Elegant designs for every occasion",
     cta: "View Collection",
@@ -52,7 +52,7 @@ const Hero = () => {
   }, [nextSlide]);
 
   return (
-    <div className="relative h-[80vh] w-full overflow-hidden group">
+    <div className="relative h-[70vh] w-full overflow-hidden group">
       {/* Slides */}
       <AnimatePresence>
         <motion.div
@@ -71,32 +71,34 @@ const Hero = () => {
             priority
           />
           {/* Overlay */}
-          <div className="absolute inset-0 bg-black/40" />
+          <div className="absolute inset-0 bg-black/10" />
 
           {/* Content */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center px-4 max-w-4xl mx-auto">
-              <ScrollAnimation direction="up" delay={0.2}>
-                <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-                  {slides[currentSlide].title}
-                </h1>
-              </ScrollAnimation>
-              <ScrollAnimation direction="up" delay={0.4}>
-                <p className="text-xl md:text-2xl text-white/90 mb-8">
-                  {slides[currentSlide].subtitle}
-                </p>
-              </ScrollAnimation>
-              <ScrollAnimation direction="up" delay={0.6}>
-                <Button
-                  asChild
-                  size="lg"
-                  className="bg-primary-accent hover:bg-primary-accent/90 text-primary-foreground text-lg px-8 py-6 rounded-full"
-                >
-                  <Link href={slides[currentSlide].link}>
-                    {slides[currentSlide].cta} <ArrowRight className="ml-2 h-5 w-5" />
-                  </Link>
-                </Button>
-              </ScrollAnimation>
+          <div className="absolute inset-0 flex items-center">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+              <div className="max-w-2xl text-left">
+                <ScrollAnimation direction="up" delay={0.2}>
+                  <h1 className="text-4xl md:text-7xl font-bold text-white mb-6 drop-shadow-lg">
+                    {slides[currentSlide].title}
+                  </h1>
+                </ScrollAnimation>
+                <ScrollAnimation direction="up" delay={0.4}>
+                  <p className="text-xl md:text-2xl text-white mb-8 drop-shadow-md">
+                    {slides[currentSlide].subtitle}
+                  </p>
+                </ScrollAnimation>
+                <ScrollAnimation direction="up" delay={0.6}>
+                  <Button
+                    asChild
+                    size="lg"
+                    className="bg-primary-accent hover:bg-primary-accent/90 text-primary-foreground text-lg px-8 py-6 rounded-full shadow-xl transition-transform hover:scale-105"
+                  >
+                    <Link href={slides[currentSlide].link}>
+                      {slides[currentSlide].cta} <ArrowRight className="ml-2 h-5 w-5" />
+                    </Link>
+                  </Button>
+                </ScrollAnimation>
+              </div>
             </div>
           </div>
         </motion.div>
