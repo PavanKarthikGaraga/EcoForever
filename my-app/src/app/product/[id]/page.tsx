@@ -175,31 +175,8 @@ const ProductDetail = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Product Images */}
-          <div className="flex flex-col-reverse md:flex-row gap-4">
-            {/* Thumbnails (Row on Mobile, Column on Desktop) */}
-            {activeImages.length > 1 && (
-              <div className="flex flex-row md:flex-col gap-3 overflow-x-auto md:overflow-y-auto scrollbar-hide shrink-0 md:w-20">
-                {activeImages.map((image, index) => (
-                  <div 
-                    key={index} 
-                    className={cn(
-                      "w-16 h-16 md:w-20 md:h-20 shrink-0 relative overflow-hidden rounded-lg bg-card-accent cursor-pointer border shadow-sm transition-all",
-                      currentImageIndex === index ? "ring-2 ring-primary-accent border-transparent opacity-100" : "opacity-70 hover:opacity-100"
-                    )}
-                    onClick={() => setCurrentImageIndex(index)}
-                  >
-                    <Image
-                      src={image}
-                      alt={`${product.title} view ${index + 1}`}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 64px, 80px"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-
+          <div className="flex flex-col md:flex-row gap-4">
+            
             {/* Main Image */}
             <div className="flex-1 aspect-square relative overflow-hidden rounded-2xl bg-card-accent border shadow-sm group">
               <Image
@@ -229,8 +206,30 @@ const ProductDetail = () => {
                 </>
               )}
             </div>
-            
-            {/* Shipping & Returns */}
+
+            {/* Thumbnails (Row on Mobile, Column on Desktop) */}
+            {activeImages.length > 1 && (
+              <div className="flex flex-row md:flex-col gap-3 overflow-x-auto md:overflow-y-auto scrollbar-hide shrink-0 md:w-20">
+                {activeImages.map((image, index) => (
+                  <div 
+                    key={index} 
+                    className={cn(
+                      "w-16 h-16 md:w-20 md:h-20 shrink-0 relative overflow-hidden rounded-lg bg-card-accent cursor-pointer border shadow-sm transition-all",
+                      currentImageIndex === index ? "ring-2 ring-primary-accent border-transparent opacity-100" : "opacity-70 hover:opacity-100"
+                    )}
+                    onClick={() => setCurrentImageIndex(index)}
+                  >
+                    <Image
+                      src={image}
+                      alt={`${product.title} view ${index + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 64px, 80px"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
             
           </div>
 
