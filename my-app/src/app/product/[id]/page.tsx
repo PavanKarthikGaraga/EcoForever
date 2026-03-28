@@ -175,8 +175,33 @@ const ProductDetail = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Product Images */}
-          <div className="space-y-4">
-            <div className="aspect-square relative overflow-hidden rounded-2xl bg-card-accent border shadow-sm group">
+          <div className="flex flex-col-reverse md:flex-row gap-4">
+            {/* Thumbnails (Row on Mobile, Column on Desktop) */}
+            {activeImages.length > 1 && (
+              <div className="flex flex-row md:flex-col gap-3 overflow-x-auto md:overflow-y-auto scrollbar-hide shrink-0 md:w-20">
+                {activeImages.map((image, index) => (
+                  <div 
+                    key={index} 
+                    className={cn(
+                      "w-16 h-16 md:w-20 md:h-20 shrink-0 relative overflow-hidden rounded-lg bg-card-accent cursor-pointer border shadow-sm transition-all",
+                      currentImageIndex === index ? "ring-2 ring-primary-accent border-transparent opacity-100" : "opacity-70 hover:opacity-100"
+                    )}
+                    onClick={() => setCurrentImageIndex(index)}
+                  >
+                    <Image
+                      src={image}
+                      alt={`${product.title} view ${index + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 64px, 80px"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Main Image */}
+            <div className="flex-1 aspect-square relative overflow-hidden rounded-2xl bg-card-accent border shadow-sm group">
               <Image
                 src={activeImages[currentImageIndex] || "/placeholder.png"}
                 alt={product.title}
@@ -201,48 +226,10 @@ const ProductDetail = () => {
                   >
                     <ChevronRight className="h-6 w-6" />
                   </button>
-                  
-                  {/* Pagination Dots */}
-                  <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
-                    {activeImages.map((_, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setCurrentImageIndex(idx)}
-                        className={cn(
-                          "w-2 h-2 rounded-full transition-all",
-                          currentImageIndex === idx ? "bg-primary-accent w-4" : "bg-gray-300 hover:bg-gray-400"
-                        )}
-                        aria-label={`Go to image ${idx + 1}`}
-                      />
-                    ))}
-                  </div>
                 </>
               )}
             </div>
             
-            {activeImages.length > 1 && (
-              <div className="grid grid-cols-4 gap-4">
-                {activeImages.map((image, index) => (
-                  <div 
-                    key={index} 
-                    className={cn(
-                      "aspect-square relative overflow-hidden rounded-lg bg-card-accent cursor-pointer border shadow-sm transition-all",
-                      currentImageIndex === index ? "ring-2 ring-primary-accent border-transparent opacity-100" : "opacity-70 hover:opacity-100"
-                    )}
-                    onClick={() => setCurrentImageIndex(index)}
-                  >
-                    <Image
-                      src={image}
-                      alt={`${product.title} view ${index + 1}`}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 1024px) 25vw, 12.5vw"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-
             {/* Shipping & Returns */}
             
           </div>
@@ -255,7 +242,7 @@ const ProductDetail = () => {
                   100% Areca Leaf
                 </Badge>
                 {product.hasPremium && (
-                  <Badge variant="outline" className="text-amber-600 border-amber-600">
+                  <Badge variant="outline" className="text-primary-accent border-primary-accent">
                     Premium Available
                   </Badge>
                 )}
@@ -284,7 +271,7 @@ const ProductDetail = () => {
               {/* Price */}
               <div className="flex flex-col mb-6 bg-gray-50 p-4 border rounded-xl relative overflow-hidden">
                 {isPremiumSelected && (
-                  <div className="absolute top-0 right-0 bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
+                  <div className="absolute top-0 right-0 bg-primary-accent text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
                     PREMIUM
                   </div>
                 )}
@@ -336,16 +323,16 @@ const ProductDetail = () => {
                       className={cn(
                         "flex-1 px-4 py-3 rounded-lg border-2 transition-all flex flex-col items-center justify-center relative",
                         isPremiumSelected
-                          ? "bg-amber-50 border-amber-500"
-                          : "bg-white border-border hover:border-amber-500/50"
+                          ? "bg-primary-accent/10 border-primary-accent"
+                          : "bg-white border-border hover:border-primary-accent/50"
                       )}
                     >
-                      <span className={cn("font-bold", isPremiumSelected ? "text-amber-600" : "text-headings")}>
+                      <span className={cn("font-bold", isPremiumSelected ? "text-primary-accent" : "text-headings")}>
                         Premium
                       </span>
                       <span className="text-xs text-muted-foreground mt-1">Sturdier, Strong base</span>
                       {isPremiumSelected && (
-                        <Check className="absolute top-2 right-2 w-4 h-4 text-amber-500" />
+                        <Check className="absolute top-2 right-2 w-4 h-4 text-primary-accent" />
                       )}
                     </button>
                   </div>

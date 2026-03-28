@@ -98,7 +98,7 @@ export function CartSheet() {
                                                         <p>Size: {item.size}</p>
                                                         <p>Pack: {item.packSize}</p>
                                                         {item.isPremium && (
-                                                            <span className="inline-block bg-amber-100 text-amber-700 text-[10px] px-1.5 py-0.5 rounded font-bold">
+                                                            <span className="inline-block bg-primary-accent/10 text-primary-accent text-[10px] px-1.5 py-0.5 rounded font-bold">
                                                                 PREMIUM
                                                             </span>
                                                         )}

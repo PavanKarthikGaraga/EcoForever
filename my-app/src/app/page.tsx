@@ -1,8 +1,8 @@
 "use client";
 import BestSellers from "@/components/home/BestSellers";
 import Testimonials from "@/components/home/Testimonials";
-import ProductCategories from "@/components/home/ProductCategories";
-import MobileCategories from "@/components/home/MobileCategories";
+// import ProductCategories from "@/components/home/ProductCategories";
+// import MobileCategories from "@/components/home/MobileCategories";
 import GlobalShipping from "@/components/home/GlobalShipping";
 import DualCTA from "@/components/home/DualCTA";
 import Hero from "@/components/home/Hero";
@@ -11,13 +11,13 @@ import Hero from "@/components/home/Hero";
 export default function Home() {
   return (
     <div className="overflow-x-hidden">
-      <MobileCategories />
+      {/* <MobileCategories /> */}
       <Hero />
-      <ProductCategories />
+      {/* <ProductCategories /> */}
       <BestSellers />
       {/* <ComboPacks /> */}
       <Testimonials />
-      <GlobalShipping />
+      {/* <GlobalShipping /> */}
       <DualCTA />
     </div>
   );

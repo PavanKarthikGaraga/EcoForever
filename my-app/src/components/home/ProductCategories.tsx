@@ -23,7 +23,7 @@ const ProductCategories = () => {
       icon: Circle,
       href: "/#products",
       image: "https://pub-90128cc82748409abc1429b2f1594649.r2.dev/ecodosth/products/1774510866149-snack_bowl_6_inch.jpeg",
-      color: "bg-amber-50",
+      color: "bg-green-50",
     },
     {
       name: "Trays",
@@ -31,7 +31,7 @@ const ProductCategories = () => {
       icon: Utensils,
       href: "/#products",
       image: "https://pub-90128cc82748409abc1429b2f1594649.r2.dev/ecodosth/products/1774510989370-idly_plate_1_.jpeg",
-      color: "bg-orange-50",
+      color: "bg-green-50",
     },
     // {
     //   name: "Combo Packs",

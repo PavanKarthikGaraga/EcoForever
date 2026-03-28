@@ -64,15 +64,15 @@ const GlobalShipping = () => {
             </p>
             <div className="flex flex-wrap justify-center gap-6 text-sm">
               <div className="flex items-center">
-                <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                <div className="w-3 h-3 bg-green-600 rounded-full mr-2"></div>
                 <span>Carbon Neutral Shipping</span>
               </div>
               <div className="flex items-center">
-                <div className="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+                <div className="w-3 h-3 bg-green-400 rounded-full mr-2"></div>
                 <span>Recycled Packaging</span>
               </div>
               <div className="flex items-center">
-                <div className="w-3 h-3 bg-orange-500 rounded-full mr-2"></div>
+                <div className="w-3 h-3 bg-primary-accent rounded-full mr-2"></div>
                 <span>Free Shipping ₹2,000+</span>
               </div>
             </div>
