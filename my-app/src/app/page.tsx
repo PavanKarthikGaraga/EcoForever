@@ -17,7 +17,7 @@ export default function Home() {
       <BestSellers />
       {/* <ComboPacks /> */}
       <Testimonials />
-      {/* <GlobalShipping /> */}
+      <GlobalShipping />
       <DualCTA />
     </div>
   );

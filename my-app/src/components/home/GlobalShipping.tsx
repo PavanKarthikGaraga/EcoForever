@@ -13,8 +13,8 @@ const GlobalShipping = () => {
 
   return (
     <section className="py-10 bg-bg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* <div className="text-center mb-16">
           <ScrollAnimation direction="up">
             <h2 className="text-4xl md:text-5xl font-heading font-bold text-headings mb-4">
               Global Reach, Local Impact
@@ -50,19 +50,19 @@ const GlobalShipping = () => {
               </div>
             </ScrollAnimation>
           ))}
-        </div>
+        </div> */}
 
         <ScrollAnimation direction="up" delay={0.4}>
-          <div className="text-center bg-white rounded-2xl p-8 md:p-12">
-            <Truck className="h-12 w-12 text-primary-accent mx-auto mb-6" />
-            <h3 className="text-2xl font-heading font-bold text-headings mb-4">
+          <div className="text-center bg-primary-accent rounded-2xl p-8 md:p-12">
+            <Truck className="h-12 w-12 text-white mx-auto mb-6" />
+            <h3 className="text-2xl font-heading font-bold text-white  mb-4">
               Eco-Friendly Shipping
             </h3>
-            <p className="text-muted-foreground text-lg mb-6 max-w-2xl mx-auto">
+            <p className="text-white/80 text-lg mb-6 max-w-2xl mx-auto">
               All shipments use recycled packaging materials and carbon-offset delivery partners.
               Free shipping on orders over ₹500.
             </p>
-            <div className="flex flex-wrap justify-center gap-6 text-sm">
+            <div className="flex text-white/90 flex-wrap justify-center gap-6 text-sm">
               <div className="flex items-center">
                 <div className="w-3 h-3 bg-green-600 rounded-full mr-2"></div>
                 <span>Carbon Neutral Shipping</span>
