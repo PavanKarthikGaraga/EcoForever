@@ -8,8 +8,30 @@ import { ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Loader2 } from "lucide-react";
 import { products as defaultProductsData } from "@/data/products";
+
+const ProductSkeleton = () => (
+  <div className="bg-white border border-border rounded-2xl p-2 shadow-sm flex flex-col h-[280px]">
+    <Skeleton className="h-8 w-3/4 mb-5" />
+    <div className="flex flex-row gap-5">
+      <Skeleton className="w-36 h-36 md:w-44 md:h-44 rounded-xl flex-shrink-0" />
+      <div className="flex flex-col justify-between flex-grow">
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-1/4" />
+          <Skeleton className="h-6 w-1/2" />
+        </div>
+        <div className="space-y-2">
+          <Skeleton className="h-3 w-full" />
+          <Skeleton className="h-3 w-full" />
+          <Skeleton className="h-3 w-3/4" />
+        </div>
+        <Skeleton className="h-9 w-full rounded-lg" />
+      </div>
+    </div>
+  </div>
+);
 
 const BestSellers = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -65,9 +87,9 @@ const BestSellers = () => {
     fetchProducts();
   }, []);
   return (
-    <section className="py-16 bg-[url('/grss-bg1.png')] bg-[length:100%_100%] bg-center bg-no-repeat" id="products">
+    <section className="py-4 grass-frame" id="products">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}        <div className="text-center mb-12">
+        <div className="text-center mb-12">
           <ScrollAnimation direction="up" duration={0.8} distance={80}>
             <h2 className="text-4xl md:text-5xl font-heading font-bold text-headings mb-4">
               Our Products
@@ -80,18 +102,21 @@ const BestSellers = () => {
           </ScrollAnimation>
         </div>
 
-        {/* Products Grid */}
-        {loading ? (
-          <div className="flex justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-primary-accent" />
-          </div>
-        ) : products.length === 0 ? (
-          <div className="text-center py-12 text-muted-foreground">
-            No products available yet.
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            {products.map((product, index) => {
+        {/* Products Grid Container with min-height to prevent layout shift */}
+        <div >
+          {loading ? (
+            <div className="gri` grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+              {[...Array(6)].map((_, i) => (
+                <ProductSkeleton key={i} />
+              ))}
+            </div>
+          ) : products.length === 0 ? (
+            <div className="text-center py-24 bg-white/50 rounded-3xl border border-dashed border-border">
+              <p className="text-xl text-muted-foreground">No products available yet.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+              {products.map((product, index) => {
               // Calculate min unit price from new schema
               const hasVariants = product.variants?.length ?? 0 > 0;
               const minPrice = hasVariants
@@ -120,7 +145,7 @@ const BestSellers = () => {
                 >
                   <Link
                     href={`/product/${product._id}`}
-                    className="bg-white border border-border rounded-2xl p-4 shadow-sm hover:shadow-lg hover:border-primary-accent/30 transition-all duration-300 group hover:-translate-y-1 flex flex-col h-full"
+                    className="bg-white border border-border rounded-2xl p-2 shadow-sm hover:shadow-lg hover:border-primary-accent/30 transition-all duration-300 group hover:-translate-y-1 flex flex-col h-full"
                   >
                     {/* Title on Top */}
                     <h3 className="text-lg md:text-3xl font-heading font-bold text-headings mb-5 group-hover:text-primary-accent transition-colors line-clamp-2 leading-tight">
@@ -180,6 +205,7 @@ const BestSellers = () => {
             })}
           </div>
         )}
+        </div>
       </div>
     </section>
   );

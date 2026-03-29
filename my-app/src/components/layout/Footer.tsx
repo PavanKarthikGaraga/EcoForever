@@ -9,7 +9,7 @@ const Footer = () => {
   return (
     <footer className="bg-headings text-white border-t border-border pt-8 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-start gap-12 mb-12">
+        <div className="flex flex-col md:flex-row justify-between items-start gap-12 mb-12">
 
           {/* Column 1: About Us */}
           <div className="space-y-4">
@@ -36,53 +36,56 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Column 2: Categories */}
-          <div>
-            <h3 className="font-heading font-semibold text-white text-3xl mb-6">Categories</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link href="/#products" className="text-white/80 hover:text-primary-accent transition-colors text-base">
-                  Wooden Cutlery
-                </Link>
-              </li>
-              <li>
-                <Link href="/#products" className="text-white/80 hover:text-primary-accent transition-colors text-base">
-                  Plates & Bowls
-                </Link>
-              </li>
-              <li>
-                <Link href="/#products" className="text-white/80 hover:text-primary-accent transition-colors text-base">
-                  Eco Packaging
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact?type=bulk" className="text-white/80 hover:text-primary-accent transition-colors text-base">
-                  Bulk Orders
-                </Link>
-              </li>
-            </ul>
-          </div>
+          {/* Wrapper for Mobile Row */}
+          <div className="grid grid-cols-2 gap-4 sm:gap-8 w-full md:w-auto md:flex md:gap-12">
+            {/* Column 2: Categories */}
+            <div>
+              <h3 className="font-heading font-semibold text-white text-xl sm:text-2xl md:text-3xl mb-4 md:mb-6">Categories</h3>
+              <ul className="space-y-3">
+                <li>
+                  <Link href="/#products" className="text-white/80 hover:text-primary-accent transition-colors text-xs sm:text-sm md:text-base">
+                    Wooden Cutlery
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/#products" className="text-white/80 hover:text-primary-accent transition-colors text-xs sm:text-sm md:text-base">
+                    Plates & Bowls
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/#products" className="text-white/80 hover:text-primary-accent transition-colors text-xs sm:text-sm md:text-base">
+                    Eco Packaging
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/contact?type=bulk" className="text-white/80 hover:text-primary-accent transition-colors text-xs sm:text-sm md:text-base">
+                    Bulk Orders
+                  </Link>
+                </li>
+              </ul>
+            </div>
 
-          {/* Column 3: Contact Us */}
-          <div>
-            <h3 className="font-heading font-semibold text-white text-3xl mb-6">Contact Us</h3>
-            <ul className="space-y-4">
-              <li className="flex items-start space-x-3">
-                <Phone className="h-5 w-5 text-white/80 shrink-0 mt-0.5" />
-                <span className="text-white/80 text-base">+91 98765 43210</span>
-              </li>
-              <li className="flex items-start space-x-3">
-                <Mail className="h-5 w-5 text-white/80 shrink-0 mt-0.5" />
-                <span className="text-white/80 text-base">hello@ecoforever.com</span>
-              </li>
-              <li className="flex items-start space-x-3">
-                <MapPin className="h-5 w-5 text-white/80 shrink-0 mt-0.5" />
-                <span className="text-white/80 text-">
-                  123 Eco Street, Green Valley,<br />
-                  Mumbai, Maharashtra, India
-                </span>
-              </li>
-            </ul>
+            {/* Column 3: Contact Us */}
+            <div>
+              <h3 className="font-heading font-semibold text-white text-xl sm:text-2xl md:text-3xl mb-4 md:mb-6">Contact Us</h3>
+              <ul className="space-y-3 md:space-y-4">
+                <li className="flex items-start space-x-2 md:space-x-3">
+                  <Phone className="h-4 w-4 md:h-5 md:w-5 text-white/80 shrink-0 mt-0.5 md:mt-1" />
+                  <span className="text-white/80 text-xs sm:text-sm md:text-base">+91 98765 43210</span>
+                </li>
+                <li className="flex items-start space-x-2 md:space-x-3">
+                  <Mail className="h-4 w-4 md:h-5 md:w-5 text-white/80 shrink-0 mt-0.5 md:mt-1" />
+                  <span className="text-white/80 text-xs sm:text-sm md:text-base break-words">hello@ecoforever.com</span>
+                </li>
+                <li className="flex items-start space-x-2 md:space-x-3">
+                  <MapPin className="h-4 w-4 md:h-5 md:w-5 text-white/80 shrink-0 mt-0.5 md:mt-1" />
+                  <span className="text-white/80 text-xs sm:text-sm md:text-base">
+                    123 Eco Street,<br /> Green Valley,<br />
+                    Mumbai, India
+                  </span>
+                </li>
+              </ul>
+            </div>
           </div>
 
         </div>

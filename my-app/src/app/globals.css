@@ -169,3 +169,27 @@ button:hover {
     @apply bg-background text-foreground;
   }
 }
+
+.grass-frame {
+  border: 20px solid transparent;
+  border-image: url("/grss-bg.png") 40 round;
+}
+
+@media (min-width: 768px) {
+  .grass-frame {
+    border: 50px solid transparent;
+    border-image: url("/grss-bg.png") 100 round;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    /* IE and Edge */
+    -ms-overflow-style: none;
+    /* Firefox */
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}

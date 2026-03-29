@@ -1,11 +1,31 @@
 "use client";
 
-import { ShoppingCart, Check } from "lucide-react";
+import { ShoppingCart, Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 import { useCartStore } from "@/store/useCartStore";
 import { useEffect, useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const ComboPackSkeleton = () => (
+    <div className="relative overflow-hidden rounded-3xl h-[400px] md:h-[500px] shadow-lg border border-gray-100 bg-white p-8 flex flex-col justify-end">
+        <Skeleton className="absolute inset-0" />
+        <div className="relative z-10 space-y-4">
+            <Skeleton className="h-10 w-3/4" />
+            <Skeleton className="h-6 w-1/4 rounded-full" />
+            <div className="space-y-2 hidden md:block">
+                <Skeleton className="h-4 w-1/2" />
+                <Skeleton className="h-4 w-2/3" />
+                <Skeleton className="h-4 w-1/3" />
+            </div>
+            <div className="flex flex-row items-center gap-4 mt-6 pt-6 border-t border-gray-100">
+                <Skeleton className="h-10 w-1/3" />
+                <Skeleton className="h-10 w-1/3 ml-auto rounded-lg" />
+            </div>
+        </div>
+    </div>
+);
 
 const defaultComboPacks = [
     {
@@ -90,92 +110,92 @@ const ComboPacks = () => {
         });
     };
 
-    if (loading) {
-        return (
-            <section className="py-16 bg-white">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-center items-center h-[500px]">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-accent"></div>
-                </div>
-            </section>
-        );
-    }
-
-    if (packs.length === 0) return null;
-
     return (
-        <section className="py-16 bg-white">
+        <section className="py-16 bg-white min-h-[600px]">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <ScrollAnimation direction="up">
-                    <h2 className="text-4xl md:text-5xl text-center font-heading font-bold text-headings mb-6">
+                    <h2 className="text-4xl md:text-5xl text-center font-heading font-bold text-headings mb-12">
                         Value Combo Packs
                     </h2>
                 </ScrollAnimation>
+                
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 overflow-hidden p-2">
-                    {packs.map((pack, index) => (
-                        <ScrollAnimation
-                            key={pack._id}
-                            direction={index % 2 === 0 ? "left" : "right"}
-                            delay={0.2}
-                            className="h-full"
-                        >
-                            <div
-                                className="relative overflow-hidden rounded-3xl h-[400px] md:h-[500px] shadow-lg group border border-gray-100"
+                    {loading ? (
+                        <>
+                            <ComboPackSkeleton />
+                            <ComboPackSkeleton />
+                        </>
+                    ) : packs.length === 0 ? (
+                        <div className="col-span-full text-center py-24 bg-gray-50 rounded-3xl border border-dashed border-gray-200">
+                            <p className="text-xl text-muted-foreground">No combo packs available yet.</p>
+                        </div>
+                    ) : (
+                        packs.map((pack, index) => (
+                            <ScrollAnimation
+                                key={pack._id}
+                                direction={index % 2 === 0 ? "left" : "right"}
+                                delay={0.2}
+                                className="h-full"
                             >
-                                <Image
-                                    src={pack.image}
-                                    alt={pack.title}
-                                    fill
-                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                    sizes="(max-width: 768px) 100vw, 50vw"
-                                />
-                                {/* Subtle Overlay to ensure text readability only on the text side */}
                                 <div
-                                    className={`absolute inset-0 transition-opacity duration-300 bg-black/40 md:bg-transparent ${pack.textPosition === 'left'
-                                        ? 'md:bg-gradient-to-r md:from-black/70 md:via-black/30 md:to-transparent'
-                                        : 'md:bg-gradient-to-l md:from-black/70 md:via-black/30 md:to-transparent'
-                                        }`}
-                                />
+                                    className="relative overflow-hidden rounded-3xl h-[400px] md:h-[500px] shadow-lg group border border-gray-100"
+                                >
+                                    <Image
+                                        src={pack.image}
+                                        alt={pack.title}
+                                        fill
+                                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                        sizes="(max-width: 768px) 100vw, 50vw"
+                                    />
+                                    {/* Subtle Overlay to ensure text readability only on the text side */}
+                                    <div
+                                        className={`absolute inset-0 transition-opacity duration-300 bg-black/40 md:bg-transparent ${pack.textPosition === 'left'
+                                            ? 'md:bg-gradient-to-r md:from-black/70 md:via-black/30 md:to-transparent'
+                                            : 'md:bg-gradient-to-l md:from-black/70 md:via-black/30 md:to-transparent'
+                                            }`}
+                                    />
 
-                                <div className={`absolute inset-0 p-6 md:p-8 flex flex-col justify-end text-white ${pack.textPosition === 'left' ? 'md:items-start' : 'md:items-end'} ${pack.textPosition === 'left' ? 'md:text-left' : 'md:text-right'}`}>
-                                    <div className="max-w-full md:max-w-[85%] w-full">
-                                        <div className="text-2xl md:text-3xl text-white font-bold mb-2">{pack.title}</div>
-                                        {pack.title?.toLowerCase().includes('premium') && (
-                                            <span className="bg-primary-accent text-white text-xs font-bold px-3 py-1 rounded-full mb-4 inline-block">
-                                                PREMIUM
-                                            </span>
-                                        )}
+                                    <div className={`absolute inset-0 p-6 md:p-8 flex flex-col justify-end text-white ${pack.textPosition === 'left' ? 'md:items-start' : 'md:items-end'} ${pack.textPosition === 'left' ? 'md:text-left' : 'md:text-right'}`}>
+                                        <div className="max-w-full md:max-w-[85%] w-full">
+                                            <div className="text-2xl md:text-3xl text-white font-bold mb-2">{pack.title}</div>
+                                            {pack.title?.toLowerCase().includes('premium') && (
+                                                <span className="bg-primary-accent text-white text-xs font-bold px-3 py-1 rounded-full mb-4 inline-block">
+                                                    PREMIUM
+                                                </span>
+                                            )}
 
-                                        <ul className={`space-y-1 md:space-y-1.5 mb-6 text-white/90 hidden md:block`}>
-                                            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                                            {pack.items?.map((item: any, idx: number) => (
-                                                <li key={idx} className="text-sm md:text-base flex items-center gap-2">
-                                                    <Check className="w-4 h-4 text-primary-accent" /> {item.quantity}x {item.name}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                        {/* Mobile list summary */}
-                                        <p className="text-white/90 text-sm mb-4 md:hidden line-clamp-2">
-                                            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                                            Includes: {pack.items?.map((i: any) => `${i.quantity}x ${i.name}`).join(", ")}
-                                        </p>
+                                            <ul className={`space-y-1 md:space-y-1.5 mb-6 text-white/90 hidden md:block`}>
+                                                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                                                {pack.items?.map((item: any, idx: number) => (
+                                                    <li key={idx} className="text-sm md:text-base flex items-center gap-2">
+                                                        <Check className="w-4 h-4 text-primary-accent" /> {item.quantity}x {item.name}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                            {/* Mobile list summary */}
+                                            <p className="text-white/90 text-sm mb-4 md:hidden line-clamp-2">
+                                                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                                                Includes: {pack.items?.map((i: any) => `${i.quantity}x ${i.name}`).join(", ")}
+                                            </p>
 
-                                        <div className={`flex flex-row items-center gap-4 mt-6 pt-6 border-t border-white/20 w-full ${pack.textPosition === 'left' ? 'justify-start' : 'justify-end'}`}>
-                                            <div className="text-2xl md:text-3xl font-bold text-white">
-                                                {pack.mrp && <span className="line-through text-white/70 text-lg mr-2">₹{pack.mrp}</span>}
-                                                ₹{pack.price}
+                                            <div className={`flex flex-row items-center gap-4 mt-6 pt-6 border-t border-white/20 w-full ${pack.textPosition === 'left' ? 'justify-start' : 'justify-end'}`}>
+                                                <div className="text-2xl md:text-3xl font-bold text-white">
+                                                    {pack.mrp && <span className="line-through text-white/70 text-lg mr-2">₹{pack.mrp}</span>}
+                                                    ₹{pack.price}
+                                                </div>
+                                                <Button
+                                                    onClick={() => handleAddToCart(pack)}
+                                                    className="bg-primary-accent text-white hover:bg-primary-accent/90 font-semibold px-6 py-2 md:px-8 shadow-md transition-transform active:scale-95 text-sm md:text-base ml-auto"
+                                                >
+                                                    <ShoppingCart className="w-4 h-4 mr-2" /> Add to Cart
+                                                </Button>
                                             </div>
-                                            <Button
-                                                onClick={() => handleAddToCart(pack)}
-                                                className="bg-primary-accent text-white hover:bg-primary-accent/90 font-semibold px-6 py-2 md:px-8 shadow-md transition-transform active:scale-95 text-sm md:text-base ml-auto"
-                                            >
-                                                <ShoppingCart className="w-4 h-4 mr-2" /> Add to Cart
-                                            </Button>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </ScrollAnimation>
-                    ))}
+                            </ScrollAnimation>
+                        ))
+                    )}
                 </div>
             </div>
         </section>

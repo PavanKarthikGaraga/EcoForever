@@ -31,6 +31,7 @@ const ProductDetail = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const addItem = useCartStore((state) => state.addItem);
+  const cartItems = useCartStore((state) => state.items);
 
   // Ref for the thumbnail container to handle auto-scrolling
   const thumbnailContainerRef = useRef<HTMLDivElement>(null);
@@ -415,61 +416,85 @@ const ProductDetail = () => {
             </div>
 
             {/* Quantity and Add to Cart */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-4 mt-2 items-stretch">
-              <div className="flex items-center border-2 border-border rounded-xl bg-white overflow-hidden h-[56px] shrink-0">
-                <button
-                  type="button"
-                  onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                  disabled={quantity <= 1}
-                  className="px-4 h-full flex items-center justify-center text-headings hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  <span className="text-2xl leading-none mt-[-2px]">-</span>
-                </button>
-                <span className="px-4 h-full flex items-center justify-center font-bold border-x-2 border-border min-w-[3.5rem] text-center text-lg">
-                  {quantity}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setQuantity(q => q + 1)}
-                  className="px-4 h-full flex items-center justify-center text-headings hover:bg-gray-100 transition-colors"
-                >
-                  <span className="text-2xl leading-none mt-[-2px]">+</span>
-                </button>
-              </div>
+            <div className="flex flex-row gap-4 pt-4 mt-2 items-stretch">
+              {(() => {
+                const itemId = product && currentVariant ? `${product._id}-${currentVariant.size}-${isPremiumSelected ? 'premium' : 'standard'}` : null;
+                const isItemInCart = itemId ? cartItems.some(item => item.id === itemId) : false;
 
-              <Button
-                className="flex-1 h-[56px] text-lg shadow-md"
-                size="lg"
-                disabled={!currentVariant || displayStock <= 0}
-                onClick={handleAddToCart}
-              >
-                <ShoppingCart className="h-5 w-5 mr-2" />
-                {!currentVariant ? "Select Options" : displayStock <= 0 ? "Out of Stock" : "Add to Cart"}
-              </Button>
+                if (isItemInCart) {
+                  return (
+                    <Button
+                      asChild
+                      className="flex-1 h-[56px] text-lg shadow-md bg-green-600 hover:bg-green-700"
+                      size="lg"
+                    >
+                      <Link href="/cart">
+                        <ShoppingCart className="h-5 w-5 mr-2" />
+                        Checkout
+                      </Link>
+                    </Button>
+                  );
+                }
+
+                return (
+                  <>
+                    <div className="flex items-center border-2 border-border rounded-xl bg-white overflow-hidden h-[56px] shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                        disabled={quantity <= 1}
+                        className="px-3 md:px-4 h-full flex items-center justify-center text-headings hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      >
+                        <span className="text-2xl leading-none mt-[-2px]">-</span>
+                      </button>
+                      <span className="px-2 md:px-4 h-full flex items-center justify-center font-bold border-x-2 border-border min-w-[2.5rem] md:min-w-[3.5rem] text-center text-lg">
+                        {quantity}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setQuantity(q => q + 1)}
+                        className="px-3 md:px-4 h-full flex items-center justify-center text-headings hover:bg-gray-100 transition-colors"
+                      >
+                        <span className="text-2xl leading-none mt-[-2px]">+</span>
+                      </button>
+                    </div>
+
+                    <Button
+                      className="flex-1 h-[56px] text-base md:text-lg shadow-md"
+                      size="lg"
+                      disabled={!currentVariant || displayStock <= 0}
+                      onClick={handleAddToCart}
+                    >
+                      <ShoppingCart className="h-5 w-5 mr-2 hidden md:block" />
+                      {!currentVariant ? "Select Options" : displayStock <= 0 ? "Out of Stock" : "Add to Cart"}
+                    </Button>
+                  </>
+                );
+              })()}
             </div>
           </div>
 
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6">
-              <div className="flex flex-col items-center text-center p-4 bg-gray-50 border rounded-xl">
-                <Truck className="h-8 w-8 text-primary-accent mb-2" />
+        <div className="grid grid-cols-3 gap-2 md:gap-4 pt-6">
+              <div className="flex flex-col items-center text-center p-2 md:p-4 bg-gray-50 border rounded-xl">
+                <Truck className="h-6 w-6 md:h-8 md:w-8 text-primary-accent mb-2" />
                 <div>
-                  <div className="font-medium text-headings text-sm">Free Shipping Above ₹500</div>
-                  <div className="text-xs text-muted-foreground mt-1">Delivery throughout India</div>
+                  <div className="font-medium text-headings text-xs md:text-sm">Free Shipping</div>
+                  <div className="text-[10px] md:text-xs text-muted-foreground mt-1 hidden md:block">Delivery throughout India</div>
                 </div>
               </div>
-              <div className="flex flex-col items-center text-center p-4 bg-gray-50 border rounded-xl">
-                <Shield className="h-8 w-8 text-primary-accent mb-2" />
+              <div className="flex flex-col items-center text-center p-2 md:p-4 bg-gray-50 border rounded-xl">
+                <Shield className="h-6 w-6 md:h-8 md:w-8 text-primary-accent mb-2" />
                 <div>
-                  <div className="font-medium text-headings text-sm">Secure Payment</div>
-                  <div className="text-xs text-muted-foreground mt-1">100% Protected</div>
+                  <div className="font-medium text-headings text-xs md:text-sm">Secure Pay</div>
+                  <div className="text-[10px] md:text-xs text-muted-foreground mt-1 hidden md:block">100% Protected</div>
                 </div>
               </div>
-              <div className="flex flex-col items-center text-center p-4 bg-gray-50 border rounded-xl">
-                <Ban className="h-8 w-8 text-primary-accent mb-2" />
+              <div className="flex flex-col items-center text-center p-2 md:p-4 bg-gray-50 border rounded-xl">
+                <Ban className="h-6 w-6 md:h-8 md:w-8 text-primary-accent mb-2" />
                 <div>
-                  <div className="font-medium text-headings text-sm">No Returns</div>
-                  <div className="text-xs text-muted-foreground mt-1">No Return Policy</div>
+                  <div className="font-medium text-headings text-xs md:text-sm">No Returns</div>
+                  <div className="text-[10px] md:text-xs text-muted-foreground mt-1 hidden md:block">No Return Policy</div>
                 </div>
               </div>
             </div>

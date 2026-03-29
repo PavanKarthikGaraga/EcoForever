@@ -33,7 +33,7 @@ const Testimonials = () => {
     <section className="py-10 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <div className="text-center pb-4">
           <ScrollAnimation direction="up">
             <h2 className="text-4xl md:text-5xl font-heading font-bold text-headings mb-4">
               What Our Customers Say
@@ -108,7 +108,7 @@ const Testimonials = () => {
         </div>
 
         {/* Trust Indicators */}
-        <div className="text-center mt-16">
+        <div className="text-center pt-4">
           <ScrollAnimation direction="up" delay={0.4}>
             <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
               <div className="flex items-center space-x-2">

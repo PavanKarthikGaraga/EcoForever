@@ -52,7 +52,7 @@ const Hero = () => {
   }, [nextSlide]);
 
   return (
-    <div className="relative h-[70vh] w-full overflow-hidden group">
+    <div className="relative h-[35vh] w-full overflow-hidden group">
       {/* Slides */}
       <AnimatePresence>
         <motion.div
