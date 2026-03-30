@@ -71,7 +71,7 @@ const Footer = () => {
               <ul className="space-y-3 md:space-y-4">
                 <li className="flex items-start space-x-2 md:space-x-3">
                   <Phone className="h-4 w-4 md:h-5 md:w-5 text-white/80 shrink-0 mt-0.5 md:mt-1" />
-                  <span className="text-white/80 text-xs sm:text-sm md:text-base">+91 98765 43210</span>
+                  <span className="text-white/80 text-xs sm:text-sm md:text-base">+91 7036777677</span>
                 </li>
                 <li className="flex items-start space-x-2 md:space-x-3">
                   <Mail className="h-4 w-4 md:h-5 md:w-5 text-white/80 shrink-0 mt-0.5 md:mt-1" />
@@ -80,8 +80,8 @@ const Footer = () => {
                 <li className="flex items-start space-x-2 md:space-x-3">
                   <MapPin className="h-4 w-4 md:h-5 md:w-5 text-white/80 shrink-0 mt-0.5 md:mt-1" />
                   <span className="text-white/80 text-xs sm:text-sm md:text-base">
-                    123 Eco Street,<br /> Green Valley,<br />
-                    Mumbai, India
+                    Villa No : 178,<br /> Chitrapuri Row House Rd,<br /> Chitrapuri Colony,<br />
+                    Hyderabad, Telangana 500104
                   </span>
                 </li>
               </ul>

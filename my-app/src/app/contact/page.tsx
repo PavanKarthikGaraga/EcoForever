@@ -19,21 +19,21 @@ const Contact = () => {
       icon: Phone,
       title: "Call Us",
       description: "Speak directly with our customer service team",
-      contact: "+91 98765 43210",
+      contact: "+91 7036777677",
       action: "tel:+919876543210"
     },
     {
       icon: MessageCircle,
       title: "WhatsApp",
       description: "Quick responses and product inquiries",
-      contact: "+91 98765 43210",
+      contact: "+91 7036777677",
       action: "https://wa.me/919876543210"
     },
     {
       icon: MapPin,
       title: "Visit Us",
       description: "Schedule a factory tour or office visit",
-      contact: "Coimbatore, Tamil Nadu, India",
+      contact: "Villa No : 178, Chitrapuri Row House Rd, Chitrapuri Colony, Hyderabad, Telangana 500104",
       action: "#"
     }
   ];
@@ -95,7 +95,7 @@ const Contact = () => {
                     <label className="block text-sm font-medium text-headings mb-2">
                       Phone Number
                     </label>
-                    <Input type="tel" placeholder="+91 98765 43210" />
+                    <Input type="tel" placeholder="+91 7036777677" />
                   </div>
 
                   <div>
@@ -257,8 +257,7 @@ const Contact = () => {
               Visit Our Location
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Located in the heart of Tamil Nadu&apos;s industrial district, our facilities
-              combine traditional craftsmanship with modern sustainable practices.
+              Our facilities combine traditional craftsmanship with modern sustainable practices.
             </p>
           </div>
 
@@ -268,7 +267,7 @@ const Contact = () => {
               <div className="text-center">
                 <MapPin className="h-16 w-16 text-primary-accent mx-auto mb-4" />
                 <h3 className="text-xl font-heading font-semibold text-headings mb-2">
-                  Coimbatore, Tamil Nadu
+                  Hyderabad, Telangana
                 </h3>
                 <p className="text-muted-foreground">
                   Interactive map would be displayed here

@@ -412,6 +412,7 @@ const ProductDetail = () => {
               </h3>
               <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
                 {product.description}
+                <span className="text-muted-foreground"> Eco-friendly packaging charges extra will be applied.</span>
               </p>
             </div>
 
@@ -480,7 +481,7 @@ const ProductDetail = () => {
                 <Truck className="h-6 w-6 md:h-8 md:w-8 text-primary-accent mb-2" />
                 <div>
                   <div className="font-medium text-headings text-xs md:text-sm">Free Shipping</div>
-                  <div className="text-[10px] md:text-xs text-muted-foreground mt-1 hidden md:block">Delivery throughout India</div>
+                  <div className="text-[10px] md:text-xs text-muted-foreground mt-1 hidden md:block">Above ₹500 across India</div>
                 </div>
               </div>
               <div className="flex flex-col items-center text-center p-2 md:p-4 bg-gray-50 border rounded-xl">
