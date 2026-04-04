@@ -31,18 +31,14 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 gap-4">
-          <Image
-            src="/logo/logo-tr.png"
-            alt="EcoForever Logo"
-            width={100}
-            height={40}
-          />
-          {/* Logo */}
-          <Link
-            href="/"
-            className="text-2xl font-heading font-semibold text-primary-accent hover:text-primary-accent transition-colors shrink-0"
-          >
-            EcoForever
+          <Link href="/" className="flex items-center shrink-0">
+            <Image
+              src="/logo/logo-tr.png"
+              alt="EcoForever Logo"
+              width={200}
+              height={80}
+              className="h-16 w-auto object-contain"
+            />
           </Link>
 
           {/* Search Bar - Desktop */}
