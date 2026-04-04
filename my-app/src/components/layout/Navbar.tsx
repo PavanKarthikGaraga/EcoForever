@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ShoppingCart, Search, User, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -30,6 +31,12 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 gap-4">
+          <Image
+            src="/logo/logo-tr.png"
+            alt="EcoForever Logo"
+            width={100}
+            height={40}
+          />
           {/* Logo */}
           <Link
             href="/"

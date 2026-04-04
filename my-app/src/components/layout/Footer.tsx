@@ -14,7 +14,7 @@ const Footer = () => {
           {/* Column 1: About Us */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center space-x-2 text-3xl">
-              <Leaf className="h-10 w-10 text-white" />
+              {/* <Leaf className="h-10 w-10 text-white" /> */}
               <span className="text-3xl font-heading font-semibold text-white ">
                 EcoForever
               </span>
@@ -75,7 +75,7 @@ const Footer = () => {
                 </li>
                 <li className="flex items-start space-x-2 md:space-x-3">
                   <Mail className="h-4 w-4 md:h-5 md:w-5 text-white/80 shrink-0 mt-0.5 md:mt-1" />
-                  <span className="text-white/80 text-xs sm:text-sm md:text-base break-words">hello@ecoforever.com</span>
+                  <span className="text-white/80 text-xs sm:text-sm md:text-base break-words">info@ecoforever.co.in</span>
                 </li>
                 <li className="flex items-start space-x-2 md:space-x-3">
                   <MapPin className="h-4 w-4 md:h-5 md:w-5 text-white/80 shrink-0 mt-0.5 md:mt-1" />

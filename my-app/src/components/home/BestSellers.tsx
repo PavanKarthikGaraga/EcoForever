@@ -164,16 +164,21 @@ const BestSellers = () => {
                       {product.title}
                     </h3>
 
-                    <div className="mb-2">
+                    <div className="mb-4">
                       {totalDisplayMrp && (
-                        <span className="text-xs text-muted-foreground line-through block">
+                        <span className="text-sm text-muted-foreground line-through block">
                           ₹{totalDisplayMrp.toFixed(2)}
                         </span>
                       )}
 
-                      <span className="text-lg sm:text-xl md:text-2xl font-bold text-primary-accent">
-                        ₹{totalMinPrice.toFixed(2)}
-                      </span>
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-2xl sm:text-3xl font-bold text-primary-accent">
+                          ₹{totalMinPrice.toFixed(2)}
+                        </span>
+                        <span className="text-sm text-muted-foreground">
+                          (pack of {packCount})
+                        </span>
+                      </div>
                     </div>
 
                     <p 
