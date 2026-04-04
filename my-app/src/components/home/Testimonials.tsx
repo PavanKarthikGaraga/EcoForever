@@ -7,25 +7,25 @@ import ScrollAnimation from "@/components/ui/ScrollAnimation";
 const Testimonials = () => {
   const testimonials = [
     {
-      name: "Sarah Johnson",
-      location: "New York, USA",
+      name: "Srinivas Rao",
+      location: "Hyderabad, Telangana",
       rating: 5,
       text: "The quality of EcoForever products is exceptional. My wooden spoons are still perfect after months of daily use, and knowing they're biodegradable makes every meal feel more meaningful.",
-      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=60&h=60&fit=crop&crop=face",
+      avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=60&h=60&fit=crop&crop=face",
     },
     {
-      name: "Rajesh Kumar",
-      location: "Mumbai, India",
+      name: "Lakshmi Reddy",
+      location: "Vijayawada, AP",
       rating: 5,
       text: "As someone who cares deeply about the environment, finding EcoForever was a game-changer. Their bamboo plates are beautiful and the fact that they're supporting local artisans is a bonus.",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60&h=60&fit=crop&crop=face",
     },
     {
-      name: "Emma Wilson",
-      location: "London, UK",
+      name: "Pradeep Varma",
+      location: "Visakhapatnam, AP",
       rating: 5,
       text: "The craftsmanship is outstanding. Each piece tells a story of sustainability and care. My dinner parties now feature these beautiful, eco-friendly alternatives to plastic.",
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop&crop=face",
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face",
     },
   ];
 
@@ -108,7 +108,7 @@ const Testimonials = () => {
         </div>
 
         {/* Trust Indicators */}
-        <div className="text-center pt-4">
+        {/* <div className="text-center pt-4">
           <ScrollAnimation direction="up" delay={0.4}>
             <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
               <div className="flex items-center space-x-2">
@@ -127,7 +127,7 @@ const Testimonials = () => {
               </div>
             </div>
           </ScrollAnimation>
-        </div>
+        </div> */}
       </div>
     </section>
   );

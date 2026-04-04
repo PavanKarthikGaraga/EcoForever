@@ -412,7 +412,8 @@ const ProductDetail = () => {
               </h3>
               <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
                 {product.description}
-                <span className="text-muted-foreground"> Eco-friendly packaging charges extra will be applied.</span>
+                <br />
+                <span className="text-muted-foreground">Eco-friendly packaging charges extra will be applied.</span>
               </p>
             </div>
 
