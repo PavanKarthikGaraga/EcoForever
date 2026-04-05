@@ -1,7 +1,6 @@
 "use client";
 
 import { Star, Quote } from "lucide-react";
-import Image from "next/image";
 import ScrollAnimation from "@/components/ui/ScrollAnimation";
 
 const Testimonials = () => {
@@ -10,22 +9,19 @@ const Testimonials = () => {
       name: "Srinivas Rao",
       location: "Hyderabad, Telangana",
       rating: 5,
-      text: "The quality of EcoForever products is exceptional. My wooden spoons are still perfect after months of daily use, and knowing they're biodegradable makes every meal feel more meaningful.",
-      avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=60&h=60&fit=crop&crop=face",
+      text: "These plates are very good. They are strong and do not leak when we eat. I like that they are natural and safe for the environment. Will buy again.",
     },
     {
       name: "Lakshmi Reddy",
       location: "Vijayawada, AP",
       rating: 5,
-      text: "As someone who cares deeply about the environment, finding EcoForever was a game-changer. Their bamboo plates are beautiful and the fact that they're supporting local artisans is a bonus.",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60&h=60&fit=crop&crop=face",
+      text: "ఈ ప్లేట్లు చాలా బాగున్నాయి. శుభకార్యాలకు వాడటానికి చాలా అనువుగా ఉన్నాయి. పర్యావరణానికి కూడా మంచివి కాబట్టి అందరూ వాడొచ్చు.",
     },
     {
       name: "Pradeep Varma",
       location: "Visakhapatnam, AP",
       rating: 5,
-      text: "The craftsmanship is outstanding. Each piece tells a story of sustainability and care. My dinner parties now feature these beautiful, eco-friendly alternatives to plastic.",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face",
+      text: "Very happy with this purchase. The leaf plates look nice for parties and are easy to throw away after eating. Best choice for big family dinners.",
     },
   ];
 
@@ -61,7 +57,7 @@ const Testimonials = () => {
 
                   {/* Rating */}
                   <div className="flex items-center mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
+                    {Array.from({ length: testimonial.rating }).map((_, i) => (
                       <Star key={i} className="h-4 w-4 md:h-5 md:w-5 text-yellow-400 fill-current" />
                     ))}
                   </div>
@@ -72,23 +68,12 @@ const Testimonials = () => {
                   </p>
 
                   {/* Author */}
-                  <div className="flex items-center mt-auto pt-6 border-t border-gray-100">
-                    <div className="relative w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden mr-4 shrink-0 border border-gray-200">
-                      <Image
-                        src={testimonial.avatar}
-                        alt={testimonial.name}
-                        fill
-                        className="object-cover"
-                        sizes="48px"
-                      />
-                    </div>
-                    <div>
-                      <div className="font-heading font-semibold text-headings group-hover:text-primary-accent transition-colors">
-                        {testimonial.name}
-                      </div>
-                      <div className="text-xs md:text-sm text-muted-foreground">
-                        {testimonial.location}
-                      </div>
+                  <div className="mt-auto pt-6 border-t border-gray-100">
+                    <div className="font-heading text-xl font-semibold text-headings group-hover:text-primary-accent transition-colors">
+                      {testimonial.name}
+                    </div> 
+                    <div className="text-xs md:text-sm text-muted-foreground mt-0.5">
+                      {testimonial.location}
                     </div>
                   </div>
                 </div>
@@ -106,28 +91,6 @@ const Testimonials = () => {
             ))}
           </div>
         </div>
-
-        {/* Trust Indicators */}
-        {/* <div className="text-center pt-4">
-          <ScrollAnimation direction="up" delay={0.4}>
-            <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
-              <div className="flex items-center space-x-2">
-                <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
-                  ))}
-                </div>
-                <span className="text-sm font-medium">4.8/5 Rating</span>
-              </div>
-              <div className="text-sm">
-                <span className="font-medium">50,000+</span> Happy Customers
-              </div>
-              <div className="text-sm">
-                <span className="font-medium">25+</span> Countries Served
-              </div>
-            </div>
-          </ScrollAnimation>
-        </div> */}
       </div>
     </section>
   );

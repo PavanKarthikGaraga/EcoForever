@@ -302,21 +302,23 @@ const ProductDetail = () => {
                     PREMIUM
                   </div>
                 )}
-                <div className="flex items-center space-x-3 ">
-                  {displayMrp > displayPrice && (
-                    <span className="text-xl line-through text-muted-foreground">
-                      ₹{(displayMrp * packCount).toFixed(2)}
+                <div className="flex flex-col space-y-1">
+                  <div className="flex items-center space-x-3">
+                    {displayMrp > displayPrice && (
+                      <span className="text-xl line-through text-muted-foreground">
+                        ₹{(displayMrp * packCount).toFixed(2)}
+                      </span>
+                    )}
+                    <span className="text-3xl font-heading font-bold text-headings">
+                      {currentVariant ? `₹${totalPrice.toFixed(2)}` : "..."} 
                     </span>
-                  )}
-                  <span className="text-3xl font-heading font-bold text-headings">
-                    {currentVariant ? `₹${totalPrice.toFixed(2)}` : "..."} 
-                  </span>
-                  <span className="text-sm text-muted-foreground"> (pack of {packCount})</span>
-                  {displayMrp > displayPrice && (
-                    <Badge className="ml-2 bg-green-100 text-green-800 hover:bg-green-100 border-green-200">
-                      Save {Math.round(((displayMrp - displayPrice) / displayMrp) * 100)}%
-                    </Badge>
-                  )}
+                    {displayMrp > displayPrice && (
+                      <Badge className="ml-2 bg-green-100 text-green-800 hover:bg-green-100 border-green-200">
+                        Save {Math.round(((displayMrp - displayPrice) / displayMrp) * 100)}%
+                      </Badge>
+                    )}
+                  </div>
+                  <span className="text-sm text-muted-foreground">(pack of {packCount})</span>
                 </div>
 
               </div>

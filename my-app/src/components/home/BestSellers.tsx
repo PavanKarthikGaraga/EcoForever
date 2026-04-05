@@ -171,11 +171,11 @@ const BestSellers = () => {
                         </span>
                       )}
 
-                      <div className="flex items-baseline gap-2">
+                      <div className="flex flex-col">
                         <span className="text-2xl sm:text-3xl font-bold text-primary-accent">
                           ₹{totalMinPrice.toFixed(2)}
                         </span>
-                        <span className="text-sm text-muted-foreground">
+                        <span className="text-sm text-muted-foreground mt-0.5">
                           (pack of {packCount})
                         </span>
                       </div>

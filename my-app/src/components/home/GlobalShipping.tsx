@@ -24,7 +24,7 @@ const GlobalShipping = () => {
                 Eco-Friendly Packaging
               </h3>
               <p className="text-white/80 text-lg md:text-xl leading-relaxed">
-                We are committed to delivering our sustainable products to you with the lowest possible environmental impact. All our shipments use 100% recycled packaging materials and partner with carbon-offset delivery networks. From our manufacturing facility to your doorstep, every order contributes to a cleaner planet. We offer free shipping on all orders above ₹500, ensuring that choosing sustainable alternatives is both affordable and convenient.
+                We are committed to delivering our sustainable products to you with the lowest possible environmental impact. All our shipments use eco-friendly packaging materials and partner with carbon-offset delivery networks. From our manufacturing facility to your doorstep, every order contributes to a cleaner planet. We offer free shipping on all orders above ₹500, ensuring that choosing sustainable alternatives is both affordable and convenient.
               </p>
             </div>
           </div>
