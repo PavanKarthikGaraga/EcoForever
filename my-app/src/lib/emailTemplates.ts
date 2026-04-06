@@ -147,15 +147,13 @@ export const sendOrderConfirmationEmail = async (to: string, orderDetails: any) 
  * Sends a contact form notification to admin and a confirmation to the user.
  */
 export const sendContactEmail = async (
-    firstName: string,
-    lastName: string,
+    name: string,
     email: string,
     phone: string,
     subject: string,
     message: string
 ) => {
     const adminEmail = 'ecoforever26@gmail.com';
-    const fullName = `${firstName} ${lastName}`;
 
     const adminHtmlContent = `
     <div style="font-family: Arial, sans-serif; max-w-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
@@ -165,7 +163,7 @@ export const sendContactEmail = async (
         <div style="padding: 30px; background-color: #ffffff;">
             <h2 style="color: #333333; margin-top: 0;">Inquiry Details</h2>
             <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
-                <tr><td style="padding: 8px 0; border-bottom: 1px solid #e0e0e0; font-weight: bold; width: 120px;">Name:</td><td style="padding: 8px 0; border-bottom: 1px solid #e0e0e0;">${fullName}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #e0e0e0; font-weight: bold; width: 120px;">Name:</td><td style="padding: 8px 0; border-bottom: 1px solid #e0e0e0;">${name}</td></tr>
                 <tr><td style="padding: 8px 0; border-bottom: 1px solid #e0e0e0; font-weight: bold;">Email:</td><td style="padding: 8px 0; border-bottom: 1px solid #e0e0e0;">${email}</td></tr>
                 <tr><td style="padding: 8px 0; border-bottom: 1px solid #e0e0e0; font-weight: bold;">Phone:</td><td style="padding: 8px 0; border-bottom: 1px solid #e0e0e0;">${phone || 'N/A'}</td></tr>
                 <tr><td style="padding: 8px 0; border-bottom: 1px solid #e0e0e0; font-weight: bold;">Topic:</td><td style="padding: 8px 0; border-bottom: 1px solid #e0e0e0;">${subject}</td></tr>
@@ -185,7 +183,7 @@ export const sendContactEmail = async (
         </div>
         <div style="padding: 30px; background-color: #ffffff;">
             <h2 style="color: #333333; margin-top: 0;">Thank you for contacting us!</h2>
-            <p style="color: #555555; line-height: 1.6;">Hello ${firstName},</p>
+            <p style="color: #555555; line-height: 1.6;">Hello ${name},</p>
             <p style="color: #555555; line-height: 1.6;">We have received your message regarding "<strong>${subject}</strong>". Our team will review your inquiry and get back to you within 24 hours.</p>
             <p style="color: #555555; line-height: 1.6;">For your records, here is a copy of your message:</p>
             <div style="background-color: #f3f4f6; padding: 15px; border-radius: 6px; margin: 20px 0; color: #555555; white-space: pre-wrap;">${message}</div>
@@ -205,7 +203,7 @@ export const sendContactEmail = async (
             from: fromAddress,
             to: adminEmail,
             replyTo: email,
-            subject: `New Contact Form Submission: ${subject} - ${fullName}`,
+            subject: `New Contact Form Submission: ${subject} - ${name}`,
             html: adminHtmlContent,
         });
 

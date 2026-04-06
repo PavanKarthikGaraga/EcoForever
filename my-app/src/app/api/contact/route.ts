@@ -4,16 +4,16 @@ import { sendContactEmail } from '@/lib/emailTemplates';
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { firstName, lastName, email, phone, subject, message } = body;
+        const { name, email, phone, subject, message } = body;
 
-        if (!firstName || !lastName || !email || !subject || !message) {
+        if (!name || !email || !subject || !message) {
             return NextResponse.json(
                 { error: 'Missing required fields' },
                 { status: 400 }
             );
         }
 
-        const success = await sendContactEmail(firstName, lastName, email, phone, subject, message);
+        const success = await sendContactEmail(name, email, phone, subject, message);
 
         if (success) {
             return NextResponse.json(

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Mail, Phone, MapPin, Clock, Send, MessageCircle, FileText, Loader2 } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, Send, MessageCircle, ChevronDown, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,8 +13,7 @@ import { toast } from "sonner";
 const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    name: "",
     email: "",
     phone: "",
     subject: "",
@@ -37,8 +36,7 @@ const Contact = () => {
       if (response.ok) {
         toast.success("Message sent successfully! We will get back to you soon.");
         setFormData({
-          firstName: "",
-          lastName: "",
+          name: "",
           email: "",
           phone: "",
           subject: "",
@@ -67,20 +65,20 @@ const Contact = () => {
       title: "Call Us",
       description: "Speak directly with our customer service team",
       contact: "+91 7036777677",
-      action: "tel:+919876543210"
+      action: "tel:+917036777677"
     },
     {
       icon: MessageCircle,
       title: "WhatsApp",
       description: "Quick responses and product inquiries",
       contact: "+91 7036777677",
-      action: "https://wa.me/919876543210"
+      action: "https://wa.me/917036777677"
     },
     {
       icon: MapPin,
       title: "Visit Us",
-      description: "Schedule a factory tour or office visit",
-      contact: "Villa No : 178, Chitrapuri Row House Rd, Chitrapuri Colony, Hyderabad, Telangana 500104",
+      description: "Schedule an office visit",
+      contact: "Villa No : 178, Chitrapuri Row House Rd, Chitrapuri Colony, Hyderabad",
       action: "#"
     }
   ];
@@ -89,6 +87,12 @@ const Contact = () => {
     { day: "Monday - Friday", hours: "9:00 AM - 6:00 PM IST" },
     { day: "Saturday", hours: "10:00 AM - 4:00 PM IST" },
     { day: "Sunday", hours: "Closed" }
+  ];
+
+  const faqs = [
+    { q: "Are your products truly biodegradable?", a: "Yes, all our products are made from natural materials and fully decompose within 90-180 days in composting conditions. We have third-party certifications to verify this." },
+    { q: "Do you offer bulk pricing for events?", a: "Absolutely! We offer special pricing for bulk orders, weddings, corporate events, and restaurants. Contact us for customized quotes based on your specific needs." },
+    { q: "What's your shipping policy?", a: "We offer free shipping on orders over ₹500 within India. International shipping is available with carbon-neutral options. All packages use eco-friendly materials." }
   ];
 
   return (
@@ -102,11 +106,9 @@ const Contact = () => {
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-4xl mx-auto mb-12">
               Have questions about our products or want to learn more about sustainable dining?
-              We&apos;re here to help and love hearing from you.
+              We're here to help and love hearing from you.
             </p>
           </div>
-
-
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Form */}
@@ -116,54 +118,43 @@ const Contact = () => {
                   Send Us a Message
                 </h2>
                 <form className="space-y-6" onSubmit={handleSubmit}>
+                  <div>
+                    <label className="block text-sm font-medium text-headings mb-2">
+                      Name *
+                    </label>
+                    <Input 
+                      placeholder="John Doe" 
+                      required 
+                      value={formData.name}
+                      onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    />
+                  </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-headings mb-2">
-                        First Name *
+                        Email Address *
                       </label>
                       <Input 
-                        placeholder="John" 
+                        type="email" 
+                        placeholder="john@example.com" 
                         required 
-                        value={formData.firstName}
-                        onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                        value={formData.email}
+                        onChange={(e) => setFormData({...formData, email: e.target.value})}
                       />
                     </div>
+
                     <div>
                       <label className="block text-sm font-medium text-headings mb-2">
-                        Last Name *
+                        Phone Number
                       </label>
                       <Input 
-                        placeholder="Doe" 
-                        required 
-                        value={formData.lastName}
-                        onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                        type="tel" 
+                        placeholder="+91 7036777677" 
+                        value={formData.phone}
+                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
                       />
                     </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-headings mb-2">
-                      Email Address *
-                    </label>
-                    <Input 
-                      type="email" 
-                      placeholder="john@example.com" 
-                      required 
-                      value={formData.email}
-                      onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-headings mb-2">
-                      Phone Number
-                    </label>
-                    <Input 
-                      type="tel" 
-                      placeholder="+91 7036777677" 
-                      value={formData.phone}
-                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                    />
                   </div>
 
                   <div>
@@ -175,7 +166,7 @@ const Contact = () => {
                       value={formData.subject}
                       onValueChange={(val) => setFormData({...formData, subject: val})}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select a topic" />
                       </SelectTrigger>
                       <SelectContent>
@@ -183,7 +174,6 @@ const Contact = () => {
                         <SelectItem value="products">Product Information</SelectItem>
                         <SelectItem value="bulk">Bulk Orders</SelectItem>
                         <SelectItem value="partnership">Partnership Opportunities</SelectItem>
-                        <SelectItem value="tour">Factory Tour</SelectItem>
                         <SelectItem value="support">Customer Support</SelectItem>
                       </SelectContent>
                     </Select>
@@ -214,8 +204,45 @@ const Contact = () => {
               </CardContent>
             </Card>
 
-            {/* Business Info & FAQ */}
+            {/* Sidebar info */}
             <div className="space-y-8">
+              
+              {/* Contact Information */}
+              <Card>
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-heading font-semibold text-headings mb-6">
+                    Contact Information
+                  </h3>
+                  <div className="space-y-6">
+                    {contactMethods.map((method) => {
+                      const Icon = method.icon;
+                      return (
+                        <div key={method.title} className="flex items-start">
+                          <div className="shrink-0 p-3 bg-primary-accent/10 rounded-xl mr-4">
+                            <Icon className="h-6 w-6 text-primary-accent" />
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-headings">{method.title}</h4>
+                            {method.action !== "#" ? (
+                              <a href={method.action} className="text-primary-accent hover:underline mt-1 block">
+                                {method.contact}
+                              </a>
+                            ) : (
+                              <span className="text-muted-foreground mt-1 block text-sm">
+                                {method.contact}
+                              </span>
+                            )}
+                            <p className="text-sm text-muted-foreground mt-1">
+                              {method.description}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+
               {/* Business Hours */}
               <Card>
                 <CardContent className="p-6">
@@ -227,105 +254,19 @@ const Contact = () => {
                   </div>
                   <div className="space-y-3">
                     {businessHours.map((schedule) => (
-                      <div key={schedule.day} className="flex justify-between">
+                      <div key={schedule.day} className="flex justify-between border-b border-border pb-2 last:border-0 last:pb-0">
                         <span className="font-medium text-headings">{schedule.day}</span>
                         <span className="text-muted-foreground">{schedule.hours}</span>
                       </div>
                     ))}
                   </div>
-                  <p className="text-sm text-muted-foreground mt-4">
-                    * Response time may vary during holidays and weekends
-                  </p>
                 </CardContent>
               </Card>
 
-              {/* Download Catalog */}
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center mb-4">
-                    <FileText className="h-6 w-6 text-primary-accent mr-3" />
-                    <h3 className="text-xl font-heading font-semibold text-headings">
-                      Product Catalog
-                    </h3>
-                  </div>
-                  <p className="text-muted-foreground mb-4">
-                    Download our complete product catalog with detailed specifications,
-                    pricing, and bulk order information.
-                  </p>
-                  <Button variant="outline" className="w-full">
-                    <FileText className="h-4 w-4 mr-2" />
-                    Download PDF Catalog
-                  </Button>
-                </CardContent>
-              </Card>
-
-              {/* Quick Links */}
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-heading font-semibold text-headings mb-4">
-                    Quick Links
-                  </h3>
-                  <div className="space-y-3">
-                    <Link
-                      href="/#products"
-                      className="block text-primary-accent hover:text-primary-accent/80 transition-colors"
-                    >
-                      Browse Products →
-                    </Link>
-                    <Link
-                      href="/sustainability"
-                      className="block text-primary-accent hover:text-primary-accent/80 transition-colors"
-                    >
-                      Sustainability Info →
-                    </Link>
-                    <Link
-                      href="/manufacturing"
-                      className="block text-primary-accent hover:text-primary-accent/80 transition-colors"
-                    >
-                      Factory Tour →
-                    </Link>
-                    <Link
-                      href="/about"
-                      className="block text-primary-accent hover:text-primary-accent/80 transition-colors"
-                    >
-                      About Us →
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
             </div>
           </div>
         </div>
       </section>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-        {contactMethods.map((method) => {
-          const Icon = method.icon;
-          return (
-            <Card key={method.title} className="text-center p-6 hover:shadow-lg transition-shadow">
-              <CardContent className="p-0">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-accent/10 rounded-full mb-4">
-                  <Icon className="h-8 w-8 text-primary-accent" />
-                </div>
-                <h3 className="text-xl font-heading font-semibold text-headings mb-2">
-                  {method.title}
-                </h3>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-4">
-                  {method.description}
-                </p>
-                <div className="text-primary-accent font-medium mb-4">
-                  {method.contact}
-                </div>
-                <Button variant="outline" size="sm" asChild>
-                  <Link href={method.action}>
-                    Contact
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
 
       {/* Map Section */}
       <section className="py-16 bg-alt-bg">
@@ -339,7 +280,6 @@ const Contact = () => {
             </p>
           </div>
 
-          {/* Placeholder for map - in real app, integrate Google Maps or similar */}
           <Card className="aspect-video relative overflow-hidden">
             <div className="w-full h-full bg-card-accent flex items-center justify-center">
               <div className="text-center">
@@ -371,54 +311,20 @@ const Contact = () => {
             </p>
           </div>
 
-          <div className="space-y-6">
-            <Card>
-              <CardContent className="p-6">
-                <h3 className="text-lg font-heading font-semibold text-headings mb-2">
-                  Are your products truly biodegradable?
-                </h3>
-                <p className="text-muted-foreground">
-                  Yes, all our products are made from natural materials and fully decompose within 90-180 days
-                  in composting conditions. We have third-party certifications to verify this.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-6">
-                <h3 className="text-lg font-heading font-semibold text-headings mb-2">
-                  Do you offer bulk pricing for events?
-                </h3>
-                <p className="text-muted-foreground">
-                  Absolutely! We offer special pricing for bulk orders, weddings, corporate events, and restaurants.
-                  Contact us for customized quotes based on your specific needs.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-6">
-                <h3 className="text-lg font-heading font-semibold text-headings mb-2">
-                  What&apos;s your shipping policy?
-                </h3>
-                <p className="text-muted-foreground">
-                  We offer free shipping on orders over ₹500 within India. International shipping is available
-                  with carbon-neutral options. All packages use biodegradable materials.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-6">
-                <h3 className="text-lg font-heading font-semibold text-headings mb-2">
-                  Can I schedule a factory tour?
-                </h3>
-                <p className="text-muted-foreground">
-                  Yes! We welcome visitors to our facilities. Virtual tours are available anytime,
-                  and in-person tours can be scheduled with advance notice.
-                </p>
-              </CardContent>
-            </Card>
+          <div className="space-y-4">
+            {faqs.map((faq, index) => (
+              <details key={index} className="group bg-white border border-border rounded-xl overflow-hidden shadow-sm">
+                <summary className="flex items-center justify-between p-6 cursor-pointer list-none font-heading font-semibold text-lg text-headings hover:text-primary-accent transition-colors">
+                  {faq.q}
+                  <span className="transition-transform duration-300 group-open:rotate-180 text-muted-foreground group-hover:text-primary-accent">
+                    <ChevronDown className="h-5 w-5" />
+                  </span>
+                </summary>
+                <div className="px-6 pb-6 text-muted-foreground leading-relaxed">
+                  {faq.a}
+                </div>
+              </details>
+            ))}
           </div>
         </div>
       </section>
