@@ -57,8 +57,8 @@ const Contact = () => {
       icon: Mail,
       title: "Email Us",
       description: "Send us an email and we'll respond within 24 hours",
-      contact: "hello@ecoforever.com",
-      action: "mailto:hello@ecoforever.com"
+      contact: "info@ecoforever.co.in",
+      action: "mailto:info@ecoforever.co.in"
     },
     {
       icon: Phone,
@@ -83,11 +83,6 @@ const Contact = () => {
     }
   ];
 
-  const businessHours = [
-    { day: "Monday - Friday", hours: "9:00 AM - 6:00 PM IST" },
-    { day: "Saturday", hours: "10:00 AM - 4:00 PM IST" },
-    { day: "Sunday", hours: "Closed" }
-  ];
 
   const faqs = [
     { q: "Are your products truly biodegradable?", a: "Yes, all our products are made from natural materials and fully decompose within 90-180 days in composting conditions. We have third-party certifications to verify this." },
@@ -243,26 +238,6 @@ const Contact = () => {
                 </CardContent>
               </Card>
 
-              {/* Business Hours */}
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center mb-4">
-                    <Clock className="h-6 w-6 text-primary-accent mr-3" />
-                    <h3 className="text-xl font-heading font-semibold text-headings">
-                      Business Hours
-                    </h3>
-                  </div>
-                  <div className="space-y-3">
-                    {businessHours.map((schedule) => (
-                      <div key={schedule.day} className="flex justify-between border-b border-border pb-2 last:border-0 last:pb-0">
-                        <span className="font-medium text-headings">{schedule.day}</span>
-                        <span className="text-muted-foreground">{schedule.hours}</span>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-
             </div>
           </div>
         </div>
@@ -280,21 +255,15 @@ const Contact = () => {
             </p>
           </div>
 
-          <Card className="aspect-video relative overflow-hidden">
-            <div className="w-full h-full bg-card-accent flex items-center justify-center">
-              <div className="text-center">
-                <MapPin className="h-16 w-16 text-primary-accent mx-auto mb-4" />
-                <h3 className="text-xl font-heading font-semibold text-headings mb-2">
-                  Hyderabad, Telangana
-                </h3>
-                <p className="text-muted-foreground">
-                  Interactive map would be displayed here
-                </p>
-                <Button className="mt-4" variant="outline">
-                  Get Directions
-                </Button>
-              </div>
-            </div>
+          <Card className="aspect-video relative overflow-hidden border-0 p-0">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.9319499093863!2d78.37897889999999!3d17.415053099999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb95aecaf120e9%3A0x85d7307a839bcd1a!2sAvanflix%20Studio!5e0!3m2!1sen!2sin!4v1775478742133!5m2!1sen!2sin" 
+              className="absolute inset-0 w-full h-full" 
+              style={{ border: 0 }} 
+              allowFullScreen={true} 
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
           </Card>
         </div>
       </section>
