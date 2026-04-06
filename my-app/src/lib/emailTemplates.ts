@@ -3,7 +3,7 @@ import nodemailer from 'nodemailer';
 // Create a transporter object
 // You need to set these variables in your .env file
 const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.gmail.com', // Default to Gmail for testing/fallback
+    host: process.env.SMTP_HOST || 'smtpout.secureserver.net', // Default to Gmail for testing/fallback
     port: Number(process.env.SMTP_PORT) || 587,
     secure: process.env.SMTP_SECURE === 'true' || false, // true for 465, false for other ports
     auth: {
@@ -153,7 +153,7 @@ export const sendContactEmail = async (
     subject: string,
     message: string
 ) => {
-    const adminEmail = 'ecoforever26@gmail.com';
+    const adminEmail = 'info@ecoforever.co.in';
 
     const adminHtmlContent = `
     <div style="font-family: Arial, sans-serif; max-w-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">

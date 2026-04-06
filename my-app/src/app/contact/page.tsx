@@ -255,7 +255,7 @@ const Contact = () => {
             </p>
           </div>
 
-          <Card className="aspect-video relative overflow-hidden border-0 p-0">
+          <Card className=" h-100 relative overflow-hidden border-0 p-0">
             <iframe 
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.9319499093863!2d78.37897889999999!3d17.415053099999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb95aecaf120e9%3A0x85d7307a839bcd1a!2sAvanflix%20Studio!5e0!3m2!1sen!2sin!4v1775478742133!5m2!1sen!2sin" 
               className="absolute inset-0 w-full h-full" 
