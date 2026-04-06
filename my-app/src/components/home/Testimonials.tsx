@@ -15,7 +15,7 @@ const Testimonials = () => {
       name: "Lakshmi Reddy",
       location: "Vijayawada, AP",
       rating: 5,
-      text: "ఈ ప్లేట్లు చాలా బాగున్నాయి. శుభకార్యాలకు వాడటానికి చాలా అనువుగా ఉన్నాయి. పర్యావరణానికి కూడా మంచివి కాబట్టి అందరూ వాడొచ్చు.",
+      text: "Ee platelu chala bagunnayi. Subhakaryalaku vadataniki chala anuvuga unnayi. Paryavarananiki kuda manchivi kabatti andaru vadochu.",
     },
     {
       name: "Pradeep Varma",

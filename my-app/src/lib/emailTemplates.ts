@@ -142,3 +142,84 @@ export const sendOrderConfirmationEmail = async (to: string, orderDetails: any) 
         return false;
     }
 };
+
+/**
+ * Sends a contact form notification to admin and a confirmation to the user.
+ */
+export const sendContactEmail = async (
+    firstName: string,
+    lastName: string,
+    email: string,
+    phone: string,
+    subject: string,
+    message: string
+) => {
+    const adminEmail = 'ecoforever26@gmail.com';
+    const fullName = `${firstName} ${lastName}`;
+
+    const adminHtmlContent = `
+    <div style="font-family: Arial, sans-serif; max-w-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+        <div style="background-color: #059669; padding: 20px; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 24px;">New Contact Form Submission</h1>
+        </div>
+        <div style="padding: 30px; background-color: #ffffff;">
+            <h2 style="color: #333333; margin-top: 0;">Inquiry Details</h2>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #e0e0e0; font-weight: bold; width: 120px;">Name:</td><td style="padding: 8px 0; border-bottom: 1px solid #e0e0e0;">${fullName}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #e0e0e0; font-weight: bold;">Email:</td><td style="padding: 8px 0; border-bottom: 1px solid #e0e0e0;">${email}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #e0e0e0; font-weight: bold;">Phone:</td><td style="padding: 8px 0; border-bottom: 1px solid #e0e0e0;">${phone || 'N/A'}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #e0e0e0; font-weight: bold;">Topic:</td><td style="padding: 8px 0; border-bottom: 1px solid #e0e0e0;">${subject}</td></tr>
+            </table>
+            <div style="margin-top: 20px;">
+                <h3 style="color: #333333; font-size: 16px;">Message:</h3>
+                <div style="background-color: #f3f4f6; padding: 15px; border-radius: 6px; color: #555555; white-space: pre-wrap;">${message}</div>
+            </div>
+        </div>
+    </div>
+    `;
+
+    const userHtmlContent = `
+    <div style="font-family: Arial, sans-serif; max-w-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+        <div style="background-color: #059669; padding: 20px; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 24px;">EcoForever</h1>
+        </div>
+        <div style="padding: 30px; background-color: #ffffff;">
+            <h2 style="color: #333333; margin-top: 0;">Thank you for contacting us!</h2>
+            <p style="color: #555555; line-height: 1.6;">Hello ${firstName},</p>
+            <p style="color: #555555; line-height: 1.6;">We have received your message regarding "<strong>${subject}</strong>". Our team will review your inquiry and get back to you within 24 hours.</p>
+            <p style="color: #555555; line-height: 1.6;">For your records, here is a copy of your message:</p>
+            <div style="background-color: #f3f4f6; padding: 15px; border-radius: 6px; margin: 20px 0; color: #555555; white-space: pre-wrap;">${message}</div>
+            <p style="color: #555555; line-height: 1.6; margin-top: 30px;">Best regards,<br>The EcoForever Team</p>
+        </div>
+        <div style="background-color: #f9fafb; padding: 15px; text-align: center; border-top: 1px solid #e0e0e0;">
+            <p style="color: #9ca3af; font-size: 12px; margin: 0;">© ${new Date().getFullYear()} EcoForever. All rights reserved.</p>
+        </div>
+    </div>
+    `;
+
+    try {
+        const fromAddress = `"EcoForever Contact" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`;
+        
+        // 1. Send notification to admin
+        await transporter.sendMail({
+            from: fromAddress,
+            to: adminEmail,
+            replyTo: email,
+            subject: `New Contact Form Submission: ${subject} - ${fullName}`,
+            html: adminHtmlContent,
+        });
+
+        // 2. Send confirmation to user
+        await transporter.sendMail({
+            from: fromAddress,
+            to: email,
+            subject: 'We received your message - EcoForever',
+            html: userHtmlContent,
+        });
+
+        return true;
+    } catch (error) {
+        console.error('Error sending contact emails:', error);
+        return false;
+    }
+};

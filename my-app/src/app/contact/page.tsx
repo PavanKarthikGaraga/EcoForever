@@ -1,12 +1,59 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
-import { Mail, Phone, MapPin, Clock, Send, MessageCircle, FileText } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, Send, MessageCircle, FileText, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { toast } from "sonner";
 
 const Contact = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: ""
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        toast.success("Message sent successfully! We will get back to you soon.");
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          phone: "",
+          subject: "",
+          message: ""
+        });
+      } else {
+        toast.error("Failed to send message. Please try again later.");
+      }
+    } catch (error) {
+      toast.error("An error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const contactMethods = [
     {
       icon: Mail,
@@ -68,19 +115,29 @@ const Contact = () => {
                 <h2 className="text-2xl font-heading font-bold text-headings mb-6">
                   Send Us a Message
                 </h2>
-                <form className="space-y-6">
+                <form className="space-y-6" onSubmit={handleSubmit}>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-headings mb-2">
                         First Name *
                       </label>
-                      <Input placeholder="John" required />
+                      <Input 
+                        placeholder="John" 
+                        required 
+                        value={formData.firstName}
+                        onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                      />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-headings mb-2">
                         Last Name *
                       </label>
-                      <Input placeholder="Doe" required />
+                      <Input 
+                        placeholder="Doe" 
+                        required 
+                        value={formData.lastName}
+                        onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                      />
                     </div>
                   </div>
 
@@ -88,21 +145,36 @@ const Contact = () => {
                     <label className="block text-sm font-medium text-headings mb-2">
                       Email Address *
                     </label>
-                    <Input type="email" placeholder="john@example.com" required />
+                    <Input 
+                      type="email" 
+                      placeholder="john@example.com" 
+                      required 
+                      value={formData.email}
+                      onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-headings mb-2">
                       Phone Number
                     </label>
-                    <Input type="tel" placeholder="+91 7036777677" />
+                    <Input 
+                      type="tel" 
+                      placeholder="+91 7036777677" 
+                      value={formData.phone}
+                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                    />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-headings mb-2">
                       Subject *
                     </label>
-                    <Select required>
+                    <Select 
+                      required 
+                      value={formData.subject}
+                      onValueChange={(val) => setFormData({...formData, subject: val})}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select a topic" />
                       </SelectTrigger>
@@ -125,12 +197,18 @@ const Contact = () => {
                       placeholder="Tell us how we can help you..."
                       rows={5}
                       required
+                      value={formData.message}
+                      onChange={(e) => setFormData({...formData, message: e.target.value})}
                     />
                   </div>
 
-                  <Button type="submit" className="w-full" size="lg">
-                    <Send className="h-5 w-5 mr-2" />
-                    Send Message
+                  <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
+                    {isSubmitting ? (
+                      <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                    ) : (
+                      <Send className="h-5 w-5 mr-2" />
+                    )}
+                    {isSubmitting ? "Sending..." : "Send Message"}
                   </Button>
                 </form>
               </CardContent>
